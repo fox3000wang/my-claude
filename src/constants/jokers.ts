@@ -12,7 +12,7 @@ export const JOKERS: Joker[] = [
     effect: { type: 'flat_mult',     value: 2 },
   },
   {
-    id: 'J003', name: '基础加成',  rarity: 'COMMON',   price: 4,
+    id: 'J003', name: '基础加成',  rarity: 'COMMON',   price: 3,
     desc: '本回合分数 +15 Bonus',
     effect: { type: 'flat_bonus',    value: 15 },
   },
@@ -37,12 +37,12 @@ export const JOKERS: Joker[] = [
     effect: { type: 'odd_bonus',    bonus: 30 },
   },
   {
-    id: 'J008', name: '低价扫货',  rarity: 'COMMON',   price: 4,
+    id: 'J008', name: '低价扫货',  rarity: 'COMMON',   price: 3,
     desc: '商店购买后额外 +$1',
     effect: { type: 'shop_bonus',   value: 1 },
   },
   {
-    id: 'J009', name: '顺子狂热',  rarity: 'UNCOMMON', price: 5,
+    id: 'J009', name: '顺子狂热',  rarity: 'UNCOMMON', price: 6,
     desc: '打出顺子/同花顺/皇家同花顺时，+4 Mult',
     effect: { type: 'hand_mult',    hands: ['顺子', '同花顺', '皇家同花顺'], mult: 4 },
   },
@@ -52,12 +52,12 @@ export const JOKERS: Joker[] = [
     effect: { type: 'hand_mult',    hands: ['一对', '两对', '三条', '葫芦', '四条', '顺子', '同花', '同花顺', '皇家同花顺'], mult: 3 },
   },
   {
-    id: 'J011', name: '高牌猎手',  rarity: 'UNCOMMON', price: 5,
+    id: 'J011', name: '高牌猎手',  rarity: 'UNCOMMON', price: 6,
     desc: '打出高牌时，+8 Mult',
     effect: { type: 'hand_mult',    hands: ['高牌'], mult: 8 },
   },
   {
-    id: 'J012', name: '三条狂热',  rarity: 'UNCOMMON', price: 5,
+    id: 'J012', name: '三条狂热',  rarity: 'UNCOMMON', price: 6,
     desc: '打出三条系手牌时，+3 Mult 和 +10 Bonus',
     effect: { type: 'hand_mult_bonus', hands: ['三条', '葫芦', '四条', '顺子', '同花', '同花顺', '皇家同花顺'], mult: 3, bonus: 10 },
   },
@@ -67,7 +67,7 @@ export const JOKERS: Joker[] = [
     effect: { type: 'count_mult',   suit: '♦', per: 3, mult_per: 2 },
   },
   {
-    id: 'J014', name: '黑桃战士',  rarity: 'UNCOMMON', price: 5,
+    id: 'J014', name: '黑桃战士',  rarity: 'UNCOMMON', price: 6,
     desc: '每有 1 张黑桃，+1 Mult',
     effect: { type: 'count_mult',   suit: '♠', per: 1 },
   },
@@ -77,37 +77,37 @@ export const JOKERS: Joker[] = [
     effect: { type: 'count_bonus',  suit: '♣', per: 1, bonus_per: 10 },
   },
   {
-    id: 'J016', name: '皇家狂热',  rarity: 'RARE',     price: 6,
+    id: 'J016', name: '皇家狂热',  rarity: 'RARE',     price: 8,
     desc: '打出皇家同花顺时，+10 Mult',
     effect: { type: 'hand_mult',    hands: ['皇家同花顺'], mult: 10 },
   },
   {
-    id: 'J017', name: '四条大师',  rarity: 'RARE',     price: 6,
+    id: 'J017', name: '四条大师',  rarity: 'RARE',     price: 8,
     desc: '打出四条时，+6 Mult',
     effect: { type: 'hand_mult',    hands: ['四条'], mult: 6 },
   },
   {
-    id: 'J018', name: '通配小丑',  rarity: 'RARE',     price: 6,
+    id: 'J018', name: '通配小丑',  rarity: 'RARE',     price: 7,
     desc: '本回合分数 +1 Mult',
     effect: { type: 'flat_mult',    value: 1 },
   },
   {
-    id: 'J019', name: '分数爆炸',  rarity: 'RARE',     price: 6,
+    id: 'J019', name: '分数爆炸',  rarity: 'RARE',     price: 8,
     desc: '基础分数 >300 时，+5 Mult',
     effect: { type: 'score_mult',   threshold: 300, mult: 5 },
   },
   {
-    id: 'J020', name: '超级Combo', rarity: 'RARE',     price: 6,
+    id: 'J020', name: '超级Combo', rarity: 'RARE',     price: 7,
     desc: '手牌有 3 种以上花色时，+5 Mult',
     effect: { type: 'suit_diverse_mult', count: 3, mult: 5 },
   },
   {
-    id: 'J021', name: '最终手段',  rarity: 'RARE',     price: 6,
+    id: 'J021', name: '最终手段',  rarity: 'RARE',     price: 7,
     desc: '最后一手时，+6 Mult',
     effect: { type: 'last_hand_mult', mult: 6 },
   },
   {
-    id: 'J022', name: '双重惊喜',  rarity: 'RARE',     price: 6,
+    id: 'J022', name: '双重惊喜',  rarity: 'RARE',     price: 8,
     desc: '打出对子系手牌时，Mult ×1.5',
     effect: { type: 'mult_boost',   hands: ['两对', '三条', '葫芦', '四条', '顺子', '同花', '同花顺', '皇家同花顺'], factor: 0.5 },
   },
