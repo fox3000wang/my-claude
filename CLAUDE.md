@@ -76,14 +76,19 @@ TITLE → PLAYING → SCORING → (继续/结束)
 - [x] 响应式布局（适配手机）
 - [x] 无障碍支持（prefers-reduced-motion）
 
+## 已实现功能 (Phase 2: Joker 系统)
+
+- [x] 22 张 Joker 卡牌数据定义（8 Common / 7 Uncommon / 6 Rare）
+- [x] JokerSystem 效果触发器（10 种效果类型）
+- [x] Joker 槽位渲染（稀有度边框颜色）
+- [x] Joker 实时预览（选牌时显示预估分数）
+- [x] Joker 触发动画（计分时闪烁）
+- [x] 集成计分引擎：(base + faceValue) × (1 + mult) × (1 + boost) + bonus
+- [x] Joker 效果分型展示（Mult/Bonus 分步计分）
+
 ---
 
 ## 待实现功能
-
-### Phase 2: Joker 系统
-- 22 张 Joker 卡牌（Common/Uncommon/Rare）
-- Joker 效果：Mult（倍率）、Bonus（加成）
-- Joker 槽位与触发动画
 
 ### Phase 3: 完整流程
 - 8 个 Ante 递增难度
