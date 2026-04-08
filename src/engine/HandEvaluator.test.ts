@@ -250,5 +250,27 @@ describe('HandEvaluator', () => {
       expect(result.type.name).toBe('两对')
       expect(result.type.base).toBe(15)
     })
+
+    it('19. 2张牌判定一对', () => {
+      const hand = [
+        makeCard(5, 0),  // 7♠
+        makeCard(5, 1),  // 7♥
+      ]
+      const result = evaluator.evaluate(hand)
+      expect(result.type.name).toBe('一对')
+      expect(result.type.base).toBe(10)
+      expect(result.faceValue).toBe(7 + 7)
+    })
+
+    it('20. 2张牌判定高牌', () => {
+      const hand = [
+        makeCard(0, 0),  // 2♠
+        makeCard(7, 1),   // 9♥
+      ]
+      const result = evaluator.evaluate(hand)
+      expect(result.type.name).toBe('高牌')
+      expect(result.type.base).toBe(5)
+      expect(result.faceValue).toBe(2 + 9)
+    })
   })
 })
