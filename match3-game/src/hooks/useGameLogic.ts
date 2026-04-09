@@ -1,5 +1,5 @@
 import { useState, useCallback, useRef } from 'react';
-import { GameState } from '../types/game';
+import { GameState, Tile } from '../types/game';
 import { LEVELS } from '../constants/gameConfig';
 import {
   createBoardWithoutInitialMatches,
@@ -12,6 +12,7 @@ import {
 } from '../utils/boardUtils';
 
 const INITIAL_LEVEL = 1;
+const MATCH_ANIMATION_DURATION = 300;
 
 function createInitialState(level: number): GameState {
   const levelConfig = LEVELS[level - 1] || LEVELS[0];
@@ -31,31 +32,66 @@ export function useGameLogic() {
   const [gameState, setGameState] = useState<GameState>(() => createInitialState(INITIAL_LEVEL));
   const isProcessingRef = useRef(false);
 
-  const processMatches = useCallback((board: typeof gameState.board, currentScore: number, currentMoves: number): { board: typeof gameState.board; score: number; moves: number; gameStatus: typeof gameState.gameStatus } => {
-    let newBoard = board;
-    let newScore = currentScore;
-    let newMoves = currentMoves;
-    let multiplier = 1;
-    let hasMatches = true;
+  // 两阶段处理：先标记匹配tiles → 动画播放 → 删除下落
+  const processMatchesInStages = useCallback((board: Tile[][], currentScore: number, currentMoves: number) => {
+    const matches = findMatches(board);
 
-    while (hasMatches) {
-      const matches = findMatches(newBoard);
+    if (matches.length === 0) {
+      const gameStatus = currentScore >= gameState.targetScore ? 'won' : currentMoves <= 0 ? 'lost' : 'playing';
+      return { board, score: currentScore, moves: currentMoves, gameStatus };
+    }
 
-      if (matches.length === 0) {
-        hasMatches = false;
-      } else {
-        // 先清除匹配的方块，再下落填充
-        newBoard = removeMatches(newBoard, matches);
-        newBoard = dropTiles(newBoard);
-        const matchScore = calculateScore(matches) * multiplier;
-        newScore += matchScore;
-        multiplier++;
+    // 第一阶段：收集所有匹配位置的 tile（保留在 DOM 中播放动画）
+    const matchPositions = new Set<string>();
+    for (const match of matches) {
+      for (const pos of match) {
+        matchPositions.add(`${pos.row}-${pos.col}`);
       }
     }
 
-    const gameStatus = newScore >= gameState.targetScore ? 'won' : newMoves <= 0 ? 'lost' : 'playing';
+    // 标记为匹配状态（触发动画）
+    const boardWithMatches = board.map(row =>
+      row.map(tile => {
+        if (!tile) return tile;
+        const key = `${tile.row}-${tile.col}`;
+        return matchPositions.has(key)
+          ? { ...tile, isMatching: true, isSelected: false }
+          : { ...tile, isSelected: false };
+      })
+    );
 
-    return { board: newBoard, score: newScore, moves: newMoves, gameStatus };
+    const matchScore = calculateScore(matches);
+
+    // 立即更新：显示匹配动画
+    setGameState(prev => ({
+      ...prev,
+      board: boardWithMatches,
+      selectedTile: null,
+    }));
+
+    // 第二阶段：动画结束后删除并下落
+    setTimeout(() => {
+      let newBoard = removeMatches(boardWithMatches, matches);
+      newBoard = dropTiles(newBoard);
+      const newScore = currentScore + matchScore;
+
+      const gameStatus = newScore >= gameState.targetScore ? 'won' : currentMoves <= 0 ? 'lost' : 'playing';
+      setGameState(prev => ({
+        ...prev,
+        board: newBoard,
+        score: newScore,
+        moves: currentMoves,
+        gameStatus,
+      }));
+
+      // 检查级联：递归处理新的匹配
+      const nextMatches = findMatches(newBoard);
+      if (nextMatches.length > 0) {
+        setTimeout(() => processMatchesInStages(newBoard, newScore, currentMoves), 50);
+      }
+    }, MATCH_ANIMATION_DURATION);
+
+    return null;
   }, [gameState.targetScore]);
 
   const handleTileClick = useCallback((row: number, col: number) => {
@@ -132,25 +168,22 @@ export function useGameLogic() {
           };
         }
 
-        // 有匹配，执行消除
+        // 有匹配，执行两阶段消除（动画 + 删除下落）
         const newMoves = prevState.moves - 1;
-        const result = processMatches(newBoard, prevState.score, newMoves);
+        processMatchesInStages(newBoard, prevState.score, newMoves);
 
         isProcessingRef.current = false;
 
         return {
           ...prevState,
-          board: result.board,
-          score: result.score,
-          moves: result.moves,
           selectedTile: null,
-          gameStatus: result.gameStatus,
         };
       }
     });
-  }, [gameState.gameStatus, processMatches]);
+  }, [gameState.gameStatus, processMatchesInStages]);
 
   const restartLevel = useCallback(() => {
+    isProcessingRef.current = false;
     setGameState(prev => createInitialState(prev.level));
   }, []);
 

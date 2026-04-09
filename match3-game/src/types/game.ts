@@ -11,6 +11,9 @@ export interface Tile {
   col: number;
   isSelected: boolean;
   isMatching: boolean;
+  visualRow: number;
+  /** 稳定 ID，贯穿 tile 整个生命周期 */
+  stableId: number;
 }
 
 export type GameStatus = 'idle' | 'playing' | 'won' | 'lost';

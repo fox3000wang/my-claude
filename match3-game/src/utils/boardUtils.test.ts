@@ -42,6 +42,8 @@ describe('boardUtils', () => {
           col,
           isSelected: false,
           isMatching: false,
+          visualRow: row,
+          stableId: row * BOARD_SIZE + col,
         }))
       );
       const matches = findMatches(board);
@@ -56,6 +58,8 @@ describe('boardUtils', () => {
           col,
           isSelected: false,
           isMatching: false,
+          visualRow: row,
+          stableId: row * BOARD_SIZE + col,
         }))
       );
       const matches = findMatches(board);
@@ -89,6 +93,8 @@ describe('boardUtils', () => {
           col,
           isSelected: false,
           isMatching: false,
+          visualRow: row,
+          stableId: row * BOARD_SIZE + col,
         }))
       );
       board[0][0].type = 'cat';

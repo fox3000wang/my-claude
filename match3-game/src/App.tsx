@@ -1,7 +1,6 @@
 import { useGameLogic } from './hooks/useGameLogic';
 import { GameBoard } from './components/Game/GameBoard';
 import { Header } from './components/UI/Header';
-import { Button } from './components/UI/Button';
 import { WinModal } from './components/Modal/WinModal';
 import { LoseModal } from './components/Modal/LoseModal';
 
@@ -24,10 +23,6 @@ function App() {
           board={gameState.board}
           onTileClick={handleTileClick}
         />
-
-        <Button onClick={restartLevel} variant="secondary">
-          重新开始
-        </Button>
 
         <WinModal
           isOpen={gameState.gameStatus === 'won'}

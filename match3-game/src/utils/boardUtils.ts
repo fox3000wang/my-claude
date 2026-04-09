@@ -1,6 +1,12 @@
 import { Tile, TileType, Position } from '../types/game';
 import { BOARD_SIZE, TILE_TYPES } from '../constants/gameConfig';
 
+// 模块级计数器，为每个 tile 分配全局唯一稳定 ID
+let tileIdCounter = 0;
+function nextTileId(): number {
+  return tileIdCounter++;
+}
+
 export function getRandomTileType(): TileType {
   return TILE_TYPES[Math.floor(Math.random() * TILE_TYPES.length)];
 }
@@ -13,6 +19,8 @@ export function createEmptyBoard(): Tile[][] {
       col,
       isSelected: false,
       isMatching: false,
+      visualRow: row,
+      stableId: nextTileId(),
     }))
   );
 }
@@ -39,6 +47,8 @@ export function createBoardWithoutInitialMatches(): Tile[][] {
         col,
         isSelected: false,
         isMatching: false,
+        visualRow: row,
+        stableId: nextTileId(),
       };
     }
   }
@@ -144,25 +154,31 @@ export function removeMatches(board: Tile[][], matches: Position[][]): Tile[][] 
   return newBoard;
 }
 
+/**
+ * 下落并填充新 tile。
+ * existing tiles: visualRow 保持旧值，由 Framer Motion 动画到新位置
+ * new tiles: visualRow = row（直接出现在位，无入场动画）
+ */
 export function dropTiles(board: Tile[][]): Tile[][] {
   const newBoard = board.map(row => row.map(() => null as unknown as Tile));
 
   for (let col = 0; col < BOARD_SIZE; col++) {
     let writeRow = BOARD_SIZE - 1;
 
-    // 从下往上遍历，把非空方块移下来
+    // 从下往上遍历，把非空方块移下来（visualRow 保持旧值，触发下落动画）
     for (let row = BOARD_SIZE - 1; row >= 0; row--) {
       const tile = board[row]?.[col];
       if (tile && tile.type !== null) {
         newBoard[writeRow][col] = {
           ...tile,
           row: writeRow,
+          // visualRow 保持不变，由 Framer Motion 动画到新 row
         };
         writeRow--;
       }
     }
 
-    // 顶部填充新方块
+    // 顶部填充新方块（visualRow = row，无入场动画）
     for (let row = writeRow; row >= 0; row--) {
       newBoard[row][col] = {
         type: getRandomTileType(),
@@ -170,6 +186,8 @@ export function dropTiles(board: Tile[][]): Tile[][] {
         col,
         isSelected: false,
         isMatching: false,
+        visualRow: row,
+        stableId: nextTileId(),
       };
     }
   }
