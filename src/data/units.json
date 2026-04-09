@@ -1,0 +1,42 @@
+{
+  "scv": {
+    "name": "SCV",
+    "health": 60,
+    "maxHealth": 60,
+    "speed": 2.5,
+    "cost": { "minerals": 50, "supply": 1 },
+    "abilities": ["harvest", "build", "repair"]
+  },
+  "marine": {
+    "name": "Marine",
+    "health": 40,
+    "maxHealth": 40,
+    "attack": 6,
+    "armor": 0,
+    "range": 4,
+    "speed": 2.5,
+    "cost": { "minerals": 50, "supply": 1 }
+  },
+  "firebat": {
+    "name": "Firebat",
+    "health": 80,
+    "maxHealth": 80,
+    "attack": 8,
+    "armor": 0,
+    "range": 1.5,
+    "speed": 2.5,
+    "cost": { "minerals": 75, "supply": 2 }
+  },
+  "tank": {
+    "name": "Siege Tank",
+    "health": 150,
+    "maxHealth": 150,
+    "attack": 40,
+    "armor": 2,
+    "range": 8,
+    "siegeRange": 12,
+    "speed": 1.5,
+    "siegeSpeed": 0.5,
+    "cost": { "minerals": 125, "supply": 3 }
+  }
+}
