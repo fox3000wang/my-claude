@@ -1,6 +1,9 @@
 import { createCard, SUITS, RANKS } from '../types/card'
 import type { Card } from '../types/card'
 
+/** 手牌上限 */
+export const HAND_SIZE = 8
+
 /**
  * 牌堆管理器
  *
@@ -41,11 +44,12 @@ export class DeckManager {
   }
 
   /**
-   * 发 n 张牌（从牌堆移到手牌）
-   * 如果牌堆不足，返回全部剩余牌
+   * 补牌至不超过 HAND_SIZE 张（从牌堆移到手牌）
+   * 无论 n 为多少，实际只补到手牌上限，差额不足时取牌堆剩余全部
    */
   draw(n: number): Card[] {
-    const drawn = this.deck.splice(0, n)
+    const toDraw = Math.min(n, HAND_SIZE - this.hand.length)
+    const drawn = this.deck.splice(0, toDraw)
     this.hand.push(...drawn)
     return drawn
   }
