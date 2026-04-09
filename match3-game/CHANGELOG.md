@@ -2,6 +2,18 @@
 
 All notable changes to 开心消消乐 (match3-game) will be documented here.
 
+## [1.3.0] - 2026-04-09
+
+### Added
+- **开始页面（StartScreen）**: 游戏启动入口
+  - 标题呼吸光效：多层 text-shadow 随时间交替
+  - 5只动物糖果球依次浮动入场（stagger 100ms）
+  - 玻璃质感开始按钮，hover 发光脉冲
+- **页面过渡动画**: AnimatePresence 控制开始页 ↔ 游戏页淡入淡出（各 400ms）
+
+### Changed
+- `App.tsx` 重构：新增 `started` state 控制游戏流程
+
 ## [1.2.0] - 2026-04-09
 
 ### Added
