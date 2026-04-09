@@ -1,3 +1,24 @@
+import { useGameStore } from '../../store/gameStore'
+import { Button } from '../ui/Button'
+
 export function GameOverScreen() {
-  return <div>Screen: GAME_OVER</div>
+  const totalScore = useGameStore(s => s.totalScore)
+  const currentAnte = useGameStore(s => s.currentAnte)
+  const currentBlindIndex = useGameStore(s => s.currentBlindIndex)
+  const backToTitle = useGameStore(s => s.backToTitle)
+
+  return (
+    <div className="end-screen gameover">
+      <h2>游戏结束</h2>
+      <div className="end-stats">
+        <p>
+          Ante {currentAnte} — Blind {currentBlindIndex + 1}
+        </p>
+        <p className="end-score">
+          最终得分: <strong>{totalScore}</strong>
+        </p>
+      </div>
+      <Button onClick={backToTitle}>再来一局</Button>
+    </div>
+  )
 }
