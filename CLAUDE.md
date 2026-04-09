@@ -12,7 +12,10 @@
 
 ## 技术栈
 
-- **单文件 HTML/CSS/JS**：`index.html`，零构建步骤，直接浏览器打开即可玩
+- **框架**：Vite + React 18 + TypeScript 5（strict mode）
+- **状态管理**：Zustand
+- **测试**：Vitest（单元测试）+ Playwright（E2E）
+- **构建**：单页面应用，输出 `dist/`
 - **字体**：Google Fonts（Inter + Oswald）
 - **图标**：纯 CSS + Unicode（♠ ♥ ♦ ♣）
 - **存档**：LocalStorage
@@ -89,7 +92,8 @@ TITLE → PLAYING → SCORING → (继续/结束)
 ## 已实现功能 (Phase 3: Roguelike 完整流程)
 
 - [x] 3 Ante × 3 Blind（Small → Big → Boss 顺序完成）
-- [x] 目标分递增（Ante 1: 100/150/200，Ante 2: 150/250/350，Ante 3: 200/350/500）
+- [x] 目标分递增（Ante 1: 100/200/100，Ante 2: 150/300/150，Ante 3: 200/400/200）
+  - 注：无 Joker 时，计分公式 total = base + faceValue，Boss Blind 校准至 100/150/200 确保可完成
 - [x] 经济系统（每 Ante +$4，Small/Big/Boss 奖励 $3/$4/$5）
 - [x] 商店系统（2 Joker + 1 Tarot/Planet）
 - [x] 15 张 Tarot 卡效果（即时 + 临时加成）
@@ -101,11 +105,6 @@ TITLE → PLAYING → SCORING → (继续/结束)
 ---
 
 ## 待实现功能
-
-### Phase 4: 完整 Balatro 对齐
-- 8 个 Ante（当前 MVP 为 3 Ante）
-- Boss Blind 负面效果（8 种规则）
-- 生命值机制（4 ♥）
 
 ### Phase 4: 完整 Balatro 对齐
 - 8 个 Ante（当前 MVP 为 3 Ante）
@@ -128,48 +127,46 @@ TITLE → PLAYING → SCORING → (继续/结束)
 
 | 文件 | 说明 |
 |------|------|
-| `index.html` | 游戏主文件 |
+| `src/` | React 组件、引擎、hooks |
+| `src/engine/` | 游戏引擎（DeckManager、ScoringEngine、BlindManager、JokerSystem） |
+| `src/store/gameStore.ts` | Zustand 全局状态 |
+| `src/components/` | React 组件（screens/、joker/、ui/） |
+| `src/hooks/useKeyboard.ts` | 键盘快捷键 Hook |
+| `index.html` | HTML 入口 |
+| `vite.config.ts` | Vite 配置 |
 | `SPEC.md` | 完整设计规格说明书 |
 | `CLAUDE.md` | 本文件 |
-| `tests/game.test.js` | 核心逻辑单元测试（Node.js） |
-| `tests/e2e/game/*.spec.ts` | Playwright E2E 测试（40 个测试全通过） |
+| `tests/game.test.ts` | 核心逻辑单元测试（Vitest） |
+| `tests/e2e/game/*.spec.ts` | Playwright E2E 测试（31 个测试全通过） |
 | `playwright.config.ts` | E2E 测试配置 |
 
 ---
 
 ## 开发规范
 
-### 代码组织（单文件内部分类注释）
+### 代码组织（src/ 目录结构）
 
-```js
-/* ============================================
-   常量定义
-============================================ */
-
-// ============================================
-// 扑克牌数据层
-// ============================================
-
-// ============================================
-// 手牌判定引擎
-// ============================================
-
-// ============================================
-// 计分引擎
-// ============================================
-
-// ============================================
-// 游戏状态管理
-// ============================================
-
-// ============================================
-// 渲染引擎
-// ============================================
-
-// ============================================
-// 游戏主类
-// ============================================
 ```
+src/
+├── engine/          # 游戏核心引擎（纯函数，无副作用）
+│   ├── DeckManager.ts
+│   ├── ScoringEngine.ts
+│   ├── BlindManager.ts
+│   └── JokerSystem.ts
+├── constants/       # 常量数据
+│   └── handTypes.ts
+├── store/           # Zustand 状态管理
+│   └── gameStore.ts
+├── components/      # React 组件
+│   ├── screens/     # 5 个游戏屏幕
+│   ├── joker/       # Joker 相关组件
+│   └── ui/          # 通用 UI 组件
+├── hooks/           # React Hooks
+│   └── useKeyboard.ts
+└── App.tsx
+```
+
+引擎层（`engine/`）为纯 TypeScript，无 React 依赖，便于单元测试。
 
 ### 命名规范
 
