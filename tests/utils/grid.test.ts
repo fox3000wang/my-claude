@@ -29,6 +29,13 @@ describe('Grid', () => {
     expect(grid.isWalkable(3, 3)).toBe(false);
   });
 
+  it('unblockCell restores walkability', () => {
+    grid.blockCell(3, 3);
+    expect(grid.isWalkable(3, 3)).toBe(false);
+    grid.unblockCell(3, 3);
+    expect(grid.isWalkable(3, 3)).toBe(true);
+  });
+
   it('worldToCell and cellToWorld are inverses', () => {
     const worldX = 4.7;
     const worldZ = 2.3;

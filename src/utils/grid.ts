@@ -4,20 +4,24 @@ export interface GridCell {
 }
 
 export class Grid {
-  private readonly width: number;
-  private readonly height: number;
-  private readonly cellSize: number;
-  private blocked: boolean[][];
+  public readonly width: number;
+  public readonly height: number;
+  public readonly cellSize: number;
+  private blocked: Set<string>;
 
   constructor(width: number, height: number, cellSize: number) {
     this.width = width;
     this.height = height;
     this.cellSize = cellSize;
-    this.blocked = Array.from({ length: height }, () => Array(width).fill(false));
+    this.blocked = new Set<string>();
   }
 
   private inBounds(cellX: number, cellZ: number): boolean {
     return cellX >= 0 && cellX < this.width && cellZ >= 0 && cellZ < this.height;
+  }
+
+  private key(x: number, z: number): string {
+    return `${x},${z}`;
   }
 
   cellAt(worldX: number, _y: number, worldZ: number): GridCell {
@@ -35,18 +39,22 @@ export class Grid {
 
   isWalkable(cellX: number, cellZ: number): boolean {
     if (!this.inBounds(cellX, cellZ)) return false;
-    return !this.blocked[cellZ][cellX];
+    return !this.blocked.has(this.key(cellX, cellZ));
   }
 
   blockCell(cellX: number, cellZ: number): void {
     if (this.inBounds(cellX, cellZ)) {
-      this.blocked[cellZ][cellX] = true;
+      this.blocked.add(this.key(cellX, cellZ));
     }
   }
 
   unblockCell(cellX: number, cellZ: number): void {
     if (this.inBounds(cellX, cellZ)) {
-      this.blocked[cellZ][cellX] = false;
+      this.blocked.delete(this.key(cellX, cellZ));
     }
+  }
+
+  getBlockedCount(): number {
+    return this.blocked.size;
   }
 }
