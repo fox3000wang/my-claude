@@ -42,6 +42,11 @@ body {
   color: var(--text-primary);
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   overflow-x: hidden;
+  /* body 垂直居中直接子元素 */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   background-image:
     radial-gradient(ellipse at 20% 20%, rgba(155, 89, 182, 0.08) 0%, transparent 50%),
     radial-gradient(ellipse at 80% 80%, rgba(241, 196, 15, 0.05) 0%, transparent 50%);
@@ -50,12 +55,11 @@ body {
 #app {
   max-width: 900px;
   width: 100%;
-  min-height: 100vh;
-  margin: 0 auto;
-  padding: 20px;
+  /* #app 内容居中 */
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  align-items: center;
+  padding: 20px;
 }
 
 /* ============================================
