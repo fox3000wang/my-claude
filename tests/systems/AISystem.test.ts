@@ -3,7 +3,6 @@ import { World } from '../../src/core/ecs/World';
 import { AISystem } from '../../src/systems/AISystem';
 import { Position } from '../../src/components/Position';
 import { Combat } from '../../src/components/Combat';
-import { MoveTarget } from '../../src/components/MoveTarget';
 import { Unit } from '../../src/components/Unit';
 import { Health } from '../../src/components/Health';
 

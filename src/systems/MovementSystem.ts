@@ -1,7 +1,6 @@
 import { System } from '../core/ecs/System';
 import { Position } from '../components/Position';
 import { MoveTarget } from '../components/MoveTarget';
-import { Unit } from '../components/Unit';
 
 const ARRIVE_THRESHOLD = 0.3;
 const UNIT_RADIUS = 0.5;

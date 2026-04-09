@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { Grid } from '../../src/utils/grid';
-import { astar, Heuristic } from '../../src/utils/pathfinding';
+import { astar } from '../../src/utils/pathfinding';
 
 describe('astar', () => {
   const WIDTH = 10;
@@ -71,7 +71,7 @@ describe('astar', () => {
       if (i === 0) {
         return p.x !== 0 || p.z !== 0;
       }
-      const prev = { x: 0, z: 0, ...manhattanPath[i - 1] };
+      const prev = manhattanPath[i - 1];
       const dx = p.x - prev.x;
       const dz = p.z - prev.z;
       return dx !== 0 && dz !== 0;
