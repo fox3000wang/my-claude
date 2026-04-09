@@ -16,7 +16,7 @@ function App() {
   return (
     <div className="app">
       <div className="game-container">
-        <h1 className="game-title">消消乐</h1>
+        <h1 className="game-title">开心消消乐</h1>
 
         <Header gameState={gameState} />
 
