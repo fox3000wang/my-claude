@@ -1,4 +1,7 @@
+import { Game } from './components/Game'
+
 function App() {
-  return <div id="app">游戏加载中...</div>
+  return <Game />
 }
+
 export default App
