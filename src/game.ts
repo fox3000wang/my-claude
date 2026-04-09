@@ -7,13 +7,15 @@ import { Position } from './components/Position';
 import { Renderable } from './components/Renderable';
 import { Unit } from './components/Unit';
 import { MineralDeposit } from './components/MineralDeposit';
+import { DOMInputManager } from './input/InputManager';
 
 export class Game {
   readonly world: World;
   readonly frameSync: LocalFrameSyncAdapter;
-  private sceneManager: SceneManager;
-  private cameraController: OrbitCameraController;
-  private entityRenderer: EntityRenderer;
+  private sceneManager!: SceneManager;
+  private cameraController!: OrbitCameraController;
+  private entityRenderer!: EntityRenderer;
+  private inputManager: DOMInputManager;
   private animationId: number | null = null;
   private lastTime = 0;
 
@@ -34,6 +36,9 @@ export class Game {
 
     // 实体渲染
     this.entityRenderer = new EntityRenderer(this.sceneManager.scene);
+
+    // 输入管理
+    this.inputManager = new DOMInputManager(canvasElement, this.sceneManager.camera);
 
     // 初始化测试场景
     this.initTestScene();
@@ -105,6 +110,7 @@ export class Game {
 
   dispose(): void {
     this.stop();
+    this.inputManager.dispose();
     this.sceneManager.dispose();
     this.cameraController.dispose();
   }
