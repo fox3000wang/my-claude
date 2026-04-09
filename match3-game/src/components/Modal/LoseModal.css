@@ -1,0 +1,17 @@
+.lose-title {
+  font-size: 28px;
+  color: #666;
+  margin-bottom: 16px;
+}
+
+.lose-info {
+  font-size: 24px;
+  color: #FF6B6B;
+  margin-bottom: 8px;
+}
+
+.lose-message {
+  font-size: 16px;
+  color: #999;
+  margin-bottom: 24px;
+}
