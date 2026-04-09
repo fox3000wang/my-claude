@@ -3,6 +3,7 @@ import { Entity } from '../core/ecs/Entity';
 import { Position } from '../components/Position';
 import { Combat } from '../components/Combat';
 import { Health } from '../components/Health';
+import { Shield } from '../components/Shield';
 
 export class CombatSystem extends System {
   readonly name = 'CombatSystem';
@@ -37,11 +38,20 @@ export class CombatSystem extends System {
     if (!attacker || !target) return;
 
     const targetHealth = target.getComponent<Health>('Health');
+    const targetShield = target.getComponent<Shield>('Shield');
     const targetCombat = target.getComponent<Combat>('Combat');
     if (!targetHealth) return;
 
     const damage = Math.max(1, combat.attack - (targetCombat?.armor ?? 0));
-    targetHealth.takeDamage(damage);
+
+    if (targetShield) {
+      const overflow = targetShield.takeDamage(damage);
+      if (overflow > 0) {
+        targetHealth.takeDamage(overflow);
+      }
+    } else {
+      targetHealth.takeDamage(damage);
+    }
 
     if (targetHealth.isDead()) {
       this.world!.removeEntity(target.id);
