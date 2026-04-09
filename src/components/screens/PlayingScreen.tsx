@@ -36,12 +36,14 @@ export function PlayingScreen() {
   const targetScore = useGameStore(s => s.targetScore)
   const totalScore = useGameStore(s => s.totalScore)
   const handsRemaining = useGameStore(s => s.handsRemaining)
+  const discardsRemaining = useGameStore(s => s.discardsRemaining)
   const hand = useGameStore(s => s.hand)
   const selectedCards = useGameStore(s => s.selectedCards)
   const activeJokers = useGameStore(s => s.activeJokers)
   const money = useGameStore(s => s.money)
   const selectCard = useGameStore(s => s.selectCard)
   const playHand = useGameStore(s => s.playHand)
+  const discardHand = useGameStore(s => s.discardHand)
   const sortHand = useGameStore(s => s.sortHand)
 
   const preview = useMemo(
@@ -58,6 +60,7 @@ export function PlayingScreen() {
         targetScore={targetScore}
         currentScore={totalScore}
         handsRemaining={handsRemaining}
+        discardsRemaining={discardsRemaining}
         money={money}
       />
       <ProgressBar current={totalScore} target={targetScore} />
@@ -90,6 +93,13 @@ export function PlayingScreen() {
       <div className="actions">
         <Button id="playBtn" onClick={playHand} disabled={selectedCards.length === 0}>
           {selectedCards.length > 0 ? `${selectedCards.length}张` : '出牌'}
+        </Button>
+        <Button
+          variant="secondary"
+          onClick={discardHand}
+          disabled={selectedCards.length === 0 || discardsRemaining <= 0}
+        >
+          弃牌 {discardsRemaining > 0 ? `(${discardsRemaining})` : ''}
         </Button>
         <Button variant="secondary" onClick={() => sortHand('rank')}>
           理牌

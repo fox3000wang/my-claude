@@ -25,6 +25,9 @@ import {
 /** 每局初始出牌次数 */
 const INITIAL_HANDS_REMAINING = 4
 
+/** 每局初始弃牌次数 */
+const INITIAL_DISCARDS = 3
+
 /** 初始金币 */
 const INITIAL_MONEY = 4
 
@@ -43,6 +46,7 @@ export interface GameStore {
   totalScore: number
   targetScore: number
   handsRemaining: number
+  discardsRemaining: number
   lastResult: HandResult | null
   lastScore: ScoreResult | null
   lastJokerContext: JokerContext | null
@@ -68,6 +72,7 @@ export interface GameStore {
   startGame: () => void
   selectCard: (cardId: string) => void
   playHand: () => void
+  discardHand: () => void
   continueGame: () => void
   sortHand: (by: 'suit' | 'rank') => void
   selectBlind: (index: number) => void
@@ -102,6 +107,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
   totalScore: 0,
   targetScore: 0,
   handsRemaining: INITIAL_HANDS_REMAINING,
+  discardsRemaining: INITIAL_DISCARDS,
   lastResult: null,
   lastScore: null,
   lastJokerContext: null,
@@ -291,6 +297,41 @@ export const useGameStore = create<GameStore>((set, get) => ({
     get().sortHand('rank')
   },
 
+  // ─── discardHand ───────────────────────────────────────────────────────
+  discardHand() {
+    const { selectedCards, discardsRemaining, deckManager } = get()
+
+    if (selectedCards.length === 0) return
+    if (discardsRemaining <= 0) return
+
+    const discardCount = Math.min(selectedCards.length, 5)
+
+    // 1. 弃置选中的牌（最多5张）
+    const toDiscard = selectedCards.slice(0, discardCount)
+    deckManager.discardCards(toDiscard)
+
+    // 2. 牌堆不足则重洗
+    if (deckManager.deck.length < discardCount) {
+      deckManager.reshuffle()
+    }
+
+    // 3. 补回对应数量的牌
+    deckManager.draw(discardCount)
+
+    // 4. Tarot 系统开始新回合
+    const { tarotSystem } = get()
+    tarotSystem.startRound()
+
+    set({
+      hand: [...deckManager.hand],
+      selectedCards: [],
+      discardsRemaining: discardsRemaining - 1,
+    })
+
+    // 5. 自动按面值理牌
+    get().sortHand('rank')
+  },
+
   // ─── sortHand ──────────────────────────────────────────────────────────
   sortHand(by: 'suit' | 'rank') {
     const { hand, deckManager } = get()
@@ -329,6 +370,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       screen: 'PLAYING',
       totalScore: 0,
       handsRemaining: INITIAL_HANDS_REMAINING,
+      discardsRemaining: INITIAL_DISCARDS,
       lastResult: null,
       lastScore: null,
       lastJokerContext: null,

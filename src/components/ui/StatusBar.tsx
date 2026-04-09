@@ -7,10 +7,11 @@ interface StatusBarProps {
   targetScore: number
   currentScore: number
   handsRemaining: number
+  discardsRemaining?: number
   money?: number
 }
 
-export function StatusBar({ ante, blind, targetScore, currentScore, handsRemaining, money = 0 }: StatusBarProps) {
+export function StatusBar({ ante, blind, targetScore, currentScore, handsRemaining, discardsRemaining, money = 0 }: StatusBarProps) {
   const blindName = BLIND_NAMES[blind] ?? 'Small'
 
   return (
@@ -35,6 +36,12 @@ export function StatusBar({ ante, blind, targetScore, currentScore, handsRemaini
         <span className="status-label">Hands</span>
         <span className="status-value hands">{handsRemaining}x</span>
       </div>
+      {discardsRemaining !== undefined && (
+        <div className="status-item">
+          <span className="status-label">弃牌</span>
+          <span className="status-value discard">{discardsRemaining}x</span>
+        </div>
+      )}
       <div className="status-item">
         <span className="status-label">Money</span>
         <span className="status-value">${money}</span>
