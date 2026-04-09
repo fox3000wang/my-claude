@@ -6,11 +6,17 @@ import { Position } from '../components/Position';
 import { Renderable } from '../components/Renderable';
 import { Unit } from '../components/Unit';
 import { Selected } from '../components/Selected';
+import { PlayerResources } from '../components/PlayerResources';
 import unitsData from '../data/units.json';
 
 export class TrainingSystem extends System {
   readonly name = 'TrainingSystem';
   private _prevLengths = new Map<number, number>();
+  private playerResources: PlayerResources | null = null;
+
+  setPlayerResources(resources: PlayerResources): void {
+    this.playerResources = resources;
+  }
 
   update(delta: number): void {
     const buildings = this.world!.getEntitiesWithComponents('TrainQueue', 'Building', 'Position');
@@ -41,9 +47,17 @@ export class TrainingSystem extends System {
     const data = (unitsData as Record<string, unknown>)[unitType] as {
       health: number;
       maxHealth: number;
+      cost: { minerals: number; supply: number };
     } | undefined;
     const health = data?.health ?? 40;
     const maxHealth = data?.maxHealth ?? 40;
+    const mineralCost = data?.cost?.minerals ?? 0;
+    const supplyCost = data?.cost?.supply ?? 0;
+
+    if (this.playerResources) {
+      if (!this.playerResources.spend(mineralCost)) return;
+      this.playerResources.useSupply(supplyCost);
+    }
 
     const newEntity = this.world!.createEntity();
     newEntity.addComponent(new Position(pos.x + 3, 0, pos.z));

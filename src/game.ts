@@ -14,6 +14,7 @@ import { CombatSystem } from './systems/CombatSystem';
 import { SelectionSystem } from './systems/SelectionSystem';
 import { AISystem } from './systems/AISystem';
 import { BuildSystem } from './systems/BuildSystem';
+import { TrainingSystem } from './systems/TrainingSystem';
 import { ResourceSystem } from './systems/ResourceSystem';
 import { PathfindingSystem } from './systems/PathfindingSystem';
 import { Grid } from './utils/grid';
@@ -31,6 +32,7 @@ export class Game {
   private inputManager!: DOMInputManager;
   private selectionSystem!: SelectionSystem;
   private buildSystem!: BuildSystem;
+  private trainingSystem!: TrainingSystem;
   private resourceSystem!: ResourceSystem;
   private aiSystem!: AISystem;
   private playerResources!: PlayerResources;
@@ -76,6 +78,9 @@ export class Game {
     this.buildSystem = new BuildSystem(this.grid);
     this.buildSystem.setPlayerResources(this.playerResources);
     this.world.addSystem(this.buildSystem);
+    this.trainingSystem = new TrainingSystem();
+    this.trainingSystem.setPlayerResources(this.playerResources);
+    this.world.addSystem(this.trainingSystem);
     this.resourceSystem = new ResourceSystem();
     this.resourceSystem.setPlayerResources(this.playerResources);
     this.world.addSystem(this.resourceSystem);
