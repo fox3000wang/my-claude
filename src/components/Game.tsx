@@ -7,8 +7,10 @@ import { ScoringScreen } from './screens/ScoringScreen'
 import { ShopScreen } from './screens/ShopScreen'
 import { GameOverScreen } from './screens/GameOverScreen'
 import { VictoryScreen } from './screens/VictoryScreen'
+import { useKeyboard } from '../hooks/useKeyboard'
 
 export function Game() {
+  useKeyboard()
   const screen = useGameStore(s => s.screen)
 
   switch (screen) {

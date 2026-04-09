@@ -7,9 +7,10 @@ interface StatusBarProps {
   targetScore: number
   currentScore: number
   handsRemaining: number
+  money?: number
 }
 
-export function StatusBar({ ante, blind, targetScore, currentScore, handsRemaining }: StatusBarProps) {
+export function StatusBar({ ante, blind, targetScore, currentScore, handsRemaining, money = 0 }: StatusBarProps) {
   const blindName = BLIND_NAMES[blind] ?? 'Small'
 
   return (
@@ -25,7 +26,7 @@ export function StatusBar({ ante, blind, targetScore, currentScore, handsRemaini
       <div className="status-item">
         <span className="status-label">Score</span>
         <span className="status-value">
-          <span className="status-value current">{currentScore}</span>
+          <span id="currentScore" className="status-value current">{currentScore}</span>
           {' / '}
           <span className="status-value target">{targetScore}</span>
         </span>
@@ -33,6 +34,10 @@ export function StatusBar({ ante, blind, targetScore, currentScore, handsRemaini
       <div className="status-item">
         <span className="status-label">Hands</span>
         <span className="status-value hands">{handsRemaining}x</span>
+      </div>
+      <div className="status-item">
+        <span className="status-label">Money</span>
+        <span className="status-value">${money}</span>
       </div>
     </div>
   )

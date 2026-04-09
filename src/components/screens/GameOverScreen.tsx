@@ -6,6 +6,7 @@ export function GameOverScreen() {
   const currentAnte = useGameStore(s => s.currentAnte)
   const currentBlindIndex = useGameStore(s => s.currentBlindIndex)
   const backToTitle = useGameStore(s => s.backToTitle)
+  const startGame = useGameStore(s => s.startGame)
 
   return (
     <div className="end-screen gameover">
@@ -18,7 +19,8 @@ export function GameOverScreen() {
           最终得分: <strong>{totalScore}</strong>
         </p>
       </div>
-      <Button onClick={backToTitle}>再来一局</Button>
+      <Button onClick={startGame}>再来一局</Button>
+      <Button variant="secondary" onClick={backToTitle}>返回标题</Button>
     </div>
   )
 }

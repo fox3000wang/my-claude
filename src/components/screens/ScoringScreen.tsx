@@ -11,6 +11,7 @@ export function ScoringScreen() {
   const targetScore = useGameStore(s => s.targetScore)
   const totalScore = useGameStore(s => s.totalScore)
   const handsRemaining = useGameStore(s => s.handsRemaining)
+  const money = useGameStore(s => s.money)
   const lastResult = useGameStore(s => s.lastResult)
   const lastScore = useGameStore(s => s.lastScore)
   const continueGame = useGameStore(s => s.continueGame)
@@ -28,6 +29,7 @@ export function ScoringScreen() {
         targetScore={targetScore}
         currentScore={totalScore}
         handsRemaining={handsRemaining}
+        money={money}
       />
       <ProgressBar current={totalScore} target={targetScore} />
 
@@ -50,7 +52,7 @@ export function ScoringScreen() {
       )}
 
       <div className="actions">
-        <Button onClick={continueGame}>继续</Button>
+        <Button onClick={continueGame}>继续出牌</Button>
       </div>
     </div>
   )

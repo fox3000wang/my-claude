@@ -7,9 +7,20 @@ export function useKeyboard() {
   const playHand = useGameStore(s => s.playHand)
   const selectCard = useGameStore(s => s.selectCard)
   const sortHand = useGameStore(s => s.sortHand)
+  const selectBlind = useGameStore(s => s.selectBlind)
+  const confirmAnte = useGameStore(s => s.confirmAnte)
 
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
+      if (screen === 'BLIND_SELECT') {
+        switch (e.key) {
+          case '1': selectBlind(0); confirmAnte(); break
+          case '2': selectBlind(1); confirmAnte(); break
+          case '3': selectBlind(2); confirmAnte(); break
+        }
+        return
+      }
+
       if (screen !== 'PLAYING') return
 
       switch (e.code) {
@@ -32,5 +43,5 @@ export function useKeyboard() {
 
     window.addEventListener('keydown', handler)
     return () => window.removeEventListener('keydown', handler)
-  }, [screen, selectedCards, playHand, selectCard, sortHand])
+  }, [screen, selectedCards, playHand, selectCard, sortHand, selectBlind, confirmAnte])
 }

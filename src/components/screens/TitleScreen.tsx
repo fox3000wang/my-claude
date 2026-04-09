@@ -9,6 +9,7 @@ export function TitleScreen() {
   return (
     <div className="title-screen">
       <h1>🃏 小丑牌</h1>
+      <p className="subtitle">打出扑克牌，获得分数，击败盲注！</p>
       <div className="title-cards" aria-hidden="true">
         {SUITS.map((suit, i) => (
           <div key={i} className={`mini-card suit-${['spade', 'heart', 'diamond', 'club', 'spade'][i]}`}>
@@ -16,7 +17,7 @@ export function TitleScreen() {
           </div>
         ))}
       </div>
-      <Button onClick={startGame}>开始游戏</Button>
+      <Button id="startBtn" onClick={startGame}>开始游戏</Button>
     </div>
   )
 }

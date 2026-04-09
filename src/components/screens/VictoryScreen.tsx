@@ -18,6 +18,7 @@ export function VictoryScreen() {
         </p>
       </div>
       <Button onClick={backToTitle}>再来一局</Button>
+      <Button variant="secondary" onClick={backToTitle}>返回标题</Button>
     </div>
   )
 }

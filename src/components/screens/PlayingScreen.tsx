@@ -39,6 +39,7 @@ export function PlayingScreen() {
   const hand = useGameStore(s => s.hand)
   const selectedCards = useGameStore(s => s.selectedCards)
   const activeJokers = useGameStore(s => s.activeJokers)
+  const money = useGameStore(s => s.money)
   const selectCard = useGameStore(s => s.selectCard)
   const playHand = useGameStore(s => s.playHand)
   const sortHand = useGameStore(s => s.sortHand)
@@ -57,6 +58,7 @@ export function PlayingScreen() {
         targetScore={targetScore}
         currentScore={totalScore}
         handsRemaining={handsRemaining}
+        money={money}
       />
       <ProgressBar current={totalScore} target={targetScore} />
 
@@ -75,6 +77,7 @@ export function PlayingScreen() {
         <ScorePanel isPreview />
       )}
 
+      <p className="hand-label">已选 {selectedCards.length} 张</p>
       <CardContainer
         cards={hand}
         selectedIds={selectedCards.map(c => c.id)}
@@ -85,8 +88,8 @@ export function PlayingScreen() {
       <JokerArea jokers={activeJokers} />
 
       <div className="actions">
-        <Button onClick={playHand} disabled={selectedCards.length === 0}>
-          出牌
+        <Button id="playBtn" onClick={playHand} disabled={selectedCards.length === 0}>
+          {selectedCards.length > 0 ? `${selectedCards.length}张` : '出牌'}
         </Button>
         <Button variant="secondary" onClick={() => sortHand('rank')}>
           理牌

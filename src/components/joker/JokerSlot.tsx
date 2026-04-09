@@ -58,7 +58,7 @@ function formatEffect(effect: JokerEffect): string {
 
 export function JokerSlot({ joker, triggered = false, contrib }: JokerSlotProps) {
   if (!joker) {
-    return <div className="joker-slot empty" aria-label="空 Joker 槽位" />
+    return <div className="joker-slot empty" aria-label="空槽位"><span className="joker-empty-msg">暂无</span></div>
   }
 
   const classes = [

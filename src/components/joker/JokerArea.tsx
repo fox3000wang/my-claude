@@ -29,7 +29,6 @@ export function JokerArea({
 
   return (
     <div className="joker-area" aria-label="Joker 区域">
-      <div className="joker-label">Joker</div>
       <div className="joker-slots">
         {slots.map(({ joker, triggered, contrib }, i) => (
           <JokerSlot
