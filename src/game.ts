@@ -72,7 +72,7 @@ export class Game {
 
     // 玩家资源
     this.playerResources = new PlayerResources();
-    this.buildSystem = new BuildSystem();
+    this.buildSystem = new BuildSystem(this.grid);
     this.buildSystem.setPlayerResources(this.playerResources);
     this.world.addSystem(this.buildSystem);
     this.resourceSystem = new ResourceSystem();
