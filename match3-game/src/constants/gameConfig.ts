@@ -2,14 +2,22 @@ import { TileType, LevelConfig } from '../types/game';
 
 export const BOARD_SIZE = 6;
 
-export const TILE_TYPES: TileType[] = ['red', 'yellow', 'blue', 'green', 'purple'];
+export const TILE_TYPES: TileType[] = ['cat', 'dog', 'rabbit', 'panda', 'fox'];
+
+export const TILE_EMOJIS: Record<TileType, string> = {
+  cat: '🐱',
+  dog: '🐶',
+  rabbit: '🐰',
+  panda: '🐼',
+  fox: '🦊',
+};
 
 export const TILE_COLORS: Record<TileType, string> = {
-  red: '#FF6B6B',
-  yellow: '#FFE66D',
-  blue: '#4ECDC4',
-  green: '#95E1A3',
-  purple: '#C9B1FF',
+  cat: '#FFE4C4',
+  dog: '#DEB887',
+  rabbit: '#FFB6C1',
+  panda: '#F5F5F5',
+  fox: '#FF8C00',
 };
 
 export const TILE_SIZE = 50;

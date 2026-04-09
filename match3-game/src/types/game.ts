@@ -1,4 +1,4 @@
-export type TileType = 'red' | 'yellow' | 'blue' | 'green' | 'purple';
+export type TileType = 'cat' | 'dog' | 'rabbit' | 'panda' | 'fox';
 
 export interface Position {
   row: number;

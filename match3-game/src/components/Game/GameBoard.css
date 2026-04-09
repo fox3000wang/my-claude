@@ -1,4 +1,4 @@
-.game-board-container {
+.game-board-wrapper {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -6,13 +6,55 @@
 }
 
 .game-board {
-  max-width: 100%;
-  height: auto;
+  position: relative;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
   touch-action: none;
 }
 
+.tile {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #fff 0%, #f0f0f0 100%);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  user-select: none;
+}
+
+.tile:active {
+  transform: scale(0.95);
+}
+
+.tile.selected {
+  transform: scale(1.15);
+  box-shadow: 0 0 20px rgba(255, 182, 193, 0.8), 0 4px 16px rgba(0, 0, 0, 0.2);
+  animation: bounce 0.4s ease;
+  z-index: 10;
+}
+
+.tile-emoji {
+  font-size: 32px;
+  line-height: 1;
+  pointer-events: none;
+}
+
+@keyframes bounce {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.25); }
+  100% { transform: scale(1.15); }
+}
+
 @media (max-width: 400px) {
-  .game-board-container {
+  .game-board-wrapper {
     padding: 8px;
+  }
+
+  .tile-emoji {
+    font-size: 26px;
   }
 }

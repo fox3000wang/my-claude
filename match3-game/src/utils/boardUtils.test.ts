@@ -37,7 +37,7 @@ describe('boardUtils', () => {
     it('应检测横向3个匹配', () => {
       const board = Array.from({ length: BOARD_SIZE }, (_, row) =>
         Array.from({ length: BOARD_SIZE }, (_, col) => ({
-          type: 'red' as TileType,
+          type: 'cat' as TileType,
           row,
           col,
           isSelected: false,
@@ -51,7 +51,7 @@ describe('boardUtils', () => {
     it('应检测纵向3个匹配', () => {
       const board = Array.from({ length: BOARD_SIZE }, (_, row) =>
         Array.from({ length: BOARD_SIZE }, (_, col) => ({
-          type: 'blue' as TileType,
+          type: 'dog' as TileType,
           row,
           col,
           isSelected: false,
@@ -84,20 +84,20 @@ describe('boardUtils', () => {
     it('应正确交换两个方块', () => {
       const board = Array.from({ length: BOARD_SIZE }, (_, row) =>
         Array.from({ length: BOARD_SIZE }, (_, col) => ({
-          type: 'red' as TileType,
+          type: 'cat' as TileType,
           row,
           col,
           isSelected: false,
           isMatching: false,
         }))
       );
-      board[0][0].type = 'red';
-      board[0][1].type = 'blue';
+      board[0][0].type = 'cat';
+      board[0][1].type = 'dog';
 
       const newBoard = swapTiles(board, { row: 0, col: 0 }, { row: 0, col: 1 });
 
-      expect(newBoard[0][0].type).toBe('blue');
-      expect(newBoard[0][1].type).toBe('red');
+      expect(newBoard[0][0].type).toBe('dog');
+      expect(newBoard[0][1].type).toBe('cat');
     });
   });
 });
