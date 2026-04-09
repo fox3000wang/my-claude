@@ -1,12 +1,26 @@
+import React from 'react';
 import type { Entity } from '../../core/ecs/Entity';
 import type { Unit } from '../../components/Unit';
 import type { Health } from '../../components/Health';
 
 interface Props {
   selectedEntities: Entity[];
+  onCommand?: (cmd: 'attack' | 'move' | 'stop') => void;
 }
 
-export function SelectionPanel({ selectedEntities }: Props) {
+const cmdButtonStyle: React.CSSProperties = {
+  padding: '4px 12px',
+  background: 'rgba(180, 60, 60, 0.8)',
+  border: '1px solid rgba(255, 100, 100, 0.5)',
+  borderRadius: 3,
+  color: '#ffcccc',
+  fontFamily: 'monospace',
+  fontSize: 11,
+  cursor: 'pointer',
+  userSelect: 'none',
+};
+
+export function SelectionPanel({ selectedEntities, onCommand }: Props) {
   if (selectedEntities.length === 0) {
     return (
       <div style={{
@@ -49,6 +63,11 @@ export function SelectionPanel({ selectedEntities }: Props) {
             }} />
           </div>
         </div>
+      )}
+      {onCommand && (
+        <button style={cmdButtonStyle} onClick={() => onCommand('attack')}>
+          ATTACK
+        </button>
       )}
     </div>
   );

@@ -1,17 +1,18 @@
 import { useEffect, useRef } from 'react';
 import { Game } from '../game';
-import { HUD } from './HUD/HUD';
+
+// Shared reference so HUD can call game.issueCommand
+export let currentGame: Game | null = null;
 
 export function GameCanvas() {
   const containerRef = useRef<HTMLDivElement>(null);
-  const gameRef = useRef<Game | null>(null);
 
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
 
     const game = new Game();
-    gameRef.current = game;
+    currentGame = game;
 
     const { width, height } = container.getBoundingClientRect();
     game.init(container, width, height);
@@ -26,19 +27,10 @@ export function GameCanvas() {
     return () => {
       window.removeEventListener('resize', handleResize);
       game.dispose();
-      gameRef.current = null;
     };
   }, []);
 
   return (
-    <>
-      <div ref={containerRef} style={{ width: '100%', height: 'calc(100% - 120px)', cursor: 'grab' }} />
-      <HUD
-        minerals={0}
-        supplyUsed={0}
-        supplyMax={10}
-        selectedEntities={[]}
-      />
-    </>
+    <div ref={containerRef} style={{ width: '100%', height: '100%', cursor: 'grab' }} />
   );
 }

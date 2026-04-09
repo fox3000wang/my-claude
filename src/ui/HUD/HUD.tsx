@@ -6,9 +6,10 @@ interface Props {
   supplyUsed: number;
   supplyMax: number;
   selectedEntities: Entity[];
+  onCommand?: (cmd: 'attack' | 'move' | 'stop') => void;
 }
 
-export function HUD({ minerals, supplyUsed, supplyMax, selectedEntities }: Props) {
+export function HUD({ minerals, supplyUsed, supplyMax, selectedEntities, onCommand }: Props) {
   return (
     <div
       style={{
@@ -35,7 +36,7 @@ export function HUD({ minerals, supplyUsed, supplyMax, selectedEntities }: Props
       </div>
 
       {/* 选中单位面板 */}
-      <SelectionPanel selectedEntities={selectedEntities} />
+      <SelectionPanel selectedEntities={selectedEntities} onCommand={onCommand} />
 
       {/* 资源面板 */}
       <div

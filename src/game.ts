@@ -163,4 +163,39 @@ export class Game {
     this.sceneManager.dispose();
     this.cameraController.dispose();
   }
+
+  issueCommand(cmd: 'attack' | 'move' | 'stop'): void {
+    const ids = this.selectionSystem.getSelectedIds();
+    for (const id of ids) {
+      const entity = this.world.getEntity(id);
+      if (!entity) continue;
+      if (cmd === 'stop') {
+        if (entity.hasComponent('MoveTarget')) entity.removeComponent('MoveTarget');
+        if (entity.hasComponent('Combat')) {
+          entity.getComponent<Combat>('Combat')!.targetId = null;
+        }
+      } else if (cmd === 'attack') {
+        // Attack nearest enemy unit
+        if (!entity.hasComponent('Combat')) continue;
+        const attackerPos = entity.getComponent<Position>('Position')!;
+        const attackerCombat = entity.getComponent<Combat>('Combat')!;
+        const range = attackerCombat.range;
+
+        const enemies = this.world.getEntitiesWithComponents('Position', 'Unit', 'Combat');
+        let nearest: { id: number; dist: number } | null = null;
+        for (const e of enemies) {
+          const unit = e.getComponent<Unit>('Unit')!;
+          if (unit.ownerId === 0) continue; // not enemy
+          const pos = e.getComponent<Position>('Position')!;
+          const dist = Math.hypot(pos.x - attackerPos.x, pos.z - attackerPos.z);
+          if (dist <= range && (!nearest || dist < nearest.dist)) {
+            nearest = { id: e.id, dist };
+          }
+        }
+        if (nearest) {
+          attackerCombat.targetId = nearest.id;
+        }
+      }
+    }
+  }
 }

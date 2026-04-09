@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import type { Entity } from '../core/ecs/Entity';
-import { GameCanvas } from './GameCanvas';
+import { GameCanvas, currentGame } from './GameCanvas';
 import { HUD } from './HUD/HUD';
 
 export function App() {
@@ -26,6 +26,7 @@ export function App() {
         supplyUsed={supplyUsed}
         supplyMax={supplyMax}
         selectedEntities={selectedEntities}
+        onCommand={(cmd) => currentGame?.issueCommand(cmd)}
       />
     </div>
   );

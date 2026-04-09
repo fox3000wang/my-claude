@@ -5,6 +5,7 @@ import { Selected } from '../components/Selected';
 import { Position } from '../components/Position';
 import { Unit } from '../components/Unit';
 import { MoveTarget } from '../components/MoveTarget';
+import { Combat } from '../components/Combat';
 import type { InputManager } from '../input/InputManager';
 
 export class SelectionSystem extends System {
@@ -42,20 +43,44 @@ export class SelectionSystem extends System {
       }
     });
 
-    // 右键点击：命令移动到目标
+    // 右键点击：攻击敌方或移动到目标
     this.input.onMouseUp((state) => {
       if (state.button === 2 && this.selectedIds.size > 0) {
-        for (const id of this.selectedIds) {
-          const entity = this.world!.getEntity(id);
-          if (entity) {
-            // 如果已经有 MoveTarget，替换目标
-            if (entity.hasComponent('MoveTarget')) {
-              const mt = entity.getComponent<MoveTarget>('MoveTarget')!;
-              mt.x = state.worldX;
-              mt.z = state.worldZ;
-              mt.arrived = false;
-            } else {
-              entity.addComponent(MoveTarget.at(state.worldX, 0, state.worldZ));
+        // Find enemy unit under click
+        const allUnits = this.world!.getEntitiesWithComponents('Position', 'Unit', 'Combat');
+        let targetEnemyId: number | null = null;
+        for (const e of allUnits) {
+          const pos = e.getComponent<Position>('Position')!;
+          const unit = e.getComponent<Unit>('Unit')!;
+          if (unit.ownerId === 0) continue; // not enemy
+          const dist = Math.hypot(pos.x - state.worldX, pos.z - state.worldZ);
+          if (dist < 2.5) {
+            targetEnemyId = e.id;
+            break;
+          }
+        }
+
+        if (targetEnemyId !== null) {
+          // Set Combat.targetId on selected units
+          for (const id of this.selectedIds) {
+            const entity = this.world!.getEntity(id);
+            if (entity?.hasComponent('Combat')) {
+              entity.getComponent<Combat>('Combat')!.targetId = targetEnemyId;
+            }
+          }
+        } else {
+          // Existing MoveTarget logic
+          for (const id of this.selectedIds) {
+            const entity = this.world!.getEntity(id);
+            if (entity) {
+              if (entity.hasComponent('MoveTarget')) {
+                const mt = entity.getComponent<MoveTarget>('MoveTarget')!;
+                mt.x = state.worldX;
+                mt.z = state.worldZ;
+                mt.arrived = false;
+              } else {
+                entity.addComponent(MoveTarget.at(state.worldX, 0, state.worldZ));
+              }
             }
           }
         }
