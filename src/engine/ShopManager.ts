@@ -187,6 +187,17 @@ export class ShopManager {
     this.rerollCost = 5
   }
 
+  // ─── Lifecycle stubs ──────────────────────────────────────────────────────
+
+  /**
+   * Exit the shop.
+   * Shop exit is handled by the store/screen transition.
+   * This stub exists for API completeness with the rest of the engine.
+   */
+  leave(): void {
+    // No-op: screen transition is managed by the game controller.
+  }
+
   // ─── Private helpers ──────────────────────────────────────────────────────
 
   private sampleOne<T>(arr: T[]): T {

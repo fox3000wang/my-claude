@@ -12,7 +12,6 @@
  */
 
 import { TarotEffect, TarotOrPlanet } from '../types/game'
-import { HAND_TYPES } from '../constants/handTypes'
 
 /**
  * Pending selection that requires player input.
@@ -217,23 +216,17 @@ export class TarotSystem {
   }
 
   /**
-   * Clear all pending selections (call after player makes a choice).
+   * Resolve a pending choose_hand_type selection.
+   *
+   * This is a no-op stub — the selected hand type is stored externally
+   * (e.g. in the game's pendingSelection state) so ScoringEngine can use it.
+   * This method exists for API completeness with the rest of the engine.
+   *
+   * @param _handType - The handType key chosen (e.g. 'FLUSH', 'STRAIGHT'); ignored.
    */
-  clearPending(): void {
-    this.roundModifiers = { ...this.roundModifiers, pending: null }
-  }
-
-  /**
-   * Set the hand type chosen via choose_hand_type effect.
-   * @param handType - The handType key chosen (e.g. 'FLUSH', 'STRAIGHT')
-   */
-  setChosenHandType(handType: string): void {
-    this.roundModifiers = {
-      ...this.roundModifiers,
-      pending: null,
-    }
-    // The chosen hand type is stored externally in the game state
-    // (e.g. state.chosenHandType = handType) so ScoringEngine can use it.
+  setChosenHandType(_handType: string): void {
+    // No-op: the chosen hand type is stored externally.
+    // Callers must manage the pending selection state directly.
   }
 
   // ─── Round lifecycle ──────────────────────────────────────────────────────
@@ -256,7 +249,7 @@ export class TarotSystem {
       multPerCard: this.roundModifiers.multPerCard,
       freeHand: this.roundModifiers.freeHand,
       nextAnteDiscount: this.roundModifiers.nextAnteDiscount,
-      chooseHandType: this.roundModifiers.pending?.type === 'choose_hand_type' ?? false,
+      chooseHandType: (this.roundModifiers.pending?.type === 'choose_hand_type') as boolean,
       pending: this.roundModifiers.pending,
     }
   }
