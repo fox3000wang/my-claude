@@ -62,7 +62,6 @@ body {
    标题画面
 ============================================ */
 .title-screen {
-  flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -475,7 +474,6 @@ body {
    结束画面
 ============================================ */
 .end-screen {
-  flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
