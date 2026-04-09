@@ -62,13 +62,18 @@ export function useGameLogic() {
     if (isProcessingRef.current) return;
     if (gameState.gameStatus !== 'playing') return;
 
+    // 防御性检查
+    if (!gameState.board[row] || !gameState.board[row][col]) return;
+
     setGameState(prevState => {
       if (prevState.selectedTile === null) {
         // 选中方块
         const newBoard = prevState.board.map(r =>
-          r.map(t => ({ ...t, isSelected: false }))
+          r.map(t => (t ? { ...t, isSelected: false } : t))
         );
-        newBoard[row][col].isSelected = true;
+        if (newBoard[row]?.[col]) {
+          newBoard[row][col].isSelected = true;
+        }
 
         return {
           ...prevState,
@@ -81,7 +86,7 @@ export function useGameLogic() {
         // 点击同一位置，取消选中
         if (selectedRow === row && selectedCol === col) {
           const newBoard = prevState.board.map(r =>
-            r.map(t => ({ ...t, isSelected: false }))
+            r.map(t => (t ? { ...t, isSelected: false } : t))
           );
           return {
             ...prevState,
@@ -94,9 +99,11 @@ export function useGameLogic() {
         if (!isAdjacent(prevState.selectedTile, { row, col })) {
           // 不相邻，重新选中
           const newBoard = prevState.board.map(r =>
-            r.map(t => ({ ...t, isSelected: false }))
+            r.map(t => (t ? { ...t, isSelected: false } : t))
           );
-          newBoard[row][col].isSelected = true;
+          if (newBoard[row]?.[col]) {
+            newBoard[row][col].isSelected = true;
+          }
           return {
             ...prevState,
             board: newBoard,
@@ -108,7 +115,7 @@ export function useGameLogic() {
         isProcessingRef.current = true;
         let newBoard = swapTiles(prevState.board, prevState.selectedTile, { row, col });
         newBoard = newBoard.map(r =>
-          r.map(t => ({ ...t, isSelected: false }))
+          r.map(t => (t ? { ...t, isSelected: false } : t))
         );
 
         const matches = findMatches(newBoard);

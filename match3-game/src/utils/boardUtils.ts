@@ -178,17 +178,15 @@ export function dropTiles(board: Tile[][]): Tile[][] {
 }
 
 export function swapTiles(board: Tile[][], pos1: Position, pos2: Position): Tile[][] {
-  const newBoard = board.map(row => row.map(tile => ({ ...tile })));
+  const newBoard = board.map(row => row.map(tile => (tile ? { ...tile } : tile)));
 
-  const temp = newBoard[pos1.row][pos1.col];
-  newBoard[pos1.row][pos1.col] = newBoard[pos2.row][pos2.col];
-  newBoard[pos2.row][pos2.col] = temp;
+  const tile1 = newBoard[pos1.row]?.[pos1.col];
+  const tile2 = newBoard[pos2.row]?.[pos2.col];
 
-  // 更新行列坐标
-  newBoard[pos1.row][pos1.col].row = pos1.row;
-  newBoard[pos1.row][pos1.col].col = pos1.col;
-  newBoard[pos2.row][pos2.col].row = pos2.row;
-  newBoard[pos2.row][pos2.col].col = pos2.col;
+  if (!tile1 || !tile2) return newBoard;
+
+  newBoard[pos1.row][pos1.col] = { ...tile2, row: pos1.row, col: pos1.col };
+  newBoard[pos2.row][pos2.col] = { ...tile1, row: pos2.row, col: pos2.col };
 
   return newBoard;
 }

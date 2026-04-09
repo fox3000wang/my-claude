@@ -26,7 +26,7 @@ export function GameBoard({ board, onTileClick }: GameBoardProps) {
       >
         {board.map((row, rowIndex) =>
           row.map((tile, colIndex) => {
-            if (!tile.type) return null;
+            if (!tile || !tile.type) return null;
             return (
               <div
                 key={`${rowIndex}-${colIndex}`}
