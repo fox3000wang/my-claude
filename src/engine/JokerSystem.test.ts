@@ -325,7 +325,7 @@ describe('JokerSystem', () => {
         rarity: 'UNCOMMON',
         price: 5,
         desc: '',
-        effect: { type: 'draw' as any, value: 2 },
+        effect: { type: 'draw', value: 2 },
       }
       const system = new JokerSystem([joker])
       const hand = [makeCard(0, 0), makeCard(3, 0)]
@@ -345,7 +345,7 @@ describe('JokerSystem', () => {
         rarity: 'UNCOMMON',
         price: 5,
         desc: '',
-        effect: { type: 'money_mult' as any, value: 2 },
+        effect: { type: 'money_mult', value: 2 },
       }
       const system = new JokerSystem([joker])
       const result = system.triggerMoneyEarned(100)

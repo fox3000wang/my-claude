@@ -182,7 +182,11 @@ export class JokerSystem {
           }
           break
 
-        // 尚未实现的效果类型：passive / shop_bonus / draw / money_mult / money_bonus
+        // 尚未实现的效果类型：passive / money / draw / money_mult / money_bonus
+        case 'money':
+        case 'draw':
+        case 'money_mult':
+        case 'money_bonus':
         default:
           break
       }

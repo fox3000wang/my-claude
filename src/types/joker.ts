@@ -15,6 +15,10 @@ export type JokerEffectType =
   | 'suit_diverse_mult'
   | 'last_hand_mult'
   | 'mult_boost'
+  | 'money'        // 每回合摸钱
+  | 'draw'         // 发牌阶段额外发牌
+  | 'money_mult'   // 摸钱时金钱 × N
+  | 'money_bonus'  // 摸钱时金钱 + N
 
 export interface JokerEffect {
   type: JokerEffectType
