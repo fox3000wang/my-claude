@@ -1,6 +1,7 @@
 import { Component } from '../core/ecs/Component';
 
-export type UnitType = 'scv' | 'marine' | 'firebat' | 'tank';
+export type UnitType = 'scv' | 'marine' | 'firebat' | 'tank'
+  | 'drone' | 'zergling' | 'hydralisk' | 'mutalisk' | 'overlord';
 
 export class Unit extends Component {
   constructor(

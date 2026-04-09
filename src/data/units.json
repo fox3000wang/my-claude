@@ -38,5 +38,54 @@
     "speed": 1.5,
     "siegeSpeed": 0.5,
     "cost": { "minerals": 125, "supply": 3 }
+  },
+  "drone": {
+    "name": "Drone",
+    "health": 40,
+    "maxHealth": 40,
+    "speed": 2.5,
+    "cost": { "minerals": 50, "supply": 1 },
+    "abilities": ["harvest", "build"]
+  },
+  "zergling": {
+    "name": "Zergling",
+    "health": 35,
+    "maxHealth": 35,
+    "attack": 5,
+    "armor": 0,
+    "range": 1,
+    "speed": 4.0,
+    "cost": { "minerals": 25, "supply": 1 }
+  },
+  "hydralisk": {
+    "name": "Hydralisk",
+    "health": 80,
+    "maxHealth": 80,
+    "attack": 10,
+    "armor": 0,
+    "range": 5,
+    "speed": 2.5,
+    "cost": { "minerals": 75, "supply": 2 }
+  },
+  "mutalisk": {
+    "name": "Mutalisk",
+    "health": 60,
+    "maxHealth": 60,
+    "attack": 9,
+    "armor": 0,
+    "range": 5,
+    "speed": 3.5,
+    "cost": { "minerals": 100, "supply": 2 }
+  },
+  "overlord": {
+    "name": "Overlord",
+    "health": 200,
+    "maxHealth": 200,
+    "attack": 0,
+    "armor": 0,
+    "range": 0,
+    "speed": 1.5,
+    "cost": { "minerals": 100, "supply": -8 },
+    "abilities": ["transport"]
   }
 }

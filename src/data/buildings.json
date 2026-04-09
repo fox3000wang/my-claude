@@ -26,5 +26,45 @@
     "cost": { "minerals": 125 },
     "supply": 0,
     "size": 2
+  },
+  "hatchery": {
+    "name": "Hatchery",
+    "health": 1200,
+    "cost": { "minerals": 300 },
+    "supply": 0,
+    "size": 3,
+    "larvae": 2,
+    "spawns": ["drone", "zergling", "hydralisk", "mutalisk", "overlord"]
+  },
+  "spawning_pool": {
+    "name": "Spawning Pool",
+    "health": 750,
+    "cost": { "minerals": 200 },
+    "supply": 0,
+    "size": 2,
+    "unlocks": ["zergling"]
+  },
+  "hydralisk_den": {
+    "name": "Hydralisk Den",
+    "health": 850,
+    "cost": { "minerals": 175 },
+    "supply": 0,
+    "size": 2,
+    "unlocks": ["hydralisk"]
+  },
+  "spire": {
+    "name": "Spire",
+    "health": 600,
+    "cost": { "minerals": 200 },
+    "supply": 0,
+    "size": 2,
+    "unlocks": ["mutalisk"]
+  },
+  "extractor": {
+    "name": "Extractor",
+    "health": 500,
+    "cost": { "minerals": 75 },
+    "supply": 0,
+    "size": 1
   }
 }
