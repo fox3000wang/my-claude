@@ -36,7 +36,7 @@ export class ArmyGroupSystem extends System {
           this.setGroupMode(group, 'retreat', nearestEnemy.pos);
         } else if (dist < DETECTION_RANGE && groupStrength >= group.attackThreshold) {
           this.setGroupMode(group, 'attack', nearestEnemy.pos);
-        } else if (group.mode === 'idle' && dist < DETECTION_RANGE) {
+        } else if (dist < DETECTION_RANGE) {
           this.setGroupMode(group, 'defend', null);
         } else if (group.mode === 'attack' || group.mode === 'defend') {
           this.setGroupMode(group, 'idle', null);
@@ -164,7 +164,7 @@ export class ArmyGroupSystem extends System {
         if (group.hasRallyPoint) {
           const pos = e.getComponent<Position>('Position')!;
           const dist = Math.hypot(pos.x - group.rallyX, pos.z - group.rallyZ);
-          if (dist > RALLY_ARRIVED_DIST && !e.hasComponent('MoveTarget')) {
+          if (dist > RALLY_ARRIVED_DIST) {
             e.addComponent(MoveTarget.at(group.rallyX, 0, group.rallyZ));
           }
         }
