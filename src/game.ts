@@ -9,6 +9,7 @@ import { Unit } from './components/Unit';
 import { MineralDeposit } from './components/MineralDeposit';
 import { DOMInputManager } from './input/InputManager';
 import { MovementSystem } from './systems/MovementSystem';
+import { CombatSystem } from './systems/CombatSystem';
 import { SelectionSystem } from './systems/SelectionSystem';
 import { Selected } from './components/Selected';
 
@@ -46,6 +47,7 @@ export class Game {
 
     // Systems
     this.world.addSystem(new MovementSystem());
+    this.world.addSystem(new CombatSystem());
     this.selectionSystem = new SelectionSystem(this.inputManager, this.sceneManager.camera);
     this.world.addSystem(this.selectionSystem);
 
