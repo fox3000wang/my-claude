@@ -286,6 +286,9 @@ export const useGameStore = create<GameStore>((set, get) => ({
       // 来自 SCORING 界面则切回 PLAYING
       screen: screen === 'SCORING' ? 'PLAYING' : screen,
     })
+
+    // 5. 自动按面值理牌
+    get().sortHand('rank')
   },
 
   // ─── sortHand ──────────────────────────────────────────────────────────
@@ -332,6 +335,9 @@ export const useGameStore = create<GameStore>((set, get) => ({
       hand: [...deckManager.hand],
       selectedCards: [],
     })
+
+    // 自动按面值理牌
+    get().sortHand('rank')
   },
 
   // ─── backToAnteSelect ─────────────────────────────────────────────────
