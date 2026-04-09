@@ -1,0 +1,30 @@
+{
+  "command_center": {
+    "name": "Command Center",
+    "health": 1500,
+    "cost": { "minerals": 400 },
+    "supply": 0,
+    "size": 3
+  },
+  "supply_depot": {
+    "name": "Supply Depot",
+    "health": 500,
+    "cost": { "minerals": 100 },
+    "supply": 8,
+    "size": 2
+  },
+  "barracks": {
+    "name": "Barracks",
+    "health": 1000,
+    "cost": { "minerals": 150 },
+    "supply": 0,
+    "size": 2
+  },
+  "engineering_bay": {
+    "name": "Engineering Bay",
+    "health": 750,
+    "cost": { "minerals": 125 },
+    "supply": 0,
+    "size": 2
+  }
+}

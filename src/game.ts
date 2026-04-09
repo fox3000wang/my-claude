@@ -11,7 +11,9 @@ import { DOMInputManager } from './input/InputManager';
 import { MovementSystem } from './systems/MovementSystem';
 import { CombatSystem } from './systems/CombatSystem';
 import { SelectionSystem } from './systems/SelectionSystem';
+import { BuildSystem } from './systems/BuildSystem';
 import { Selected } from './components/Selected';
+import { PlayerResources } from './components/PlayerResources';
 
 export class Game {
   readonly world: World;
@@ -21,6 +23,8 @@ export class Game {
   private entityRenderer!: EntityRenderer;
   private inputManager!: DOMInputManager;
   private selectionSystem!: SelectionSystem;
+  private buildSystem!: BuildSystem;
+  private playerResources!: PlayerResources;
   private animationId: number | null = null;
   private lastTime = 0;
 
@@ -50,6 +54,12 @@ export class Game {
     this.world.addSystem(new CombatSystem());
     this.selectionSystem = new SelectionSystem(this.inputManager, this.sceneManager.camera);
     this.world.addSystem(this.selectionSystem);
+
+    // 玩家资源
+    this.playerResources = new PlayerResources();
+    this.buildSystem = new BuildSystem();
+    this.buildSystem.setPlayerResources(this.playerResources);
+    this.world.addSystem(this.buildSystem);
 
     // 初始化测试场景
     this.initTestScene();
