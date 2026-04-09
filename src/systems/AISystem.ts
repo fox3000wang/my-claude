@@ -4,11 +4,12 @@ import { Position } from '../components/Position';
 import { Combat } from '../components/Combat';
 import { MoveTarget } from '../components/MoveTarget';
 import { Unit } from '../components/Unit';
+import { Health } from '../components/Health';
 
 export class AISystem extends System {
   readonly name = 'AISystem';
   private decisionTimer = 0;
-  private readonly DECISION_INTERVAL = 3; // 每3秒决策一次
+  private readonly DECISION_INTERVAL = 3; // decision every 3 seconds
 
   update(delta: number): void {
     this.decisionTimer += delta;
@@ -19,10 +20,27 @@ export class AISystem extends System {
       .filter(e => (e.getComponent<Unit>('Unit')?.ownerId ?? 0) !== 0);
 
     for (const entity of aiUnits) {
+      const unit = entity.getComponent<Unit>('Unit')!;
       const pos = entity.getComponent<Position>('Position')!;
       const combat = entity.getComponent<Combat>('Combat')!;
 
-      // 找最近的玩家单位
+      // --- Retreat: health < 30% of max ---
+      const health = entity.getComponent<Health>('Health');
+      const currentHealth = health ? health.current : unit.health;
+      const maxHealth = health ? health.max : unit.maxHealth;
+      if (currentHealth < maxHealth * 0.3) {
+        combat.targetId = null;
+        const angle = Math.random() * Math.PI * 2;
+        const retreatDist = 8;
+        entity.addComponent(MoveTarget.at(
+          pos.x + Math.cos(angle) * retreatDist,
+          0,
+          pos.z + Math.sin(angle) * retreatDist,
+        ));
+        continue;
+      }
+
+      // --- Find nearest player unit ---
       const playerUnits = this.world!.getEntitiesWithComponents('Unit', 'Position')
         .filter(e => (e.getComponent<Unit>('Unit')?.ownerId ?? 0) === 0);
 
@@ -36,9 +54,14 @@ export class AISystem extends System {
         }
       }
 
-      if (nearest && nearest.dist < 15) {
+      if (nearest && nearest.dist < 20) {
+        // --- In combat range: set target and stop or move ---
         combat.targetId = nearest.entity?.id ?? null;
-        if (nearest.dist > combat.range) {
+        const dist = nearest.dist;
+        const attackRange = combat.range * 0.8;
+
+        if (dist > attackRange) {
+          // Move toward enemy
           const targetPos = nearest.entity?.getComponent<Position>('Position');
           if (targetPos) {
             const dx = targetPos.x - pos.x;
@@ -50,15 +73,18 @@ export class AISystem extends System {
               pos.z + (dz / len) * 5,
             ));
           }
+        } else {
+          // In range: stop moving
+          entity.addComponent(new MoveTarget(pos.x, 0, pos.z, true));
         }
       } else {
-        // 随机移动
+        // --- No nearby enemies: patrol/roam ---
         const angle = Math.random() * Math.PI * 2;
-        const dist = 5 + Math.random() * 10;
+        const patrolDist = 5 + Math.random() * 10; // 5-15 units
         entity.addComponent(MoveTarget.at(
-          pos.x + Math.cos(angle) * dist,
+          pos.x + Math.cos(angle) * patrolDist,
           0,
-          pos.z + Math.sin(angle) * dist,
+          pos.z + Math.sin(angle) * patrolDist,
         ));
       }
     }
