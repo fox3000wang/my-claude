@@ -81,7 +81,7 @@
     "name": "Pylon",
     "health": 300,
     "cost": { "minerals": 100 },
-    "supply": 8,
+    "supply": -8,
     "size": 1
   },
   "gateway": {
