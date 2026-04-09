@@ -1,6 +1,6 @@
 import { useState, useCallback, useRef } from 'react';
 import { GameState, Tile } from '../types/game';
-import { LEVELS } from '../constants/gameConfig';
+import { LEVELS, TILE_TYPES } from '../constants/gameConfig';
 import {
   createBoardWithoutInitialMatches,
   isAdjacent,
@@ -10,6 +10,12 @@ import {
   dropTiles,
   removeMatches,
 } from '../utils/boardUtils';
+import {
+  playPopSound,
+  playComboSound,
+  playWinSound,
+  playLoseSound,
+} from '../utils/soundEngine';
 
 const INITIAL_LEVEL = 1;
 const MATCH_ANIMATION_DURATION = 300;
@@ -31,14 +37,45 @@ function createInitialState(level: number): GameState {
 export function useGameLogic() {
   const [gameState, setGameState] = useState<GameState>(() => createInitialState(INITIAL_LEVEL));
   const isProcessingRef = useRef(false);
+  // 级联连击计数器
+  const comboRef = useRef(0);
+
+  // 播放消除音效（每消除一个 tile 播放一次）
+  function playEliminationSounds(board: Tile[][], matches: ReturnType<typeof findMatches>) {
+    const played = new Set<string>();
+    for (const match of matches) {
+      for (const pos of match) {
+        const key = `${pos.row}-${pos.col}`;
+        if (!played.has(key)) {
+          const tile = board[pos.row]?.[pos.col];
+          if (tile) {
+            const typeIndex = TILE_TYPES.indexOf(tile.type);
+            playPopSound(typeIndex);
+          }
+          played.add(key);
+        }
+      }
+    }
+  }
 
   // 两阶段处理：先标记匹配tiles → 动画播放 → 删除下落
   const processMatchesInStages = useCallback((board: Tile[][], currentScore: number, currentMoves: number) => {
     const matches = findMatches(board);
 
     if (matches.length === 0) {
-      const gameStatus = currentScore >= gameState.targetScore ? 'won' : currentMoves <= 0 ? 'lost' : 'playing';
-      return { board, score: currentScore, moves: currentMoves, gameStatus };
+      // 连击结束，检查胜负
+      const won = currentScore >= gameState.targetScore;
+      const lost = currentMoves <= 0 && !won;
+      if (won) playWinSound();
+      if (lost) playLoseSound();
+      comboRef.current = 0;
+      return { board, score: currentScore, moves: currentMoves, gameStatus: won ? 'won' : lost ? 'lost' : 'playing' };
+    }
+
+    // 连击音效
+    comboRef.current++;
+    if (comboRef.current > 1) {
+      playComboSound(comboRef.current);
     }
 
     // 第一阶段：收集所有匹配位置的 tile（保留在 DOM 中播放动画）
@@ -48,6 +85,9 @@ export function useGameLogic() {
         matchPositions.add(`${pos.row}-${pos.col}`);
       }
     }
+
+    // 播放消除音效
+    playEliminationSounds(board, matches);
 
     // 标记为匹配状态（触发动画）
     const boardWithMatches = board.map(row =>
@@ -75,19 +115,25 @@ export function useGameLogic() {
       newBoard = dropTiles(newBoard);
       const newScore = currentScore + matchScore;
 
-      const gameStatus = newScore >= gameState.targetScore ? 'won' : currentMoves <= 0 ? 'lost' : 'playing';
-      setGameState(prev => ({
-        ...prev,
-        board: newBoard,
-        score: newScore,
-        moves: currentMoves,
-        gameStatus,
-      }));
-
       // 检查级联：递归处理新的匹配
       const nextMatches = findMatches(newBoard);
       if (nextMatches.length > 0) {
         setTimeout(() => processMatchesInStages(newBoard, newScore, currentMoves), 50);
+      } else {
+        // 级联结束，检查胜负
+        comboRef.current = 0;
+        const won = newScore >= gameState.targetScore;
+        const lost = currentMoves <= 0 && !won;
+        if (won) playWinSound();
+        if (lost) playLoseSound();
+
+        setGameState(prev => ({
+          ...prev,
+          board: newBoard,
+          score: newScore,
+          moves: currentMoves,
+          gameStatus: won ? 'won' : lost ? 'lost' : 'playing',
+        }));
       }
     }, MATCH_ANIMATION_DURATION);
 
