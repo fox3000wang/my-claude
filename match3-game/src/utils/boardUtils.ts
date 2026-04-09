@@ -1,0 +1,184 @@
+import { Tile, TileType, Position } from '../types/game';
+import { BOARD_SIZE, TILE_TYPES } from '../constants/gameConfig';
+
+export function getRandomTileType(): TileType {
+  return TILE_TYPES[Math.floor(Math.random() * TILE_TYPES.length)];
+}
+
+export function createEmptyBoard(): Tile[][] {
+  return Array.from({ length: BOARD_SIZE }, (_, row) =>
+    Array.from({ length: BOARD_SIZE }, (_, col) => ({
+      type: getRandomTileType(),
+      row,
+      col,
+      isSelected: false,
+      isMatching: false,
+    }))
+  );
+}
+
+export function createBoardWithoutInitialMatches(): Tile[][] {
+  const board: Tile[][] = [];
+
+  for (let row = 0; row < BOARD_SIZE; row++) {
+    board[row] = [];
+    for (let col = 0; col < BOARD_SIZE; col++) {
+      let type = getRandomTileType();
+
+      // 避免初始生成时就有可消除的组合
+      while (
+        (col >= 2 && board[row][col - 1].type === type && board[row][col - 2].type === type) ||
+        (row >= 2 && board[row - 1][col].type === type && board[row - 2][col].type === type)
+      ) {
+        type = getRandomTileType();
+      }
+
+      board[row][col] = {
+        type,
+        row,
+        col,
+        isSelected: false,
+        isMatching: false,
+      };
+    }
+  }
+
+  return board;
+}
+
+export function isAdjacent(pos1: Position, pos2: Position): boolean {
+  const rowDiff = Math.abs(pos1.row - pos2.row);
+  const colDiff = Math.abs(pos1.col - pos2.col);
+  return (rowDiff === 1 && colDiff === 0) || (rowDiff === 0 && colDiff === 1);
+}
+
+export function findMatches(board: Tile[][]): Position[][] {
+  const matches: Position[][] = [];
+
+  // 横向匹配检测
+  for (let row = 0; row < BOARD_SIZE; row++) {
+    let matchStart = 0;
+    let matchLength = 1;
+
+    for (let col = 1; col <= BOARD_SIZE; col++) {
+      if (col < BOARD_SIZE && board[row][col].type === board[row][matchStart].type) {
+        matchLength++;
+      } else {
+        if (matchLength >= 3) {
+          const match: Position[] = [];
+          for (let i = matchStart; i < matchStart + matchLength; i++) {
+            match.push({ row, col: i });
+          }
+          matches.push(match);
+        }
+        matchStart = col;
+        matchLength = 1;
+      }
+    }
+  }
+
+  // 纵向匹配检测
+  for (let col = 0; col < BOARD_SIZE; col++) {
+    let matchStart = 0;
+    let matchLength = 1;
+
+    for (let row = 1; row <= BOARD_SIZE; row++) {
+      if (row < BOARD_SIZE && board[row][col].type === board[matchStart][col].type) {
+        matchLength++;
+      } else {
+        if (matchLength >= 3) {
+          const match: Position[] = [];
+          for (let i = matchStart; i < matchStart + matchLength; i++) {
+            match.push({ row: i, col });
+          }
+          matches.push(match);
+        }
+        matchStart = row;
+        matchLength = 1;
+      }
+    }
+  }
+
+  return matches;
+}
+
+export function calculateScore(matches: Position[][]): number {
+  let score = 0;
+
+  for (const match of matches) {
+    const length = match.length;
+    if (length === 3) {
+      score += 100;
+    } else if (length === 4) {
+      score += 200;
+    } else if (length >= 5) {
+      score += 300;
+    }
+  }
+
+  return score;
+}
+
+export function removeMatches(board: Tile[][], matches: Position[][]): Tile[][] {
+  const newBoard = board.map(row => row.map(tile => ({ ...tile })));
+
+  for (const match of matches) {
+    for (const pos of match) {
+      newBoard[pos.row][pos.col] = {
+        ...newBoard[pos.row][pos.col],
+        type: null as unknown as TileType,
+        isMatching: true,
+      };
+    }
+  }
+
+  return newBoard;
+}
+
+export function dropTiles(board: Tile[][]): Tile[][] {
+  const newBoard = board.map(row => row.map(() => null as unknown as Tile));
+
+  for (let col = 0; col < BOARD_SIZE; col++) {
+    let writeRow = BOARD_SIZE - 1;
+
+    // 从下往上遍历，把非空方块移下来
+    for (let row = BOARD_SIZE - 1; row >= 0; row--) {
+      if (board[row][col].type !== null) {
+        newBoard[writeRow][col] = {
+          ...board[row][col],
+          row: writeRow,
+        };
+        writeRow--;
+      }
+    }
+
+    // 顶部填充新方块
+    for (let row = writeRow; row >= 0; row--) {
+      newBoard[row][col] = {
+        type: getRandomTileType(),
+        row,
+        col,
+        isSelected: false,
+        isMatching: false,
+      };
+    }
+  }
+
+  return newBoard;
+}
+
+export function swapTiles(board: Tile[][], pos1: Position, pos2: Position): Tile[][] {
+  const newBoard = board.map(row => row.map(tile => ({ ...tile })));
+
+  const temp = newBoard[pos1.row][pos1.col];
+  newBoard[pos1.row][pos1.col] = newBoard[pos2.row][pos2.col];
+  newBoard[pos2.row][pos2.col] = temp;
+
+  // 更新行列坐标
+  newBoard[pos1.row][pos1.col].row = pos1.row;
+  newBoard[pos1.row][pos1.col].col = pos1.col;
+  newBoard[pos2.row][pos2.col].row = pos2.row;
+  newBoard[pos2.row][pos2.col].col = pos2.col;
+
+  return newBoard;
+}
