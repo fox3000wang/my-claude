@@ -7,6 +7,8 @@ import { Renderable } from '../components/Renderable';
 import { Unit } from '../components/Unit';
 import { Selected } from '../components/Selected';
 import { PlayerResources } from '../components/PlayerResources';
+import { RallyPoint } from '../components/RallyPoint';
+import { MoveTarget } from '../components/MoveTarget';
 import unitsData from '../data/units.json';
 
 export class TrainingSystem extends System {
@@ -74,5 +76,21 @@ export class TrainingSystem extends System {
     newEntity.addComponent(new Renderable(`unit_${unitType}`, 1));
     newEntity.addComponent(new Unit(unitType as Unit['unitType'], health, maxHealth, 0));
     newEntity.addComponent(new Selected(false));
+
+    // Send newly trained unit to rally point if building has one
+    if (buildingEntity.hasComponent('RallyPoint')) {
+      const rp = buildingEntity.getComponent<RallyPoint>('RallyPoint')!;
+      if (rp.enabled) {
+        if (rp.targetEntityId != null) {
+          const target = this.world!.getEntity(rp.targetEntityId);
+          const tpos = target?.getComponent<Position>('Position');
+          if (tpos) {
+            newEntity.addComponent(MoveTarget.at(tpos.x, tpos.y, tpos.z));
+          }
+        } else {
+          newEntity.addComponent(MoveTarget.at(rp.x, rp.y, rp.z));
+        }
+      }
+    }
   }
 }

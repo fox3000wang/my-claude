@@ -20,6 +20,9 @@ export class AISystem extends System {
       .filter(e => (e.getComponent<Unit>('Unit')?.ownerId ?? 0) !== 0);
 
     for (const entity of aiUnits) {
+      // Units that belong to an ArmyGroup follow group mode — skip individual decisions
+      if (entity.hasComponent('ArmyGroup')) continue;
+
       const unit = entity.getComponent<Unit>('Unit')!;
       const pos = entity.getComponent<Position>('Position')!;
       const combat = entity.getComponent<Combat>('Combat')!;

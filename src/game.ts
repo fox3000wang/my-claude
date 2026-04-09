@@ -3,7 +3,8 @@ import type { Entity } from './core/ecs/Entity';
 import { SceneManager } from './renderer/SceneManager';
 import { OrbitCameraController } from './renderer/camera/OrbitCameraController';
 import { EntityRenderer } from './renderer/EntityRenderer';
-import { LocalFrameSyncAdapter } from './adapters/FrameSyncAdapter';
+import { LocalFrameSyncAdapter, type FrameSyncAdapter, type Action } from './adapters/FrameSyncAdapter';
+import { MoveTarget } from './components/MoveTarget';
 import { Position } from './components/Position';
 import { Renderable } from './components/Renderable';
 import { Unit } from './components/Unit';
@@ -14,6 +15,7 @@ import { CombatSystem } from './systems/CombatSystem';
 import { ShieldSystem } from './systems/ShieldSystem';
 import { SelectionSystem } from './systems/SelectionSystem';
 import { AISystem } from './systems/AISystem';
+import { ArmyGroupSystem } from './systems/ArmyGroupSystem';
 import { BuildSystem } from './systems/BuildSystem';
 import { TrainingSystem } from './systems/TrainingSystem';
 import { LarvaeSystem } from './systems/LarvaeSystem';
@@ -30,7 +32,7 @@ import { Shield } from './components/Shield';
 
 export class Game {
   readonly world: World;
-  readonly frameSync: LocalFrameSyncAdapter;
+  readonly frameSync: FrameSyncAdapter;
   private sceneManager!: SceneManager;
   private cameraController!: OrbitCameraController;
   private entityRenderer!: EntityRenderer;
@@ -44,10 +46,18 @@ export class Game {
   private grid!: Grid;
   private animationId: number | null = null;
   private lastTime = 0;
+  private currentFrame = 0;
 
-  constructor() {
+  constructor(frameSync?: FrameSyncAdapter) {
     this.world = new World();
-    this.frameSync = new LocalFrameSyncAdapter();
+    this.frameSync = frameSync ?? new LocalFrameSyncAdapter();
+
+    // Handle commands from other players (multiplayer)
+    this.frameSync.onCommand((cmd) => {
+      for (const action of cmd.actions) {
+        this.applyAction(action);
+      }
+    });
   }
 
   init(canvasElement: HTMLElement, width: number, height: number): void {
@@ -79,6 +89,7 @@ export class Game {
     this.world.addSystem(this.selectionSystem);
     this.aiSystem = new AISystem();
     this.world.addSystem(this.aiSystem);
+    this.world.addSystem(new ArmyGroupSystem());
 
     // 玩家资源
     this.playerResources = new PlayerResources();
@@ -176,6 +187,8 @@ export class Game {
     const delta = (now - this.lastTime) / 1000;
     this.lastTime = now;
 
+    this.currentFrame++;
+
     // ECS update
     this.world.update(delta);
 
@@ -237,6 +250,65 @@ export class Game {
         if (nearest) {
           attackerCombat.targetId = nearest.id;
         }
+      }
+    }
+  }
+
+  applyAction(action: Action): void {
+    switch (action.type) {
+      case 'move': {
+        const entity = this.world.getEntity(action.entityId);
+        if (!entity) return;
+        if (entity.hasComponent('MoveTarget')) {
+          const mt = entity.getComponent<MoveTarget>('MoveTarget')!;
+          mt.x = action.targetX;
+          mt.y = action.targetY;
+          mt.z = action.targetZ;
+          mt.arrived = false;
+        } else {
+          entity.addComponent(new MoveTarget(action.targetX, action.targetY, action.targetZ));
+        }
+        break;
+      }
+      case 'attack': {
+        const entity = this.world.getEntity(action.entityId);
+        if (!entity?.hasComponent('Combat')) return;
+        entity.getComponent<Combat>('Combat')!.targetId = action.targetId;
+        break;
+      }
+      case 'stop': {
+        const entity = this.world.getEntity(action.entityId);
+        if (!entity) return;
+        if (entity.hasComponent('MoveTarget')) entity.removeComponent('MoveTarget');
+        if (entity.hasComponent('Combat')) {
+          entity.getComponent<Combat>('Combat')!.targetId = null;
+        }
+        break;
+      }
+      case 'select': {
+        for (const id of action.entityIds) {
+          const entity = this.world.getEntity(id);
+          if (!entity) continue;
+          if (!entity.hasComponent('Selected')) {
+            entity.addComponent(new Selected());
+          } else {
+            entity.getComponent<Selected>('Selected')!.select();
+          }
+          this.selectionSystem.addSelectedIds([id]);
+        }
+        break;
+      }
+      case 'deselect': {
+        for (const id of action.entityIds) {
+          const entity = this.world.getEntity(id);
+          if (!entity) continue;
+          if (entity.hasComponent('Selected')) {
+            entity.getComponent<Selected>('Selected')!.deselect();
+            entity.removeComponent('Selected');
+          }
+          this.selectionSystem.removeSelectedIds([id]);
+        }
+        break;
       }
     }
   }

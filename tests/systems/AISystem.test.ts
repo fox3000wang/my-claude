@@ -1,10 +1,12 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { World } from '../../src/core/ecs/World';
 import { AISystem } from '../../src/systems/AISystem';
+import { ArmyGroupSystem } from '../../src/systems/ArmyGroupSystem';
 import { Position } from '../../src/components/Position';
 import { Combat } from '../../src/components/Combat';
 import { Unit } from '../../src/components/Unit';
 import { Health } from '../../src/components/Health';
+import { ArmyGroup } from '../../src/components/ArmyGroup';
 
 describe('AISystem', () => {
   let world: World;
@@ -14,6 +16,7 @@ describe('AISystem', () => {
     world = new World();
     system = new AISystem();
     world.addSystem(system);
+    world.addSystem(new ArmyGroupSystem());
   });
 
   it('skips decision tick if timer not reached', () => {
@@ -97,5 +100,31 @@ describe('AISystem', () => {
     world.update(3);
 
     expect(aiUnit.hasComponent('MoveTarget')).toBe(true); // patrol target set
+  });
+
+  it('skips individual decisions for units with ArmyGroup component', () => {
+    // ArmyGroup entity representing the player's army group
+    const group = world.createEntity();
+    group.addComponent(new ArmyGroup(1));
+
+    // AI unit that belongs to the army group
+    const aiUnit = world.createEntity();
+    aiUnit.addComponent(new Unit('marine', 100, 100, 1));
+    aiUnit.addComponent(new Position(0, 0, 0));
+    aiUnit.addComponent(new Combat(10, 2, 5, 1));
+    aiUnit.addComponent(new Health(100, 100));
+    aiUnit.addComponent(new ArmyGroup(1)); // unit has ArmyGroup — AISystem skips it
+
+    // Player unit very close
+    const playerUnit = world.createEntity();
+    playerUnit.addComponent(new Unit('marine', 100, 100, 0));
+    playerUnit.addComponent(new Position(5, 0, 0));
+    playerUnit.addComponent(new Health(100, 100));
+
+    world.update(3); // force decision tick
+
+    // ArmyGroupSystem handles movement; AISystem should NOT have set a patrol target
+    const combat = aiUnit.getComponent<Combat>('Combat');
+    expect(combat!.targetId).toBeNull(); // AISystem skipped, so no target set
   });
 });
