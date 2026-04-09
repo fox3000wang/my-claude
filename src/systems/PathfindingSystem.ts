@@ -34,15 +34,25 @@ export class PathfindingSystem extends System {
         const startCell = this.grid.cellAt(pos.x, pos.y, pos.z);
         const goalCell = this.grid.cellAt(mt.x, mt.y, mt.z);
 
+        if (startCell.x === goalCell.x && startCell.z === goalCell.z) {
+          pf.clear();
+          mt.arrived = true;
+          continue;
+        }
+
         const cellPath = astar(this.grid, startCell, goalCell);
 
-        if (cellPath.length > 0) {
-          const worldPath = cellPath.map(cell => {
-            const world = this.grid.cellToWorld(cell.x, cell.z);
-            return { x: world.x, y: pos.y, z: world.z };
-          });
-          pf.setPath(worldPath);
+        if (cellPath.length === 0) {
+          pf.clear();
+          mt.arrived = true;
+          continue;
         }
+
+        const worldPath = cellPath.map(cell => {
+          const world = this.grid.cellToWorld(cell.x, cell.z);
+          return { x: world.x, y: pos.y, z: world.z };
+        });
+        pf.setPath(worldPath);
       }
 
       // Follow active path
@@ -55,11 +65,10 @@ export class PathfindingSystem extends System {
         const distance = Math.sqrt(dx * dx + dz * dz);
 
         if (distance < 0.5) {
-          const current = pf.currentWaypoint()!;
           // Set MoveTarget to current waypoint first, then advance
-          mt.x = current.x;
-          mt.y = current.y;
-          mt.z = current.z;
+          mt.x = waypoint.x;
+          mt.y = waypoint.y;
+          mt.z = waypoint.z;
           pf.advance();
         }
       }

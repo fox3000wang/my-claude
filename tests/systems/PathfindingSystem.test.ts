@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach } from 'vitest';
 import { World } from '../../src/core/ecs/World';
 import { PathfindingSystem } from '../../src/systems/PathfindingSystem';
 import { Grid } from '../../src/utils/grid';
