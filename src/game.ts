@@ -15,7 +15,7 @@ export class Game {
   private sceneManager!: SceneManager;
   private cameraController!: OrbitCameraController;
   private entityRenderer!: EntityRenderer;
-  private inputManager: DOMInputManager;
+  private inputManager!: DOMInputManager;
   private animationId: number | null = null;
   private lastTime = 0;
 

@@ -44,10 +44,10 @@ export class DOMInputManager implements InputManager {
   constructor(canvas: HTMLElement, camera: THREE.PerspectiveCamera) {
     this.canvas = canvas;
     this.camera = camera;
-    this.canvas.addEventListener('mousedown', this.onMouseDown);
-    this.canvas.addEventListener('mouseup', this.onMouseUp);
-    this.canvas.addEventListener('mousemove', this.onMouseMove);
-    window.addEventListener('keydown', this.onKeyDown);
+    this.canvas.addEventListener('mousedown', this._handleMouseDown);
+    this.canvas.addEventListener('mouseup', this._handleMouseUp);
+    this.canvas.addEventListener('mousemove', this._handleMouseMove);
+    window.addEventListener('keydown', this._handleKeyDown);
   }
 
   private screenToWorld(clientX: number, clientY: number): { x: number; y: number; z: number } {
@@ -61,7 +61,7 @@ export class DOMInputManager implements InputManager {
     return { x: intersection.x, y: intersection.y, z: intersection.z };
   }
 
-  private onMouseDown = (e: MouseEvent): void => {
+  private _handleMouseDown = (e: MouseEvent): void => {
     e.preventDefault();
     const world = this.screenToWorld(e.clientX, e.clientY);
     this._mouseState = {
@@ -73,7 +73,7 @@ export class DOMInputManager implements InputManager {
     this.downCallbacks.forEach(cb => cb(this._mouseState));
   };
 
-  private onMouseMove = (e: MouseEvent): void => {
+  private _handleMouseMove = (e: MouseEvent): void => {
     const world = this.screenToWorld(e.clientX, e.clientY);
     const dragStart = this._mouseState.isDown ? this._mouseState.dragStart : null;
 
@@ -97,7 +97,7 @@ export class DOMInputManager implements InputManager {
     this.moveCallbacks.forEach(cb => cb(this._mouseState));
   };
 
-  private onMouseUp = (e: MouseEvent): void => {
+  private _handleMouseUp = (e: MouseEvent): void => {
     const world = this.screenToWorld(e.clientX, e.clientY);
     this._mouseState = {
       x: e.clientX, y: e.clientY,
@@ -109,7 +109,7 @@ export class DOMInputManager implements InputManager {
     this.upCallbacks.forEach(cb => cb(this._mouseState));
   };
 
-  private onKeyDown = (e: KeyboardEvent): void => {
+  private _handleKeyDown = (e: KeyboardEvent): void => {
     this.keyCallbacks.forEach(cb => cb(e.key));
   };
 
@@ -138,9 +138,9 @@ export class DOMInputManager implements InputManager {
   }
 
   dispose(): void {
-    this.canvas.removeEventListener('mousedown', this.onMouseDown);
-    this.canvas.removeEventListener('mouseup', this.onMouseUp);
-    this.canvas.removeEventListener('mousemove', this.onMouseMove);
-    window.removeEventListener('keydown', this.onKeyDown);
+    this.canvas.removeEventListener('mousedown', this._handleMouseDown);
+    this.canvas.removeEventListener('mouseup', this._handleMouseUp);
+    this.canvas.removeEventListener('mousemove', this._handleMouseMove);
+    window.removeEventListener('keydown', this._handleKeyDown);
   }
 }
