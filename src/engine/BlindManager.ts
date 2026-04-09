@@ -126,6 +126,16 @@ export class BlindManager {
   }
 
   /**
+   * Select a blind by index (0=Small, 1=Big, 2=Boss).
+   * Validates the index is within range.
+   */
+  selectBlind(index: number): boolean {
+    if (index < 0 || index > 2) return false
+    this.blindIndex = index
+    return true
+  }
+
+  /**
    * Get a serializable snapshot of the current state.
    */
   toJSON(): { ante: number; blindIndex: number } {

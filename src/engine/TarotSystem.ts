@@ -229,6 +229,23 @@ export class TarotSystem {
     // Callers must manage the pending selection state directly.
   }
 
+  /**
+   * Replace all hand type upgrades (e.g. when restoring from a store snapshot).
+   */
+  setHandTypeUpgrades(upgrades: Record<string, number>): void {
+    this.handTypeUpgrades = { ...upgrades }
+  }
+
+  /**
+   * Clear the freeHand flag after it has been consumed by a hand play.
+   */
+  clearFreeHand(): void {
+    this.roundModifiers = {
+      ...this.roundModifiers,
+      freeHand: false,
+    }
+  }
+
   // ─── Round lifecycle ──────────────────────────────────────────────────────
 
   /**

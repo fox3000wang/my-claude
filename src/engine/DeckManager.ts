@@ -70,6 +70,14 @@ export class DeckManager {
   }
 
   /**
+   * 直接设置手牌（用于排序等场景）。
+   * 接收一个新的手牌数组，替换当前手牌。
+   */
+  setHand(cards: Card[]): void {
+    this.hand = cards
+  }
+
+  /**
    * 完整重置：将弃牌堆和手牌全部移回牌堆，洗牌，清空所有状态
    *
    * 调用此方法后 deck 恢复至 52 张，hand 和 discardPile 均为空。

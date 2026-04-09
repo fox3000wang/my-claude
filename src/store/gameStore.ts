@@ -127,19 +127,11 @@ export const useGameStore = create<GameStore>((set, get) => ({
     // 重置所有引擎状态
     deckManager.createDeck()
     deckManager.shuffle()
-    deckManager.hand = []
-    deckManager.discardPile = []
 
     blindManager.reset()
     jokerSystem.clearJokers()
     shopManager.reset()
-    tarotSystem.roundModifiers = {
-      bonusDouble: false,
-      multPerCard: false,
-      freeHand: false,
-      nextAnteDiscount: 0,
-      pending: null,
-    }
+    tarotSystem.startRound()
 
     // 发 5 张手牌
     deckManager.draw(5)
@@ -206,7 +198,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
     // 7. Tarot freeHand 只生效一次，清除
     if (freeHand) {
-      tarotSystem.roundModifiers.freeHand = false
+      tarotSystem.clearFreeHand()
     }
 
     // 8. 判断游戏走向
@@ -277,15 +269,14 @@ export const useGameStore = create<GameStore>((set, get) => ({
       }
       return b.value - a.value
     })
-    deckManager.hand = sorted
+    deckManager.setHand(sorted)
     set({ hand: sorted })
   },
 
   // ─── selectBlind ───────────────────────────────────────────────────────
   selectBlind(index: number) {
     const { blindManager } = get()
-    if (index < 0 || index > 2) return
-    blindManager.blindIndex = index
+    if (!blindManager.selectBlind(index)) return
     set({
       screen: 'BLIND_SELECT',
       currentBlindIndex: index,
@@ -337,7 +328,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       // Planet：永久升级手牌类型基础分
       if (item.type === 'planet') {
         const newState = tarotSystem.applyPlanet(item)
-        tarotSystem.handTypeUpgrades = newState.handTypeUpgrades
+        tarotSystem.setHandTypeUpgrades(newState.handTypeUpgrades)
       }
       // Tarot：临时效果
       if (item.type === 'tarot') {
@@ -350,9 +341,10 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
   // ─── leaveShop ─────────────────────────────────────────────────────────
   leaveShop() {
-    const { blindManager } = get()
+    const { blindManager, shopManager } = get()
 
-    // 关闭商店，进入下一个 Blind 选择
+    // 关闭商店，清空商品，进入下一个 Blind 选择
+    shopManager.reset()
     const isLastBlind = blindManager.isLastBlind()
     const isLastAnte = blindManager.isLastAnte()
 
@@ -369,18 +361,10 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
     deckManager.createDeck()
     deckManager.shuffle()
-    deckManager.hand = []
-    deckManager.discardPile = []
     blindManager.reset()
     jokerSystem.clearJokers()
     shopManager.reset()
-    tarotSystem.roundModifiers = {
-      bonusDouble: false,
-      multPerCard: false,
-      freeHand: false,
-      nextAnteDiscount: 0,
-      pending: null,
-    }
+    tarotSystem.startRound()
 
     set({
       screen: 'TITLE',
