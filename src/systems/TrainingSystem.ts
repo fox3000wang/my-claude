@@ -43,6 +43,12 @@ export class TrainingSystem extends System {
 
   private spawnUnit(buildingEntity: Entity | undefined, unitType: string): void {
     if (!buildingEntity) return;
+
+    const building = buildingEntity.getComponent<Building>('Building')!;
+    if (building.spawns && building.larvae <= 0) {
+      return; // Zerg spawning building — no larvae available
+    }
+
     const pos = buildingEntity.getComponent<Position>('Position')!;
     const data = (unitsData as Record<string, unknown>)[unitType] as {
       health: number;
@@ -57,6 +63,10 @@ export class TrainingSystem extends System {
     if (this.playerResources) {
       if (!this.playerResources.spend(mineralCost)) return;
       this.playerResources.useSupply(supplyCost);
+    }
+
+    if (building.spawns) {
+      building.larvae--;
     }
 
     const newEntity = this.world!.createEntity();
