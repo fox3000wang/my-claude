@@ -263,6 +263,17 @@ body {
 }
 
 /* ===========================
+   Screen Container — AnimatePresence wrapper
+   =========================== */
+
+.screen-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* ===========================
    Title — Cosmic Candy Glow
    =========================== */
 
