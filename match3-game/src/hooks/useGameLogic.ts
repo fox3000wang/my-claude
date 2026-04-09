@@ -8,6 +8,7 @@ import {
   calculateScore,
   swapTiles,
   dropTiles,
+  removeMatches,
 } from '../utils/boardUtils';
 
 const INITIAL_LEVEL = 1;
@@ -43,9 +44,11 @@ export function useGameLogic() {
       if (matches.length === 0) {
         hasMatches = false;
       } else {
+        // 先清除匹配的方块，再下落填充
+        newBoard = removeMatches(newBoard, matches);
+        newBoard = dropTiles(newBoard);
         const matchScore = calculateScore(matches) * multiplier;
         newScore += matchScore;
-        newBoard = dropTiles(newBoard);
         multiplier++;
       }
     }
