@@ -127,9 +127,61 @@ interface GameState {
 
 ## 验收标准
 
-- [ ] 5 关关卡可正常游玩
-- [ ] 消除、连锁逻辑正确
-- [ ] 分数计算准确
-- [ ] 过关/失败判定正确
-- [ ] 移动端触摸操作流畅
-- [ ] 无明显性能问题
+- [x] 5 关关卡可正常游玩
+- [x] 消除、连锁逻辑正确
+- [x] 分数计算准确
+- [x] 过关/失败判定正确
+- [x] 移动端触摸操作流畅
+- [x] 无明显性能问题
+
+## 已知问题修复
+
+### Bug: 点击第二个方块后页面卡死 (已修复)
+
+**问题描述**：点击第二个方块进行交换时，页面会卡死无响应。
+
+**根本原因**：`processMatches` 函数中的 while 循环只调用了 `dropTiles` 下落填充，但没有先调用 `removeMatches` 清除匹配的方块。这导致 `findMatches` 永远能找到相同的匹配，形成无限循环。
+
+**修复方案**：在 `dropTiles` 之前添加 `removeMatches` 调用，确保匹配的方块被真正清除后再进行下落填充。
+
+```typescript
+// 修复前
+while (hasMatches) {
+  const matches = findMatches(newBoard);
+  if (matches.length === 0) {
+    hasMatches = false;
+  } else {
+    newBoard = dropTiles(newBoard); // 错误：未清除匹配
+  }
+}
+
+// 修复后
+while (hasMatches) {
+  const matches = findMatches(newBoard);
+  if (matches.length === 0) {
+    hasMatches = false;
+  } else {
+    newBoard = removeMatches(newBoard, matches); // 先清除
+    newBoard = dropTiles(newBoard);              // 再下落
+  }
+}
+```
+
+## 测试
+
+### 单元测试
+
+运行：`pnpm test`
+
+覆盖：棋盘工具函数（创建、匹配检测、分数计算、交换、下落）
+
+### E2E 测试
+
+运行：`pnpm exec playwright test`
+
+覆盖：
+- 页面加载正确性
+- 游戏交互（选中、交换）
+- 重新开始功能
+- 移动端视口适配
+- 弹窗组件显示
