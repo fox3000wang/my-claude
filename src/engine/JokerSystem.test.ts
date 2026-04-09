@@ -353,4 +353,395 @@ describe('JokerSystem', () => {
       expect(result.newTotal).toBe(100)
     })
   })
+
+  describe('computeContext — count_mult Joker (每 N 张指定花色 +M Mult)', () => {
+    it('24. count_mult Joker: 3 张指定花色牌时获得 1 组奖励', () => {
+      // per=3, mult_per=4: 3张→1组→4 mult
+      const joker: Joker = {
+        id: 'J_CNT_MULT',
+        name: 'Test Count Mult',
+        rarity: 'UNCOMMON',
+        price: 5,
+        desc: '',
+        effect: { type: 'count_mult', suit: '♠', per: 3, mult_per: 4 },
+      }
+      const system = new JokerSystem([joker])
+      // 3 张黑桃
+      const hand = [makeCard(0, 0), makeCard(3, 0), makeCard(6, 0)]
+      const result = evaluator.evaluate(hand)
+      const ctx = system.computeContext(result)
+      expect(ctx.mult).toBe(4)
+      expect(ctx.triggered.length).toBe(1)
+    })
+
+    it('25. count_mult Joker: 4 张指定花色牌时仍只有 1 组奖励', () => {
+      // per=3, mult_per=4: floor(4/3)=1→4 mult（第4张不成组）
+      const joker: Joker = {
+        id: 'J_CNT_MULT',
+        name: 'Test Count Mult',
+        rarity: 'UNCOMMON',
+        price: 5,
+        desc: '',
+        effect: { type: 'count_mult', suit: '♠', per: 3, mult_per: 4 },
+      }
+      const system = new JokerSystem([joker])
+      const hand = [makeCard(0, 0), makeCard(3, 0), makeCard(6, 0), makeCard(9, 0)]
+      const result = evaluator.evaluate(hand)
+      const ctx = system.computeContext(result)
+      expect(ctx.mult).toBe(4)
+    })
+
+    it('26. count_mult Joker: 6 张指定花色牌时获得 2 组奖励', () => {
+      // per=3, mult_per=4: floor(6/3)=2→8 mult
+      const joker: Joker = {
+        id: 'J_CNT_MULT',
+        name: 'Test Count Mult',
+        rarity: 'UNCOMMON',
+        price: 5,
+        desc: '',
+        effect: { type: 'count_mult', suit: '♠', per: 3, mult_per: 4 },
+      }
+      const system = new JokerSystem([joker])
+      const hand = [
+        makeCard(0, 0), makeCard(3, 0), makeCard(6, 0),
+        makeCard(9, 0), makeCard(12, 0), makeCard(1, 0),
+      ]
+      const result = evaluator.evaluate(hand)
+      const ctx = system.computeContext(result)
+      expect(ctx.mult).toBe(8)
+    })
+
+    it('27. count_mult Joker: 花色牌不足时不触发', () => {
+      // 只有 2 张黑桃，per=3，不触发
+      const joker: Joker = {
+        id: 'J_CNT_MULT',
+        name: 'Test Count Mult',
+        rarity: 'UNCOMMON',
+        price: 5,
+        desc: '',
+        effect: { type: 'count_mult', suit: '♠', per: 3, mult_per: 4 },
+      }
+      const system = new JokerSystem([joker])
+      const hand = [makeCard(0, 0), makeCard(3, 0)]
+      const result = evaluator.evaluate(hand)
+      const ctx = system.computeContext(result)
+      expect(ctx.mult).toBe(0)
+      expect(ctx.triggered.length).toBe(0)
+    })
+  })
+
+  describe('computeContext — count_bonus Joker (每 N 张指定花色 +M Bonus)', () => {
+    it('28. count_bonus Joker: 3 张指定花色牌时获得 1 组奖励', () => {
+      // per=3, bonus_per=20: 3张→1组→20 bonus
+      const joker: Joker = {
+        id: 'J_CNT_BONUS',
+        name: 'Test Count Bonus',
+        rarity: 'COMMON',
+        price: 4,
+        desc: '',
+        effect: { type: 'count_bonus', suit: '♥', per: 3, bonus_per: 20 },
+      }
+      const system = new JokerSystem([joker])
+      const hand = [makeCard(0, 1), makeCard(3, 1), makeCard(6, 1)]
+      const result = evaluator.evaluate(hand)
+      const ctx = system.computeContext(result)
+      expect(ctx.bonus).toBe(20)
+      expect(ctx.triggered.length).toBe(1)
+    })
+
+    it('29. count_bonus Joker: 6 张指定花色牌时获得 2 组奖励', () => {
+      // per=3, bonus_per=20: floor(6/3)=2→40 bonus
+      const joker: Joker = {
+        id: 'J_CNT_BONUS',
+        name: 'Test Count Bonus',
+        rarity: 'COMMON',
+        price: 4,
+        desc: '',
+        effect: { type: 'count_bonus', suit: '♥', per: 3, bonus_per: 20 },
+      }
+      const system = new JokerSystem([joker])
+      const hand = [
+        makeCard(0, 1), makeCard(3, 1), makeCard(6, 1),
+        makeCard(9, 1), makeCard(12, 1), makeCard(1, 1),
+      ]
+      const result = evaluator.evaluate(hand)
+      const ctx = system.computeContext(result)
+      expect(ctx.bonus).toBe(40)
+    })
+  })
+
+  describe('computeContext — value_mult Joker (手牌含有指定面值时 +N Mult)', () => {
+    it('30. value_mult Joker: 手牌包含指定面值时触发', () => {
+      // Joker 寻找 A(14)，手牌有 3 张 A
+      const joker: Joker = {
+        id: 'J_VAL_MULT',
+        name: 'Test Value Mult',
+        rarity: 'UNCOMMON',
+        price: 5,
+        desc: '',
+        effect: { type: 'value_mult', values: [14], mult: 2 },
+      }
+      const system = new JokerSystem([joker])
+      const hand = [
+        makeCard(12, 0), // A♠
+        makeCard(12, 1), // A♥
+        makeCard(12, 2), // A♦
+      ]
+      const result = evaluator.evaluate(hand)
+      const ctx = system.computeContext(result)
+      expect(ctx.mult).toBe(2)
+      expect(ctx.triggered.length).toBe(1)
+    })
+
+    it('31. value_mult Joker: 手牌不包含指定面值时不触发', () => {
+      const joker: Joker = {
+        id: 'J_VAL_MULT',
+        name: 'Test Value Mult',
+        rarity: 'UNCOMMON',
+        price: 5,
+        desc: '',
+        effect: { type: 'value_mult', values: [14], mult: 2 },
+      }
+      const system = new JokerSystem([joker])
+      const hand = [makeCard(0, 0), makeCard(1, 1), makeCard(2, 2)] // 2,3,4 无 A
+      const result = evaluator.evaluate(hand)
+      const ctx = system.computeContext(result)
+      expect(ctx.mult).toBe(0)
+      expect(ctx.triggered.length).toBe(0)
+    })
+  })
+
+  describe('computeContext — even_mult Joker (全部为偶数牌时 +N Mult)', () => {
+    it('32. even_mult Joker: 手牌全部为偶数面值时触发', () => {
+      // 面值: 2=2, 4=4, 6=6, 8=8, 10=10, Q=12 — 全部偶数
+      const joker: Joker = {
+        id: 'J_EVEN_MULT',
+        name: 'Test Even Mult',
+        rarity: 'COMMON',
+        price: 4,
+        desc: '',
+        effect: { type: 'even_mult', mult: 3 },
+      }
+      const system = new JokerSystem([joker])
+      const hand = [makeCard(0, 0), makeCard(2, 1), makeCard(4, 2), makeCard(6, 3)]
+      const result = evaluator.evaluate(hand)
+      // 偶数面值: 2,4,6,8 (非连续，故高牌，但 Joker 仍触发)
+      expect(result.type.name).toBe('高牌')
+      const ctx = system.computeContext(result)
+      expect(ctx.mult).toBe(3)
+      expect(ctx.triggered.length).toBe(1)
+    })
+
+    it('33. even_mult Joker: 手牌包含奇数面值时不触发', () => {
+      const joker: Joker = {
+        id: 'J_EVEN_MULT',
+        name: 'Test Even Mult',
+        rarity: 'COMMON',
+        price: 4,
+        desc: '',
+        effect: { type: 'even_mult', mult: 3 },
+      }
+      const system = new JokerSystem([joker])
+      const hand = [makeCard(0, 0), makeCard(2, 1), makeCard(4, 2), makeCard(5, 3)] // 含 7(奇数)
+      const result = evaluator.evaluate(hand)
+      const ctx = system.computeContext(result)
+      expect(ctx.mult).toBe(0)
+      expect(ctx.triggered.length).toBe(0)
+    })
+  })
+
+  describe('computeContext — odd_bonus Joker (全部为奇数牌时 +N Bonus)', () => {
+    it('34. odd_bonus Joker: 手牌全部为奇数面值时触发', () => {
+      // 面值: 3=3, 5=5, 7=7, 9=9, J=11, K=13 — 全部奇数
+      const joker: Joker = {
+        id: 'J_ODD_BONUS',
+        name: 'Test Odd Bonus',
+        rarity: 'COMMON',
+        price: 4,
+        desc: '',
+        effect: { type: 'odd_bonus', bonus: 15 },
+      }
+      const system = new JokerSystem([joker])
+      const hand = [makeCard(1, 0), makeCard(3, 1), makeCard(5, 2), makeCard(7, 3)]
+      const result = evaluator.evaluate(hand)
+      // 奇数面值: 3,5,7,9 (非连续，故高牌，但 Joker 仍触发)
+      expect(result.type.name).toBe('高牌')
+      const ctx = system.computeContext(result)
+      expect(ctx.bonus).toBe(15)
+      expect(ctx.triggered.length).toBe(1)
+    })
+
+    it('35. odd_bonus Joker: 手牌包含偶数面值时不触发', () => {
+      const joker: Joker = {
+        id: 'J_ODD_BONUS',
+        name: 'Test Odd Bonus',
+        rarity: 'COMMON',
+        price: 4,
+        desc: '',
+        effect: { type: 'odd_bonus', bonus: 15 },
+      }
+      const system = new JokerSystem([joker])
+      const hand = [makeCard(1, 0), makeCard(3, 1), makeCard(4, 2), makeCard(7, 3)] // 含 6(偶数)
+      const result = evaluator.evaluate(hand)
+      const ctx = system.computeContext(result)
+      expect(ctx.bonus).toBe(0)
+      expect(ctx.triggered.length).toBe(0)
+    })
+  })
+
+  describe('computeContext — suit_diverse_mult Joker (花色种类 >= N 时 +N Mult)', () => {
+    it('36. suit_diverse_mult Joker: 3 种不同花色时 mult = 3 × mult_per', () => {
+      // count=2, mult_per=1: 3种花色→3×1=3 mult
+      const joker: Joker = {
+        id: 'J_SUIT_DIV',
+        name: 'Test Suit Diverse',
+        rarity: 'UNCOMMON',
+        price: 5,
+        desc: '',
+        effect: { type: 'suit_diverse_mult', count: 2, mult: 3 },
+      }
+      const system = new JokerSystem([joker])
+      const hand = [makeCard(0, 0), makeCard(1, 1), makeCard(2, 2)] // 3种花色
+      const result = evaluator.evaluate(hand)
+      const ctx = system.computeContext(result)
+      expect(ctx.mult).toBe(3)
+      expect(ctx.triggered.length).toBe(1)
+    })
+
+    it('37. suit_diverse_mult Joker: 4 种不同花色时 mult = mult_per（触发时加一次）', () => {
+      // count=2, mult=3: 满足条件后加一次 mult，非 suitCount × mult
+      const joker: Joker = {
+        id: 'J_SUIT_DIV',
+        name: 'Test Suit Diverse',
+        rarity: 'UNCOMMON',
+        price: 5,
+        desc: '',
+        effect: { type: 'suit_diverse_mult', count: 2, mult: 3 },
+      }
+      const system = new JokerSystem([joker])
+      const hand = [
+        makeCard(0, 0), makeCard(1, 1), makeCard(2, 2), makeCard(3, 3),
+      ] // 4种花色
+      const result = evaluator.evaluate(hand)
+      const ctx = system.computeContext(result)
+      expect(ctx.mult).toBe(3)
+    })
+
+    it('38. suit_diverse_mult Joker: 花色种类不足时不触发', () => {
+      // 只有 2 种花色，count=3，不触发
+      const joker: Joker = {
+        id: 'J_SUIT_DIV',
+        name: 'Test Suit Diverse',
+        rarity: 'UNCOMMON',
+        price: 5,
+        desc: '',
+        effect: { type: 'suit_diverse_mult', count: 3, mult: 3 },
+      }
+      const system = new JokerSystem([joker])
+      const hand = [makeCard(0, 0), makeCard(1, 0), makeCard(2, 1)] // 只有 2 种花色
+      const result = evaluator.evaluate(hand)
+      const ctx = system.computeContext(result)
+      expect(ctx.mult).toBe(0)
+      expect(ctx.triggered.length).toBe(0)
+    })
+  })
+
+  describe('computeContext — last_hand_mult Joker (最后一手时 +N Mult)', () => {
+    it('39. last_hand_mult Joker: isLastHand=true 时触发', () => {
+      const joker: Joker = {
+        id: 'J_LAST_HAND',
+        name: 'Test Last Hand',
+        rarity: 'RARE',
+        price: 8,
+        desc: '',
+        effect: { type: 'last_hand_mult', mult: 5 },
+      }
+      const system = new JokerSystem([joker])
+      const hand = [makeCard(0, 0), makeCard(3, 1)]
+      const result = evaluator.evaluate(hand)
+      const ctx = system.computeContext(result, { isLastHand: true })
+      expect(ctx.mult).toBe(5)
+      expect(ctx.triggered.length).toBe(1)
+    })
+
+    it('40. last_hand_mult Joker: isLastHand=false 时不触发', () => {
+      const joker: Joker = {
+        id: 'J_LAST_HAND',
+        name: 'Test Last Hand',
+        rarity: 'RARE',
+        price: 8,
+        desc: '',
+        effect: { type: 'last_hand_mult', mult: 5 },
+      }
+      const system = new JokerSystem([joker])
+      const hand = [makeCard(0, 0), makeCard(3, 1)]
+      const result = evaluator.evaluate(hand)
+      const ctx = system.computeContext(result, { isLastHand: false })
+      expect(ctx.mult).toBe(0)
+      expect(ctx.triggered.length).toBe(0)
+    })
+  })
+
+  describe('computeContext — score_mult Joker (基础分数超过阈值时 +N Mult)', () => {
+    it('41. score_mult Joker: 基础分数超过阈值时触发', () => {
+      const joker: Joker = {
+        id: 'J_SCORE_MULT',
+        name: 'Test Score Mult',
+        rarity: 'UNCOMMON',
+        price: 6,
+        desc: '',
+        effect: { type: 'score_mult', threshold: 100, mult: 4 },
+      }
+      const system = new JokerSystem([joker])
+      const hand = [makeCard(0, 0), makeCard(3, 1)]
+      const result = evaluator.evaluate(hand)
+      const ctx = system.computeContext(result, { baseScore: 150 })
+      expect(ctx.mult).toBe(4)
+      expect(ctx.triggered.length).toBe(1)
+    })
+
+    it('42. score_mult Joker: 基础分数未超过阈值时不触发', () => {
+      const joker: Joker = {
+        id: 'J_SCORE_MULT',
+        name: 'Test Score Mult',
+        rarity: 'UNCOMMON',
+        price: 6,
+        desc: '',
+        effect: { type: 'score_mult', threshold: 100, mult: 4 },
+      }
+      const system = new JokerSystem([joker])
+      const hand = [makeCard(0, 0), makeCard(3, 1)]
+      const result = evaluator.evaluate(hand)
+      const ctx = system.computeContext(result, { baseScore: 80 })
+      expect(ctx.mult).toBe(0)
+      expect(ctx.triggered.length).toBe(0)
+    })
+
+    it('43. score_mult Joker: 基础分数等于阈值时不触发（需 > 阈值）', () => {
+      const joker: Joker = {
+        id: 'J_SCORE_MULT',
+        name: 'Test Score Mult',
+        rarity: 'UNCOMMON',
+        price: 6,
+        desc: '',
+        effect: { type: 'score_mult', threshold: 100, mult: 4 },
+      }
+      const system = new JokerSystem([joker])
+      const hand = [makeCard(0, 0), makeCard(3, 1)]
+      const result = evaluator.evaluate(hand)
+      const ctx = system.computeContext(result, { baseScore: 100 })
+      expect(ctx.mult).toBe(0)
+    })
+  })
+
+  describe('addJoker — 不可变模式验证', () => {
+    it('44. addJoker 不修改原 Joker 数组', () => {
+      const system = new JokerSystem()
+      const jokersBefore = system.getActiveJokers()
+      system.addJoker(makeFlatMultJoker('J100', 1))
+      const jokersAfter = system.getActiveJokers()
+      expect(jokersBefore.length).toBe(0)
+      expect(jokersAfter.length).toBe(1)
+    })
+  })
 })

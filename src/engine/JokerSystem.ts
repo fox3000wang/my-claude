@@ -25,7 +25,7 @@ export class JokerSystem {
    * 添加一个 Joker 到活跃列表
    */
   addJoker(joker: Joker): void {
-    this.jokers.push(joker)
+    this.jokers = [...this.jokers, joker]
   }
 
   /**
