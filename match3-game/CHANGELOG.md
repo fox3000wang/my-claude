@@ -2,6 +2,27 @@
 
 All notable changes to 开心消消乐 (match3-game) will be documented here.
 
+## [1.2.0] - 2026-04-09
+
+### Added
+- **梦幻星空糖果（Cosmic Candy）UI 风格**: 全面视觉升级
+  - App.css: 深空星空背景（5层径向渐变 + ~100颗闪烁/漂移星星 + 2个漂浮光球）+ Fredoka One 字体
+  - Header.css: 毛玻璃卡片（backdrop-blur + 微光边框）+ 各统计项糖果色发光
+  - GameBoard.css: 深色玻璃棋盘 + 玻璃质感方块（顶部高光弧形）+ emoji 白色辉光
+  - Modal.css: 深空黑 overlay + 淡紫光晕 + overshoot 弹跳动画
+  - WinModal.css: 彩虹渐变星星（旋转弹入）+ 半透明文字
+  - LoseModal.css: 薰衣草紫标题 + 温暖粉橙信息
+
+### Changed
+- **方块配色统一**: 每种动物专属糖果色，背景渐变 + 外发光与 emoji 原色配套
+  - 🐱 Cat: 暖桃粉 `#FF8FAB` + 粉 glow
+  - 🐶 Dog: 琥珀金 `#FFAA47` + 金 glow
+  - 🐰 Rabbit: 樱花粉 `#FF7EB3` + 粉 glow
+  - 🐼 Panda: 薰衣草紫 `#C4B5FD` + 紫 glow
+  - 🦊 Fox: 蜜橙金 `#FF9F45` + 橙 glow
+- 爆炸动画优化: 亮度提升至 3x，全白/金色光晕，视觉更炸裂
+- `TILE_COLORS` 从单色字符串升级为 `{ primary, glow }` 结构化配置
+
 ## [1.1.0] - 2026-04-09
 
 ### Added
