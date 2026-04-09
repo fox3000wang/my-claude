@@ -1,0 +1,8 @@
+/* Card component styles */
+/* Most styles are inherited from src/index.css */
+/* Only add transition/animation overrides here if needed */
+
+.card:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
