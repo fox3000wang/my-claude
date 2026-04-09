@@ -126,6 +126,17 @@ export class Game {
       mineral.addComponent(new MineralDeposit(1500));
     }
 
+    // Zerg: Drone + Extractor (gas矿)
+    const extractor = this.world.createEntity();
+    extractor.addComponent(new Position(-15, 0, 5));
+    extractor.addComponent(new Renderable('mineral', 1));
+    extractor.addComponent(new MineralDeposit(800));
+
+    const drone = this.world.createEntity();
+    drone.addComponent(new Position(-12, 0, 5));
+    drone.addComponent(new Renderable('unit_scv', 1));
+    drone.addComponent(new Unit('drone', 40, 40, 0));
+    drone.addComponent(new ResourceCarrier());
     // 注册到渲染层
     this.entityRenderer.registerWorld(this.world);
   }
