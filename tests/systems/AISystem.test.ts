@@ -63,4 +63,40 @@ describe('AISystem', () => {
     const combat = aiUnit.getComponent<Combat>('Combat');
     expect(combat!.targetId).toBe(playerUnit.id);
   });
+
+  it('retreats when health falls below 30%', () => {
+    const aiUnit = world.createEntity();
+    aiUnit.addComponent(new Unit('marine', 100, 100, 1));
+    aiUnit.addComponent(new Position(0, 0, 0));
+    aiUnit.addComponent(new Combat(10, 2, 5, 1));
+    aiUnit.addComponent(new Health(20, 100)); // 20% HP — below 30%
+
+    const playerUnit = world.createEntity();
+    playerUnit.addComponent(new Unit('marine', 100, 100, 0));
+    playerUnit.addComponent(new Position(30, 0, 0)); // far away
+    playerUnit.addComponent(new Health(100, 100));
+
+    world.update(3); // force decision tick
+
+    const combat = aiUnit.getComponent<Combat>('Combat')!;
+    expect(combat.targetId).toBeNull(); // retreated — target cleared
+    expect(aiUnit.hasComponent('MoveTarget')).toBe(true); // retreat move
+  });
+
+  it('patrols when no enemy is within 20 units', () => {
+    const aiUnit = world.createEntity();
+    aiUnit.addComponent(new Unit('marine', 100, 100, 1));
+    aiUnit.addComponent(new Position(0, 0, 0));
+    aiUnit.addComponent(new Combat(10, 2, 5, 1));
+    aiUnit.addComponent(new Health(100, 100));
+
+    const playerUnit = world.createEntity();
+    playerUnit.addComponent(new Unit('marine', 100, 100, 0));
+    playerUnit.addComponent(new Position(30, 0, 0)); // outside 20 unit range
+    playerUnit.addComponent(new Health(100, 100));
+
+    world.update(3);
+
+    expect(aiUnit.hasComponent('MoveTarget')).toBe(true); // patrol target set
+  });
 });

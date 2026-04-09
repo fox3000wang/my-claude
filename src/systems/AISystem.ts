@@ -67,11 +67,13 @@ export class AISystem extends System {
             const dx = targetPos.x - pos.x;
             const dz = targetPos.z - pos.z;
             const len = Math.hypot(dx, dz);
-            entity.addComponent(MoveTarget.at(
-              pos.x + (dx / len) * 5,
-              0,
-              pos.z + (dz / len) * 5,
-            ));
+            if (len > 0) {
+              entity.addComponent(MoveTarget.at(
+                pos.x + (dx / len) * 5,
+                0,
+                pos.z + (dz / len) * 5,
+              ));
+            }
           }
         } else {
           // In range: stop moving
