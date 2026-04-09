@@ -108,7 +108,11 @@ export class BuildSystem extends System {
     if (!this.playerResources.canAfford(data.cost.minerals, data.supply)) return false;
 
     this.playerResources.spend(data.cost.minerals);
-    this.playerResources.useSupply(data.supply);
+    if (data.supply < 0) {
+      this.playerResources.supplyMax += Math.abs(data.supply);
+    } else {
+      this.playerResources.useSupply(data.supply);
+    }
 
     const entity = this.world!.createEntity();
     entity.addComponent(new Position(x, 0, z));
