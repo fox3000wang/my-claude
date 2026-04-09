@@ -9,7 +9,7 @@ export interface ScoreResult {
 }
 
 export interface JokerTriggered {
-  joker: import('./joker').Joker
+  jokerId: string
   jokerMult: number
   jokerBonus: number
 }
