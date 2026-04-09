@@ -17,6 +17,17 @@ export interface DeckState {
   discard: Card[]
 }
 
+/**
+ * Pending selection for tarot effects that require player choice.
+ * Used by effects like "choose_hand_type" (The High Priestess).
+ */
+export type PendingSelection =
+  | { type: 'choose_hand_type'; handTypes: string[] }
+  | { type: 'upgrade_card'; cardIds: string[] }
+  | { type: 'reroll_suit'; cardIds: string[] }
+  | { type: 'add_value'; cardIds: string[] }
+  | { type: 'double_value'; cardIds: string[] }
+
 export interface TarotEffect {
   bonusFlat?: number
   multFlat?: number
@@ -25,7 +36,7 @@ export interface TarotEffect {
   freeHand?: boolean
   nextAnteDiscount?: number
   chooseHandType?: boolean
-  pending?: unknown
+  pending?: PendingSelection | null
 }
 
 export interface TarotOrPlanet {
