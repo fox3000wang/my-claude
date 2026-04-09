@@ -1,10 +1,11 @@
 import * as THREE from 'three';
 import { System } from '../core/ecs/System';
+import { Entity } from '../core/ecs/Entity';
 import { Selected } from '../components/Selected';
 import { Position } from '../components/Position';
 import { Unit } from '../components/Unit';
 import { MoveTarget } from '../components/MoveTarget';
-import type { InputManager, MouseState } from '../input/InputManager';
+import type { InputManager } from '../input/InputManager';
 
 export class SelectionSystem extends System {
   readonly name = 'SelectionSystem';
@@ -67,7 +68,7 @@ export class SelectionSystem extends System {
     this.clearAllSelections();
 
     const units = this.world!.getEntitiesWithComponents('Position', 'Unit', 'Selected');
-    let closest: { entity: ReturnType<typeof this.world!.getEntity>; dist: number } | null = null;
+    let closest: { entity: Entity | undefined; dist: number } | null = null;
     const clickRadius = 2.5;
 
     for (const entity of units) {
