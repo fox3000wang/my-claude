@@ -11,7 +11,6 @@ function App() {
     handleTileClick,
     restartLevel,
     nextLevel,
-    startNewGame,
   } = useGameLogic();
 
   return (

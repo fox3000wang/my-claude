@@ -1,5 +1,5 @@
 import { useState, useCallback, useRef } from 'react';
-import { GameState, Position } from '../types/game';
+import { GameState } from '../types/game';
 import { LEVELS } from '../constants/gameConfig';
 import {
   createBoardWithoutInitialMatches,
