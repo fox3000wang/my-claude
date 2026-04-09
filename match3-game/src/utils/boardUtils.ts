@@ -61,7 +61,10 @@ export function findMatches(board: Tile[][]): Position[][] {
     let matchLength = 1;
 
     for (let col = 1; col <= BOARD_SIZE; col++) {
-      if (col < BOARD_SIZE && board[row][col].type === board[row][matchStart].type) {
+      const currentTile = board[row]?.[col];
+      const startTile = board[row]?.[matchStart];
+
+      if (col < BOARD_SIZE && currentTile && startTile && currentTile.type === startTile.type) {
         matchLength++;
       } else {
         if (matchLength >= 3) {
@@ -83,7 +86,10 @@ export function findMatches(board: Tile[][]): Position[][] {
     let matchLength = 1;
 
     for (let row = 1; row <= BOARD_SIZE; row++) {
-      if (row < BOARD_SIZE && board[row][col].type === board[matchStart][col].type) {
+      const currentTile = board[row]?.[col];
+      const startTile = board[matchStart]?.[col];
+
+      if (row < BOARD_SIZE && currentTile && startTile && currentTile.type === startTile.type) {
         matchLength++;
       } else {
         if (matchLength >= 3) {
@@ -120,15 +126,18 @@ export function calculateScore(matches: Position[][]): number {
 }
 
 export function removeMatches(board: Tile[][], matches: Position[][]): Tile[][] {
-  const newBoard = board.map(row => row.map(tile => ({ ...tile })));
+  const newBoard = board.map(row => row.map(tile => tile ? { ...tile } : tile));
 
   for (const match of matches) {
     for (const pos of match) {
-      newBoard[pos.row][pos.col] = {
-        ...newBoard[pos.row][pos.col],
-        type: null as unknown as TileType,
-        isMatching: true,
-      };
+      const tile = newBoard[pos.row]?.[pos.col];
+      if (tile) {
+        newBoard[pos.row][pos.col] = {
+          ...tile,
+          type: null as unknown as TileType,
+          isMatching: true,
+        };
+      }
     }
   }
 
@@ -143,9 +152,10 @@ export function dropTiles(board: Tile[][]): Tile[][] {
 
     // 从下往上遍历，把非空方块移下来
     for (let row = BOARD_SIZE - 1; row >= 0; row--) {
-      if (board[row][col].type !== null) {
+      const tile = board[row]?.[col];
+      if (tile && tile.type !== null) {
         newBoard[writeRow][col] = {
-          ...board[row][col],
+          ...tile,
           row: writeRow,
         };
         writeRow--;
