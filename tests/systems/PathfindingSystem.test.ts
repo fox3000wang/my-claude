@@ -48,8 +48,8 @@ describe('PathfindingSystem', () => {
     expect(pf.path.length).toBeGreaterThan(0);
   });
 
-  it('sets MoveTarget to first waypoint and clears Pathfinding when done', () => {
-    // Place entity at the first world waypoint so it immediately arrives
+  it('clears Pathfinding when reaching the only waypoint', () => {
+    // Place entity at the only waypoint so it immediately arrives
     const startCellX = 3;
     const startCellZ = 3;
     const startWorld = grid.cellToWorld(startCellX, startCellZ);
@@ -76,5 +76,36 @@ describe('PathfindingSystem', () => {
     expect(mt.x).toBeCloseTo(startWorld.x);
     expect(mt.z).toBeCloseTo(startWorld.z);
     expect(pf.isActive).toBe(false);
+  });
+
+  it('sets MoveTarget to current waypoint before advancing', () => {
+    // Two-waypoint path: entity starts at first waypoint, second is the goal
+    const startCellX = 3;
+    const startCellZ = 3;
+    const endCellX = 5;
+    const endCellZ = 5;
+    const startWorld = grid.cellToWorld(startCellX, startCellZ);
+    const endWorld = grid.cellToWorld(endCellX, endCellZ);
+
+    const worldPath = [
+      { x: startWorld.x, y: 0, z: startWorld.z },
+      { x: endWorld.x,   y: 0, z: endWorld.z   },
+    ];
+
+    const entity = world.createEntity();
+    entity.addComponent(new Position(startWorld.x, 0, startWorld.z));
+    entity.addComponent(MoveTarget.at(10, 0, 10));
+    const pf = new Pathfinding();
+    pf.setPath(worldPath);
+    entity.addComponent(pf);
+
+    world.update(0.016);
+
+    // MoveTarget should be set to the CURRENT (first) waypoint, not the next one
+    const mt = entity.getComponent<MoveTarget>('MoveTarget')!;
+    expect(mt.x).toBeCloseTo(startWorld.x);
+    expect(mt.z).toBeCloseTo(startWorld.z);
+    // Path still active — advance() was called but there is a next waypoint
+    expect(pf.isActive).toBe(true);
   });
 });

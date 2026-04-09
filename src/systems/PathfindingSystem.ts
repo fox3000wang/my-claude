@@ -55,18 +55,11 @@ export class PathfindingSystem extends System {
         const distance = Math.sqrt(dx * dx + dz * dz);
 
         if (distance < 0.5) {
-          const lastWaypoint = pf.currentWaypoint()!;
-          const next = pf.path[pf.currentIndex + 1];
-          if (next !== undefined) {
-            mt.x = next.x;
-            mt.y = next.y;
-            mt.z = next.z;
-          } else {
-            // Path exhausted — set MoveTarget to last waypoint
-            mt.x = lastWaypoint.x;
-            mt.y = lastWaypoint.y;
-            mt.z = lastWaypoint.z;
-          }
+          const current = pf.currentWaypoint()!;
+          // Set MoveTarget to current waypoint first, then advance
+          mt.x = current.x;
+          mt.y = current.y;
+          mt.z = current.z;
           pf.advance();
         }
       }
