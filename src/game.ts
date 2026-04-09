@@ -15,6 +15,7 @@ import { SelectionSystem } from './systems/SelectionSystem';
 import { AISystem } from './systems/AISystem';
 import { BuildSystem } from './systems/BuildSystem';
 import { TrainingSystem } from './systems/TrainingSystem';
+import { LarvaeSystem } from './systems/LarvaeSystem';
 import { ResourceSystem } from './systems/ResourceSystem';
 import { PathfindingSystem } from './systems/PathfindingSystem';
 import { Grid } from './utils/grid';
@@ -78,6 +79,7 @@ export class Game {
     this.buildSystem = new BuildSystem(this.grid);
     this.buildSystem.setPlayerResources(this.playerResources);
     this.world.addSystem(this.buildSystem);
+    this.world.addSystem(new LarvaeSystem());
     this.trainingSystem = new TrainingSystem();
     this.trainingSystem.setPlayerResources(this.playerResources);
     this.world.addSystem(this.trainingSystem);
