@@ -1,0 +1,18 @@
+.game-board-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 16px;
+}
+
+.game-board {
+  max-width: 100%;
+  height: auto;
+  touch-action: none;
+}
+
+@media (max-width: 400px) {
+  .game-board-container {
+    padding: 8px;
+  }
+}
