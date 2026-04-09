@@ -21,16 +21,32 @@ export class BuildSystem extends System {
     this.playerResources = resources;
   }
 
-  private blockBuildingFootprint(buildingType: string, x: number, z: number): void {
+  private getFootprintCells(
+    buildingType: string,
+    x: number,
+    z: number,
+  ): { minCX: number; maxCX: number; minCZ: number; maxCZ: number } | null {
     const data = (buildingsData as Record<string, { size: number }>)[buildingType];
-    if (!data) return;
+    if (!data) return null;
 
-    const halfSize = Math.floor(data.size / 2);
-    const minCell = this.grid.cellAt(x - halfSize - 0.5, 0, z - halfSize - 0.5);
-    const maxCell = this.grid.cellAt(x + halfSize + 0.5, 0, z + halfSize + 0.5);
+    const halfSize = data.size / 2; // floating point: 1.5 for size=3, 1.0 for size=2
+    // Compute the exclusive upper world boundary in integer space before flooring,
+    // avoiding floating-point rounding errors (e.g. 5 + 1.5 = 6.5 exactly, not 6.499...)
+    const maxWorldX = Math.floor(x + halfSize) - 1e-9;
+    const maxWorldZ = Math.floor(z + halfSize) - 1e-9;
+    const minCX = this.grid.cellAt(x - halfSize, 0, z - halfSize).x;
+    const maxCX = this.grid.cellAt(maxWorldX, 0, maxWorldZ).x;
+    const minCZ = this.grid.cellAt(x - halfSize, 0, z - halfSize).z;
+    const maxCZ = this.grid.cellAt(maxWorldX, 0, maxWorldZ).z;
+    return { minCX, maxCX, minCZ, maxCZ };
+  }
 
-    for (let cx = minCell.x; cx <= maxCell.x; cx++) {
-      for (let cz = minCell.z; cz <= maxCell.z; cz++) {
+  private blockBuildingFootprint(buildingType: string, x: number, z: number): void {
+    const cells = this.getFootprintCells(buildingType, x, z);
+    if (!cells) return;
+
+    for (let cx = cells.minCX; cx <= cells.maxCX; cx++) {
+      for (let cz = cells.minCZ; cz <= cells.maxCZ; cz++) {
         this.grid.blockCell(cx, cz);
       }
     }
@@ -40,12 +56,11 @@ export class BuildSystem extends System {
     const data = (buildingsData as Record<string, { size: number }>)[buildingType];
     if (!data) return false;
 
-    const halfSize = Math.floor(data.size / 2);
-    const minCell = this.grid.cellAt(x - halfSize - 0.5, 0, z - halfSize - 0.5);
-    const maxCell = this.grid.cellAt(x + halfSize + 0.5, 0, z + halfSize + 0.5);
+    const cells = this.getFootprintCells(buildingType, x, z);
+    if (!cells) return false;
 
-    for (let cx = minCell.x; cx <= maxCell.x; cx++) {
-      for (let cz = minCell.z; cz <= maxCell.z; cz++) {
+    for (let cx = cells.minCX; cx <= cells.maxCX; cx++) {
+      for (let cz = cells.minCZ; cz <= cells.maxCZ; cz++) {
         if (!this.grid.isWalkable(cx, cz)) return false;
       }
     }
@@ -89,6 +104,7 @@ export class BuildSystem extends System {
     } | undefined;
     if (!data || !this.playerResources) return false;
 
+    if (!this.canPlaceBuilding(buildingType, x, z)) return false;
     if (!this.playerResources.canAfford(data.cost.minerals, data.supply)) return false;
 
     this.playerResources.spend(data.cost.minerals);
