@@ -12,8 +12,11 @@ import { MovementSystem } from './systems/MovementSystem';
 import { CombatSystem } from './systems/CombatSystem';
 import { SelectionSystem } from './systems/SelectionSystem';
 import { BuildSystem } from './systems/BuildSystem';
+import { ResourceSystem } from './systems/ResourceSystem';
+import { TrainingSystem } from './systems/TrainingSystem';
 import { Selected } from './components/Selected';
 import { PlayerResources } from './components/PlayerResources';
+import { ResourceCarrier } from './components/ResourceCarrier';
 
 export class Game {
   readonly world: World;
@@ -24,6 +27,7 @@ export class Game {
   private inputManager!: DOMInputManager;
   private selectionSystem!: SelectionSystem;
   private buildSystem!: BuildSystem;
+  private resourceSystem!: ResourceSystem;
   private playerResources!: PlayerResources;
   private animationId: number | null = null;
   private lastTime = 0;
@@ -60,6 +64,9 @@ export class Game {
     this.buildSystem = new BuildSystem();
     this.buildSystem.setPlayerResources(this.playerResources);
     this.world.addSystem(this.buildSystem);
+    this.resourceSystem = new ResourceSystem();
+    this.resourceSystem.setPlayerResources(this.playerResources);
+    this.world.addSystem(this.resourceSystem);
 
     // 初始化测试场景
     this.initTestScene();
@@ -71,6 +78,7 @@ export class Game {
     scv.addComponent(new Position(0, 0, 0));
     scv.addComponent(new Renderable('unit_scv', 1));
     scv.addComponent(new Unit('scv', 60, 60, 0));
+    scv.addComponent(new ResourceCarrier());
     scv.addComponent(new Selected());
 
     // 添加一个 Marine
