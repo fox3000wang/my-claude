@@ -8,6 +8,7 @@ import { Renderable } from './components/Renderable';
 import { Unit } from './components/Unit';
 import { MineralDeposit } from './components/MineralDeposit';
 import { DOMInputManager } from './input/InputManager';
+import { MovementSystem } from './systems/MovementSystem';
 
 export class Game {
   readonly world: World;
@@ -39,6 +40,9 @@ export class Game {
 
     // 输入管理
     this.inputManager = new DOMInputManager(canvasElement, this.sceneManager.camera);
+
+    // Systems
+    this.world.addSystem(new MovementSystem());
 
     // 初始化测试场景
     this.initTestScene();
