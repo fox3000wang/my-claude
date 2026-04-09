@@ -8,7 +8,7 @@ export interface JokerSlotProps {
 }
 
 function formatEffect(effect: JokerEffect): string {
-  const { type, mult, bonus, hands, money, draw, bonus_per } = effect
+  const { type, mult, bonus, hands, money, value, bonus_per } = effect
 
   switch (type) {
     case 'score_mult':
@@ -28,7 +28,7 @@ function formatEffect(effect: JokerEffect): string {
     case 'mult_boost':
       return mult != null ? `×(1+${mult}) Score` : ''
     case 'draw':
-      return draw != null ? `+${draw} 抽牌` : ''
+      return value != null ? `+${value} 抽牌` : ''
     case 'money':
       return money != null ? `+$ ${money}` : ''
     case 'money_mult':

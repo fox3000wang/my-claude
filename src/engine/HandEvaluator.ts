@@ -1,5 +1,5 @@
-import { Card } from '../types/card'
-import { HandResult, HandType } from '../types/hand'
+import type { Card } from '../types/card'
+import type { HandResult } from '../types/hand'
 import { HAND_TYPES } from '../constants/handTypes'
 
 /**

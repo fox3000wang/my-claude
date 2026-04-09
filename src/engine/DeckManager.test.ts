@@ -125,7 +125,6 @@ describe('DeckManager', () => {
       dm.createDeck()
       dm.draw(5)
       const cardToDiscard = dm.hand[0]
-      const cardToDiscard2 = dm.hand[1]
       dm.discardCards([cardToDiscard])
       expect(dm.hand.length).toBe(4)
       expect(dm.discardPile.length).toBe(1)

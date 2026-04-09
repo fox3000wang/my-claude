@@ -1,4 +1,3 @@
-import React from 'react'
 
 const BLIND_NAMES = ['Small', 'Big', 'Boss']
 

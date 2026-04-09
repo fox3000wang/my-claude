@@ -1,8 +1,8 @@
-import { describe, it, expect, beforeEach } from 'vitest'
+import { describe, it, expect } from 'vitest'
 import { JokerSystem } from './JokerSystem'
 import { HandEvaluator } from './HandEvaluator'
 import { createCard, SUITS } from '../types/card'
-import { Joker } from '../types/joker'
+import type { Joker } from '../types/joker'
 
 // 测试辅助函数：创建指定面值和花色的牌
 // RANKS index: 2=0, 3=1, 4=2, 5=3, 6=4, 7=5, 8=6, 9=7, 10=8, J=9, Q=10, K=11, A=12

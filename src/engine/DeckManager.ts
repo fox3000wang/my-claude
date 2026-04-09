@@ -1,4 +1,5 @@
-import { Card, createCard, SUITS, RANKS } from '../types/card'
+import { createCard, SUITS, RANKS } from '../types/card'
+import type { Card } from '../types/card'
 
 /**
  * 牌堆管理器

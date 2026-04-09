@@ -1,5 +1,5 @@
-import { HandResult } from '../types/hand'
-import { JokerContext, ScoreResult } from '../types/scoring'
+import type { HandResult } from '../types/hand'
+import type { JokerContext, ScoreResult } from '../types/scoring'
 
 export class ScoringEngine {
   /**
@@ -30,6 +30,7 @@ export class ScoringEngine {
       bonus,
       boostFactor,
       total,
+      triggered: jokerCtx.triggered,
     }
   }
 }

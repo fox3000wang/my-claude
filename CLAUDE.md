@@ -86,20 +86,31 @@ TITLE → PLAYING → SCORING → (继续/结束)
 - [x] 集成计分引擎：(base + faceValue) × (1 + mult) × (1 + boost) + bonus
 - [x] Joker 效果分型展示（Mult/Bonus 分步计分）
 
+## 已实现功能 (Phase 3: Roguelike 完整流程)
+
+- [x] 3 Ante × 3 Blind（Small → Big → Boss 顺序完成）
+- [x] 目标分递增（Ante 1: 100/150/200，Ante 2: 150/250/350，Ante 3: 200/350/500）
+- [x] 经济系统（每 Ante +$4，Small/Big/Boss 奖励 $3/$4/$5）
+- [x] 商店系统（2 Joker + 1 Tarot/Planet）
+- [x] 15 张 Tarot 卡效果（即时 + 临时加成）
+- [x] 10 张 Planet 卡永久升级
+- [x] Boss Blind 跳过扣 $2
+- [x] 出牌后自动继续（1.5s 后自动补牌）
+- [x] 理牌功能（按花色 ♠♥ / 按面值 A-K）
+
 ---
 
 ## 待实现功能
 
-### Phase 3: 完整流程
-- 8 个 Ante 递增难度
-- 商店系统（Joker/道具购买）
-- 经济系统（筹码 $）
-- Boss Blind 负面效果
+### Phase 4: 完整 Balatro 对齐
+- 8 个 Ante（当前 MVP 为 3 Ante）
+- Boss Blind 负面效果（8 种规则）
+- 生命值机制（4 ♥）
 
-### Phase 4: 卡片库完善
-- 15 张 Tarot 卡
-- 10 张 Planet 卡
-- 5 个道具（Voucher）
+### Phase 4: 完整 Balatro 对齐
+- 8 个 Ante（当前 MVP 为 3 Ante）
+- Boss Blind 负面效果（8 种规则）
+- 生命值机制（4 ♥）
 
 ### Phase 5: 视觉打磨
 - 完整动画系统
@@ -108,8 +119,8 @@ TITLE → PLAYING → SCORING → (继续/结束)
 
 ### Phase 6: 体验增强
 - LocalStorage 存档
-- Boss 规则
 - 更多 Joker 变体
+- 5 个道具（Voucher）
 
 ---
 
@@ -120,6 +131,9 @@ TITLE → PLAYING → SCORING → (继续/结束)
 | `index.html` | 游戏主文件 |
 | `SPEC.md` | 完整设计规格说明书 |
 | `CLAUDE.md` | 本文件 |
+| `tests/game.test.js` | 核心逻辑单元测试（Node.js） |
+| `tests/e2e/game/*.spec.ts` | Playwright E2E 测试（40 个测试全通过） |
+| `playwright.config.ts` | E2E 测试配置 |
 
 ---
 

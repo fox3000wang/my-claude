@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest'
 import { ScoringEngine } from './ScoringEngine'
 import { HandEvaluator } from './HandEvaluator'
 import { createCard, SUITS } from '../types/card'
-import { JokerContext } from '../types/scoring'
+import type { JokerContext } from '../types/scoring'
 
 function makeCard(valueIndex: number, suitIndex: number = 0) {
   const ranks = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A']
@@ -224,7 +224,7 @@ describe('ScoringEngine', () => {
         makeCard(11, 0), // K♠
       ]
       const result = evaluator.evaluate(hand)
-      const score = engine.calculate(result, {})
+      const score = engine.calculate(result, emptyJokerCtx())
 
       expect(score.mult).toBe(0)
       expect(score.bonus).toBe(0)

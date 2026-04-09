@@ -1,4 +1,4 @@
-import { TarotOrPlanet } from '../types/game'
+import type { TarotOrPlanet } from '../types/game'
 
 export const TAROTS: Omit<TarotOrPlanet, 'type'>[] = [
   { id: 'T01', name: 'The Fool',         effect: 'draw',              desc: '抽 1 张牌',              price: 3 },

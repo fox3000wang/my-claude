@@ -11,18 +11,18 @@
  * state objects rather than mutating the input.
  */
 
-import { TarotEffect, TarotOrPlanet } from '../types/game'
+import type { TarotEffect, TarotOrPlanet } from '../types/game'
 
 /**
  * Pending selection that requires player input.
  * Stored in the game state while awaiting a choice.
  */
 export type PendingSelection =
-  | { type: 'choose_hand_type' }
-  | { type: 'upgrade_card' }
-  | { type: 'reroll_suit' }
-  | { type: 'add_value' }
-  | { type: 'double_value' }
+  | { type: 'choose_hand_type'; handTypes: string[] }
+  | { type: 'upgrade_card'; cardIds: string[] }
+  | { type: 'reroll_suit'; cardIds: string[] }
+  | { type: 'add_value'; cardIds: string[] }
+  | { type: 'double_value'; cardIds: string[] }
 
 /**
  * Temporary round modifiers applied by Tarot cards.
@@ -166,27 +166,27 @@ export class TarotSystem {
 
       case 'choose_hand_type':
         // Player selects a hand type for the next played hand
-        mods.pending = { type: 'choose_hand_type' }
+        mods.pending = { type: 'choose_hand_type', handTypes: [] }
         break
 
       case 'upgrade_card':
         // Player selects a card to upgrade to J/Q/K/A
-        mods.pending = { type: 'upgrade_card' }
+        mods.pending = { type: 'upgrade_card', cardIds: [] }
         break
 
       case 'reroll_suit':
         // Player selects a card to change to a random different suit of the same value
-        mods.pending = { type: 'reroll_suit' }
+        mods.pending = { type: 'reroll_suit', cardIds: [] }
         break
 
       case 'add_value':
         // Player selects 2 cards to add +4 to their value
-        mods.pending = { type: 'add_value' }
+        mods.pending = { type: 'add_value', cardIds: [] }
         break
 
       case 'double_value':
         // Player selects 1 card to double its value
-        mods.pending = { type: 'double_value' }
+        mods.pending = { type: 'double_value', cardIds: [] }
         break
 
       case 'instant_money':

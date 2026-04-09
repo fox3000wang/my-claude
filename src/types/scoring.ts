@@ -6,6 +6,7 @@ export interface ScoreResult {
   bonus: number
   boostFactor: number
   total: number
+  triggered: JokerTriggered[]
 }
 
 export interface JokerTriggered {

@@ -1,6 +1,6 @@
-import { Joker } from '../types/joker'
-import { HandResult } from '../types/hand'
-import { JokerContext, JokerTriggered } from '../types/scoring'
+import type { Joker } from '../types/joker'
+import type { HandResult } from '../types/hand'
+import type { JokerContext, JokerTriggered } from '../types/scoring'
 
 export interface JokerScoringContext {
   isLastHand?: boolean

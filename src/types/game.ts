@@ -1,5 +1,4 @@
-import { Card } from './card'
-import { Joker } from './joker'
+import type { Card } from './card'
 
 export type ScreenType =
   | 'TITLE'
@@ -22,11 +21,11 @@ export interface DeckState {
  * Used by effects like "choose_hand_type" (The High Priestess).
  */
 export type PendingSelection =
-  | { type: 'choose_hand_type'; handTypes: string[] }
-  | { type: 'upgrade_card'; cardIds: string[] }
-  | { type: 'reroll_suit'; cardIds: string[] }
-  | { type: 'add_value'; cardIds: string[] }
-  | { type: 'double_value'; cardIds: string[] }
+  | { type: 'choose_hand_type'; handTypes?: string[] }
+  | { type: 'upgrade_card'; cardIds?: string[] }
+  | { type: 'reroll_suit'; cardIds?: string[] }
+  | { type: 'add_value'; cardIds?: string[] }
+  | { type: 'double_value'; cardIds?: string[] }
 
 export interface TarotEffect {
   bonusFlat?: number

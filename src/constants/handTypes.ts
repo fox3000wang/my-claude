@@ -1,4 +1,4 @@
-import { HandType } from '../types/hand'
+import type { HandType } from '../types/hand'
 
 export const HAND_TYPES: Record<string, HandType> = {
   ROYAL_FLUSH:    { name: '皇家同花顺', base: 100, level: 1 },

@@ -7,11 +7,11 @@
  */
 
 import { create } from 'zustand'
-import { Card } from '../types/card'
-import { HandResult } from '../types/hand'
-import { ScoreResult, JokerContext } from '../types/scoring'
-import { Joker } from '../types/joker'
-import { ScreenType, PendingSelection } from '../types/game'
+import type { Card } from '../types/card'
+import type { HandResult } from '../types/hand'
+import type { ScoreResult, JokerContext } from '../types/scoring'
+import type { Joker } from '../types/joker'
+import type { ScreenType, PendingSelection } from '../types/game'
 import {
   DeckManager,
   HandEvaluator,
@@ -172,8 +172,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
   // ─── playHand ──────────────────────────────────────────────────────────
   playHand() {
-    const { selectedCards, handEvaluator, scoringEngine, jokerSystem,
-      deckManager, tarotSystem, totalScore, handsRemaining, blindManager } = get()
+    const { selectedCards, jokerSystem,
+      tarotSystem, totalScore, handsRemaining, blindManager } = get()
 
     if (selectedCards.length === 0) return
 
@@ -386,7 +386,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
   // ─── enterShop ─────────────────────────────────────────────────────────
   enterShop() {
-    const { blindManager, shopManager, money, deckManager } = get()
+    const { blindManager, shopManager, money } = get()
 
     // 1. 获得盲注奖励
     const reward = blindManager.getReward()

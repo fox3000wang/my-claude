@@ -1,4 +1,4 @@
-import { Card } from './card'
+import type { Card } from './card'
 
 export interface HandType {
   name: string

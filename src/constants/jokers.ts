@@ -1,4 +1,4 @@
-import { Joker } from '../types/joker'
+import type { Joker } from '../types/joker'
 
 export const JOKERS: Joker[] = [
   {

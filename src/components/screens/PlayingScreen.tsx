@@ -8,11 +8,9 @@ import { ScorePanel } from '../ui/ScorePanel'
 import { CardContainer } from '../card/CardContainer'
 import { JokerArea } from '../joker/JokerArea'
 import { Button } from '../ui/Button'
-import { JokerContext } from '../../types/scoring'
 
 const handEvaluator = new HandEvaluator()
 const scoringEngine = new ScoringEngine()
-const previewJokerSystem = new JokerSystem()
 
 function computePreview(
   selectedCards: ReturnType<typeof useGameStore.getState>['selectedCards'],
@@ -21,16 +19,15 @@ function computePreview(
   if (selectedCards.length === 0) return null
 
   const result = handEvaluator.evaluate(selectedCards)
-  const jokerCtx: JokerContext = {
-    jokers: activeJokers,
-    activeJokerIds: activeJokers.map(j => j.id),
-    handType: result.type.name,
-    cardCount: selectedCards.length,
-    isLastHand: false,
-    triggeredEffects: [],
-  }
+  const previewJokerSystem = new JokerSystem(activeJokers)
+  const jokerCtx = previewJokerSystem.computeContext(result)
   const score = scoringEngine.calculate(result, jokerCtx)
-  return { result, score }
+  const jokerContrib = score.triggered.map(t => ({
+    id: t.jokerId,
+    mult: t.jokerMult || 0,
+    bonus: t.jokerBonus || 0,
+  }))
+  return { result, score, jokerContrib }
 }
 
 export function PlayingScreen() {
@@ -66,12 +63,12 @@ export function PlayingScreen() {
       {preview ? (
         <ScorePanel
           handType={preview.result.type.name}
-          baseScore={preview.score.baseScore}
+          baseScore={preview.score.base}
           faceValue={preview.score.faceValue}
           mult={preview.score.mult}
           boostFactor={preview.score.boostFactor}
           bonus={preview.score.bonus}
-          jokerContrib={preview.score.jokerContrib}
+          jokerContrib={preview.jokerContrib}
           isPreview
         />
       ) : (

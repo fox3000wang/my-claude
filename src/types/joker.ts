@@ -19,6 +19,7 @@ export type JokerEffectType =
   | 'draw'         // 发牌阶段额外发牌
   | 'money_mult'   // 摸钱时金钱 × N
   | 'money_bonus'  // 摸钱时金钱 + N
+  | 'shop_bonus'   // 商店购买后额外 +$N
 
 export interface JokerEffect {
   type: JokerEffectType

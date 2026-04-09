@@ -11,8 +11,8 @@
  * Purchases deduct from the player's money; insufficient funds block the purchase.
  */
 
-import { Joker } from '../types/joker'
-import { TarotOrPlanet } from '../types/game'
+import type { Joker } from '../types/joker'
+import type { TarotOrPlanet } from '../types/game'
 import { JOKERS } from '../constants/jokers'
 import { TAROTS } from '../constants/tarots'
 import { PLANETS } from '../constants/planets'
@@ -64,8 +64,9 @@ export class ShopManager {
    */
   generateShop(): void {
     this.jokers = this.sampleWithoutReplacement(JOKERS, 2) as Joker[]
-    const tarotPlanet = this.sampleOne([...TAROTS, ...PLANETS])
-    this.tarotPlanet = { ...tarotPlanet, type: tarotPlanet.type as 'tarot' | 'planet' }
+    const sampled = this.sampleOne([...TAROTS, ...PLANETS]) as TarotOrPlanet
+    const itemType: 'tarot' | 'planet' = 'effect' in sampled ? 'tarot' : 'planet'
+    this.tarotPlanet = { ...sampled, type: itemType }
 
     // Prices equal to base price; no discount applied here (use appliediscount())
     this.jokerPrices = this.jokers.map(j => j?.price ?? 0)

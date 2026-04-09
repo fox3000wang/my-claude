@@ -34,12 +34,16 @@ export function ScoringScreen() {
       {lastResult && lastScore ? (
         <ScorePanel
           handType={lastResult.type.name}
-          baseScore={lastScore.baseScore}
+          baseScore={lastScore.base}
           faceValue={lastScore.faceValue}
           mult={lastScore.mult}
           boostFactor={lastScore.boostFactor}
           bonus={lastScore.bonus}
-          jokerContrib={lastScore.jokerContrib}
+          jokerContrib={lastScore.triggered.map(t => ({
+            id: t.jokerId,
+            mult: t.jokerMult || 0,
+            bonus: t.jokerBonus || 0,
+          }))}
         />
       ) : (
         <ScorePanel />

@@ -1,4 +1,4 @@
-import { TarotOrPlanet } from '../types/game'
+import type { TarotOrPlanet } from '../types/game'
 
 export const PLANETS: Omit<TarotOrPlanet, 'type' | 'effect' | 'desc'>[] = [
   { id: 'P01', name: 'Mercury', handType: 'HIGH_CARD',       bonus: 10,  price: 3 },
