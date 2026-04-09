@@ -11,6 +11,7 @@ import { MineralDeposit } from './components/MineralDeposit';
 import { DOMInputManager } from './input/InputManager';
 import { MovementSystem } from './systems/MovementSystem';
 import { CombatSystem } from './systems/CombatSystem';
+import { ShieldSystem } from './systems/ShieldSystem';
 import { SelectionSystem } from './systems/SelectionSystem';
 import { AISystem } from './systems/AISystem';
 import { BuildSystem } from './systems/BuildSystem';
@@ -69,6 +70,7 @@ export class Game {
     this.world.addSystem(new MovementSystem());
     this.world.addSystem(new PathfindingSystem(this.grid));
     this.world.addSystem(new CombatSystem());
+    this.world.addSystem(new ShieldSystem());
     this.selectionSystem = new SelectionSystem(this.inputManager, this.sceneManager.camera);
     this.world.addSystem(this.selectionSystem);
     this.aiSystem = new AISystem();
