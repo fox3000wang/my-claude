@@ -28,6 +28,7 @@ export class Game {
   private selectionSystem!: SelectionSystem;
   private buildSystem!: BuildSystem;
   private resourceSystem!: ResourceSystem;
+  private trainingSystem!: TrainingSystem;
   private playerResources!: PlayerResources;
   private animationId: number | null = null;
   private lastTime = 0;
@@ -67,6 +68,9 @@ export class Game {
     this.resourceSystem = new ResourceSystem();
     this.resourceSystem.setPlayerResources(this.playerResources);
     this.world.addSystem(this.resourceSystem);
+    this.trainingSystem = new TrainingSystem();
+    this.trainingSystem.setPlayerResources(this.playerResources);
+    this.world.addSystem(this.trainingSystem);
 
     // 初始化测试场景
     this.initTestScene();

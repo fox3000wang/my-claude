@@ -1,0 +1,63 @@
+import { System } from '../core/ecs/System';
+import { TrainQueue } from '../components/TrainQueue';
+import { Building } from '../components/Building';
+import { Position } from '../components/Position';
+import { PlayerResources } from '../components/PlayerResources';
+import { Renderable } from '../components/Renderable';
+import { Unit } from '../components/Unit';
+import { Selected } from '../components/Selected';
+import unitsData from '../data/units.json';
+
+export class TrainingSystem extends System {
+  readonly name = 'TrainingSystem';
+  private playerResources: PlayerResources | null = null;
+  private _prevLengths = new Map<number, number>();
+
+  setPlayerResources(resources: PlayerResources): void {
+    this.playerResources = resources;
+  }
+
+  update(delta: number): void {
+    const buildings = this.world!.getEntitiesWithComponents('TrainQueue', 'Building', 'Position');
+
+    for (const entity of buildings) {
+      const queue = entity.getComponent<TrainQueue>('TrainQueue')!;
+      const building = entity.getComponent<Building>('Building')!;
+
+      if (building.isConstructing) continue;
+      if (queue.isEmpty()) continue;
+
+      const prevLen = this._prevLengths.get(entity.id) ?? queue.queue.length;
+      queue.tick(delta);
+      const newLen = queue.queue.length;
+
+      if (newLen < prevLen) {
+        // 有单位训练完成
+        const unitType = queue.queue[0] ?? 'marine';
+        this.spawnUnit(entity, unitType);
+      }
+
+      this._prevLengths.set(entity.id, newLen);
+    }
+  }
+
+  private spawnUnit(
+    buildingEntity: ReturnType<typeof this.world!.getEntity>,
+    unitType: string,
+  ): void {
+    if (!buildingEntity) return;
+    const pos = buildingEntity.getComponent<Position>('Position')!;
+    const data = (unitsData as Record<string, unknown>)[unitType] as {
+      health: number;
+      maxHealth: number;
+    } | undefined;
+    const health = data?.health ?? 40;
+    const maxHealth = data?.maxHealth ?? 40;
+
+    const newEntity = this.world!.createEntity();
+    newEntity.addComponent(new Position(pos.x + 3, 0, pos.z));
+    newEntity.addComponent(new Renderable(`unit_${unitType}`, 1));
+    newEntity.addComponent(new Unit(unitType as Unit['unitType'], health, maxHealth, 0));
+    newEntity.addComponent(new Selected(false));
+  }
+}

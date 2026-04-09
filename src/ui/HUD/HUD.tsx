@@ -1,4 +1,14 @@
-export function HUD() {
+import type { Entity } from '../../core/ecs/Entity';
+import { SelectionPanel } from './SelectionPanel';
+
+interface Props {
+  minerals: number;
+  supplyUsed: number;
+  supplyMax: number;
+  selectedEntities: Entity[];
+}
+
+export function HUD({ minerals, supplyUsed, supplyMax, selectedEntities }: Props) {
   return (
     <div
       style={{
@@ -16,8 +26,7 @@ export function HUD() {
       <div style={{ width: 160, padding: 8 }}>
         <div
           style={{
-            width: '100%',
-            height: '100%',
+            width: '100%', height: '100%',
             background: 'rgba(0,30,60,0.8)',
             border: '1px solid rgba(100,150,255,0.3)',
             borderRadius: 4,
@@ -25,40 +34,19 @@ export function HUD() {
         />
       </div>
 
-      {/* 建造队列区域 */}
-      <div
-        style={{
-          flex: 1,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          color: 'rgba(200,220,255,0.5)',
-          fontSize: 12,
-          fontFamily: 'monospace',
-        }}
-      >
-        [ Select units to see build options ]
-      </div>
+      {/* 选中单位面板 */}
+      <SelectionPanel selectedEntities={selectedEntities} />
 
       {/* 资源面板 */}
       <div
         style={{
-          width: 200,
-          padding: 12,
-          display: 'flex',
-          flexDirection: 'column',
-          gap: 4,
-          fontFamily: 'monospace',
-          fontSize: 12,
-          color: '#aaccee',
+          width: 200, padding: 12,
+          display: 'flex', flexDirection: 'column', gap: 4,
+          fontFamily: 'monospace', fontSize: 12, color: '#aaccee',
         }}
       >
-        <div>
-          <span style={{ color: '#88ccff' }}>Mineral:</span> 400
-        </div>
-        <div>
-          <span style={{ color: '#44ff88' }}>Supply:</span> 20 / 30
-        </div>
+        <div><span style={{ color: '#88ccff' }}>Mineral:</span> {minerals}</div>
+        <div><span style={{ color: '#44ff88' }}>Supply:</span> {supplyUsed} / {supplyMax}</div>
       </div>
     </div>
   );

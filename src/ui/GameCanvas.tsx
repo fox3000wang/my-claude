@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { Game } from '../game';
+import { HUD } from './HUD/HUD';
 
 export function GameCanvas() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -30,9 +31,14 @@ export function GameCanvas() {
   }, []);
 
   return (
-    <div
-      ref={containerRef}
-      style={{ width: '100%', height: '100%', cursor: 'grab' }}
-    />
+    <>
+      <div ref={containerRef} style={{ width: '100%', height: 'calc(100% - 120px)', cursor: 'grab' }} />
+      <HUD
+        minerals={0}
+        supplyUsed={0}
+        supplyMax={10}
+        selectedEntities={[]}
+      />
+    </>
   );
 }
