@@ -48,6 +48,7 @@ export function HUD({ minerals, supplyUsed, supplyMax, selectedEntities, onComma
       >
         <div><span style={{ color: '#88ccff' }}>Mineral:</span> {minerals}</div>
         <div><span style={{ color: '#44ff88' }}>Supply:</span> {supplyUsed} / {supplyMax}</div>
+        <div style={{ color: '#00aaff', marginTop: 4 }}>TERRAN</div>
       </div>
     </div>
   );
