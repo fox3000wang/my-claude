@@ -1,4 +1,5 @@
 import { World } from './core/ecs/World';
+import type { Entity } from './core/ecs/Entity';
 import { SceneManager } from './renderer/SceneManager';
 import { OrbitCameraController } from './renderer/camera/OrbitCameraController';
 import { EntityRenderer } from './renderer/EntityRenderer';
@@ -162,6 +163,11 @@ export class Game {
     this.inputManager.dispose();
     this.sceneManager.dispose();
     this.cameraController.dispose();
+  }
+
+  getSelectedEntities(): Entity[] {
+    const ids = this.selectionSystem.getSelectedIds();
+    return ids.map(id => this.world.getEntity(id)).filter((e): e is Entity => e !== undefined);
   }
 
   issueCommand(cmd: 'attack' | 'move' | 'stop'): void {

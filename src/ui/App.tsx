@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import type { Entity } from '../core/ecs/Entity';
 import { GameCanvas, currentGame } from './GameCanvas';
 import { HUD } from './HUD/HUD';
@@ -7,7 +7,16 @@ export function App() {
   const [minerals] = useState(200);
   const [supplyUsed] = useState(0);
   const [supplyMax] = useState(10);
-  const [selectedEntities] = useState<Entity[]>([]);
+  const [selectedEntities, setSelectedEntities] = useState<Entity[]>([]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (currentGame) {
+        setSelectedEntities(currentGame.getSelectedEntities());
+      }
+    }, 100);
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <div
