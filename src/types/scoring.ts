@@ -1,7 +1,6 @@
 export interface ScoreResult {
   base: number
   faceValue: number
-  planetBonus: number
   subtotal: number
   mult: number
   bonus: number
