@@ -26,6 +26,7 @@ import { Selected } from './components/Selected';
 import { PlayerResources } from './components/PlayerResources';
 import { ResourceCarrier } from './components/ResourceCarrier';
 import { Combat } from './components/Combat';
+import { Shield } from './components/Shield';
 
 export class Game {
   readonly world: World;
@@ -145,6 +146,15 @@ export class Game {
     drone.addComponent(new Renderable('unit_scv', 1));
     drone.addComponent(new Unit('drone', 40, 40, 0));
     drone.addComponent(new ResourceCarrier());
+
+    // Protoss AI Zealot (ownerId = 2 — gold/yellow)
+    const zealot = this.world.createEntity();
+    zealot.addComponent(new Position(10, 0, -5));
+    zealot.addComponent(new Renderable('unit_zealot', 1));
+    zealot.addComponent(new Unit('zealot', 100, 100, 2));
+    zealot.addComponent(new Combat(8, 1, 1, 2.0));
+    zealot.addComponent(new Shield(50, 50));
+
     // 注册到渲染层
     this.entityRenderer.registerWorld(this.world);
   }
