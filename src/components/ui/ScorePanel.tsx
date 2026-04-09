@@ -11,6 +11,7 @@ interface ScorePanelProps {
   baseScore?: number
   faceValue?: number
   mult?: number
+  boostFactor?: number
   bonus?: number
   jokerContrib?: JokerContrib[]
   isPreview?: boolean
@@ -21,11 +22,12 @@ export function ScorePanel({
   baseScore = 0,
   faceValue = 0,
   mult = 0,
+  boostFactor = 0,
   bonus = 0,
   jokerContrib = [],
   isPreview = false,
 }: ScorePanelProps) {
-  const totalScore = Math.floor((baseScore + faceValue) * (1 + mult) + bonus)
+  const totalScore = Math.floor((baseScore + faceValue) * (1 + mult) * (1 + boostFactor) + bonus)
 
   return (
     <div className="score-panel">
@@ -33,7 +35,7 @@ export function ScorePanel({
         <div className="hand-type-display">{handType}</div>
       )}
 
-      {handType && (mult > 0 || bonus > 0 || jokerContrib.length > 0) && (
+      {handType && (mult > 0 || boostFactor > 0 || bonus > 0 || jokerContrib.length > 0) && (
         <div className="score-breakdown">
           <span className="score-item">
             <span>Base</span>
@@ -49,6 +51,12 @@ export function ScorePanel({
             <span className="score-item">
               <span>Mult</span>
               <span className="value">×{(1 + mult).toFixed(1)}</span>
+            </span>
+          )}
+          {boostFactor > 0 && (
+            <span className="score-item">
+              <span>Boost</span>
+              <span className="value">×{(1 + boostFactor).toFixed(1)}</span>
             </span>
           )}
           {bonus > 0 && (
