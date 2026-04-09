@@ -14,6 +14,8 @@ import { SelectionSystem } from './systems/SelectionSystem';
 import { AISystem } from './systems/AISystem';
 import { BuildSystem } from './systems/BuildSystem';
 import { ResourceSystem } from './systems/ResourceSystem';
+import { PathfindingSystem } from './systems/PathfindingSystem';
+import { Grid } from './utils/grid';
 import { Selected } from './components/Selected';
 import { PlayerResources } from './components/PlayerResources';
 import { ResourceCarrier } from './components/ResourceCarrier';
@@ -31,6 +33,7 @@ export class Game {
   private resourceSystem!: ResourceSystem;
   private aiSystem!: AISystem;
   private playerResources!: PlayerResources;
+  private grid!: Grid;
   private animationId: number | null = null;
   private lastTime = 0;
 
@@ -55,8 +58,12 @@ export class Game {
     // 输入管理
     this.inputManager = new DOMInputManager(canvasElement, this.sceneManager.camera);
 
+    // Grid (used by PathfindingSystem)
+    this.grid = new Grid(100, 100, 1);
+
     // Systems
     this.world.addSystem(new MovementSystem());
+    this.world.addSystem(new PathfindingSystem(this.grid));
     this.world.addSystem(new CombatSystem());
     this.selectionSystem = new SelectionSystem(this.inputManager, this.sceneManager.camera);
     this.world.addSystem(this.selectionSystem);
