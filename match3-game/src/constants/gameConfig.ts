@@ -12,12 +12,13 @@ export const TILE_EMOJIS: Record<TileType, string> = {
   fox: '🦊',
 };
 
-export const TILE_COLORS: Record<TileType, string> = {
-  cat: '#FFE4C4',
-  dog: '#DEB887',
-  rabbit: '#FFB6C1',
-  panda: '#F5F5F5',
-  fox: '#FF8C00',
+// 糖果色：与 emoji 原色配套，玻璃质感用（中心亮→边缘深）
+export const TILE_COLORS: Record<TileType, { primary: string; glow: string }> = {
+  cat:    { primary: '#FF8FAB', glow: 'rgba(255, 143, 171, 0.7)' },   // 暖桃粉
+  dog:    { primary: '#FFAA47', glow: 'rgba(255, 170, 71, 0.7)' },   // 琥珀金
+  rabbit: { primary: '#FF7EB3', glow: 'rgba(255, 126, 179, 0.7)' }, // 樱花粉
+  panda:  { primary: '#C4B5FD', glow: 'rgba(196, 181, 253, 0.7)' },  // 薰衣草紫
+  fox:    { primary: '#FF9F45', glow: 'rgba(255, 159, 69, 0.7)' },   // 蜜橙金
 };
 
 export const TILE_SIZE = 50;

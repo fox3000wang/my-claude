@@ -1,17 +1,40 @@
+.lose-modal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 .lose-title {
   font-size: 28px;
-  color: #666;
-  margin-bottom: 16px;
+  font-weight: 700;
+  /* 柔和的薰衣草紫，不是刺眼的灰色 */
+  color: #c4b5fd;
+  text-shadow:
+    0 0 10px rgba(196, 181, 253, 0.5),
+    0 2px 4px rgba(0, 0, 0, 0.3);
+  margin-bottom: 20px;
 }
 
 .lose-info {
-  font-size: 24px;
-  color: #FF6B6B;
-  margin-bottom: 8px;
+  font-size: 22px;
+  /* 粉橙色，有温度感 */
+  color: #FF9F7A;
+  text-shadow: 0 0 8px rgba(255, 159, 122, 0.4);
+  margin-bottom: 12px;
+  font-weight: 600;
 }
 
 .lose-message {
   font-size: 16px;
-  color: #999;
-  margin-bottom: 24px;
+  /* 柔和的半透明白色 */
+  color: rgba(255, 255, 255, 0.55);
+  margin-bottom: 28px;
+  font-style: italic;
+}
+
+/* LoseModal 的按钮也要适配深色背景 */
+.lose-modal .btn-primary {
+  background: linear-gradient(135deg, #7C3AED, #A855F7);
+  border: 1px solid rgba(167, 139, 250, 0.4);
+  box-shadow: 0 4px 20px rgba(124, 58, 237, 0.4);
 }

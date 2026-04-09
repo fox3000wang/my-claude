@@ -1,15 +1,29 @@
+/* ============================================================
+   Cosmic Candy — 梦幻星空糖果 · GameBoard.css
+   玻璃质感方块 + 外发光光晕
+   ============================================================ */
+
 .game-board-wrapper {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 16px;
+  padding: 0;
+  /* 淡紫色外发光边框 */
+  box-shadow: 0 0 40px rgba(139, 92, 246, 0.3);
+  border-radius: 20px;
 }
 
 .game-board {
   position: relative;
-  background: rgba(255, 255, 255, 0.95);
+  /* 深色玻璃质感 */
+  background: rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 16px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.4),
+    0 0 60px rgba(139, 92, 246, 0.1) inset;
   touch-action: none;
   overflow: hidden;
 }
@@ -20,15 +34,35 @@
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  background: linear-gradient(135deg, #fff 0%, #f0f0f0 100%);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  /* 颜色由 GameBoard.tsx 内联 style 注入 */
+  background: radial-gradient(circle at 35% 35%, rgba(255,255,255,0.55) 0%, #FF8FAB 45%, #e0667fBB 100%);
+  box-shadow: 0 0 14px rgba(255,143,171,0.7), 0 4px 8px rgba(0,0,0,0.3), inset 0 2px 4px rgba(255,255,255,0.5);
   cursor: pointer;
   user-select: none;
   will-change: transform, opacity;
+  overflow: visible;
+}
+
+/* 顶部高光弧形 */
+.tile::after {
+  content: '';
+  position: absolute;
+  top: 15%;
+  left: 20%;
+  width: 30%;
+  height: 20%;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 50%;
+  filter: blur(3px);
+  pointer-events: none;
 }
 
 .tile.selected {
-  box-shadow: 0 0 20px rgba(255, 182, 193, 0.8), 0 4px 16px rgba(0, 0, 0, 0.2);
+  /* 选中时外发光更强，白色泛光与任何糖果色都协调 */
+  box-shadow:
+    0 0 20px rgba(255, 255, 255, 0.8),
+    0 0 40px rgba(255, 255, 255, 0.4),
+    0 4px 16px rgba(0, 0, 0, 0.3);
   z-index: 10;
 }
 
@@ -41,19 +75,22 @@
   0% {
     transform: scale(1) rotate(0deg);
     filter: brightness(1);
-    box-shadow: 0 0 0 rgba(255, 255, 255, 0);
+    box-shadow: 0 0 0 rgba(255,255,255,0);
   }
   15% {
     transform: scale(1.6) rotate(-10deg);
-    filter: brightness(2.5);
-    box-shadow: 0 0 30px 15px rgba(255, 220, 100, 0.9),
-                0 0 60px 30px rgba(255, 150, 50, 0.6);
+    filter: brightness(3);
+    box-shadow:
+      0 0 30px 15px rgba(255, 255, 255, 0.9),
+      0 0 60px 30px rgba(255, 220, 100, 0.8),
+      0 0 80px 40px rgba(255, 180, 80, 0.5);
   }
   40% {
     transform: scale(1.3) rotate(15deg);
-    filter: brightness(1.8);
-    box-shadow: 0 0 20px 10px rgba(255, 180, 80, 0.7),
-                0 0 40px 20px rgba(255, 100, 30, 0.4);
+    filter: brightness(2);
+    box-shadow:
+      0 0 20px 10px rgba(255, 255, 255, 0.7),
+      0 0 40px 20px rgba(255, 180, 80, 0.6);
   }
   70% {
     transform: scale(0.6) rotate(-5deg);
@@ -64,7 +101,7 @@
     transform: scale(0) rotate(20deg);
     filter: brightness(0.5);
     opacity: 0;
-    box-shadow: 0 0 0 rgba(255, 255, 255, 0);
+    box-shadow: 0 0 0 rgba(255,255,255,0);
   }
 }
 
@@ -72,11 +109,24 @@
   font-size: 32px;
   line-height: 1;
   pointer-events: none;
+  /* 文字发光效果 — emoji 自带色彩，filter 叠一层白色辉光 */
+  filter:
+    drop-shadow(0 0 4px rgba(255, 255, 255, 0.9))
+    drop-shadow(0 0 10px rgba(255, 255, 255, 0.5));
+  /* 选中态 emoji 更强发光 */
+  transition: filter 150ms ease;
 }
 
+.tile.selected .tile-emoji {
+  filter:
+    drop-shadow(0 0 8px rgba(255, 255, 255, 1))
+    drop-shadow(0 0 16px rgba(255, 255, 255, 0.8));
+}
+
+/* ---- 移动端 ---- */
 @media (max-width: 400px) {
   .game-board-wrapper {
-    padding: 8px;
+    padding: 0;
   }
 
   .tile-emoji {

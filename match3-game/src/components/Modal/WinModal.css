@@ -1,24 +1,45 @@
+.win-modal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 .win-title {
-  font-size: 28px;
-  color: #FF6B6B;
-  margin-bottom: 16px;
+  font-size: 30px;
+  font-weight: 800;
+  /* 粉红糖果色 + 多层发光 */
+  color: #FF6B9D;
+  text-shadow:
+    0 0 10px rgba(255, 107, 157, 0.8),
+    0 0 30px rgba(255, 107, 157, 0.4),
+    0 2px 4px rgba(0, 0, 0, 0.3);
+  margin-bottom: 20px;
+  letter-spacing: 2px;
 }
 
 .stars {
-  font-size: 40px;
-  margin-bottom: 16px;
+  font-size: 48px;
+  margin-bottom: 20px;
+  display: flex;
+  gap: 8px;
 }
 
 .star {
-  color: #DDD;
+  color: rgba(255, 255, 255, 0.15);  /* 未激活：暗色 */
   margin: 0 4px;
-  transition: transform 0.3s ease;
+  transition: all 0.3s ease;
+  /* 装饰性旋转 */
+  display: inline-block;
 }
 
+/* 激活星星：彩虹渐变色 + 强发光 */
 .star.active {
-  color: #FFD700;
-  text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
-  animation: starPop 0.5s ease backwards;
+  background: linear-gradient(135deg, #FFD700, #FF6B6B, #FF6B9D, #FECA57);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.9)) drop-shadow(0 0 16px rgba(255, 107, 157, 0.6));
+  animation: starPop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
 }
 
 .star:nth-child(1).active { animation-delay: 0.1s; }
@@ -27,26 +48,36 @@
 
 @keyframes starPop {
   0% {
-    transform: scale(0);
+    transform: scale(0) rotate(-30deg);
     opacity: 0;
   }
-  50% {
-    transform: scale(1.3);
+  60% {
+    transform: scale(1.4) rotate(5deg);
   }
   100% {
-    transform: scale(1);
+    transform: scale(1) rotate(0deg);
     opacity: 1;
   }
 }
 
 .win-score {
   font-size: 18px;
-  color: #666;
-  margin-bottom: 24px;
+  /* 半透明白色，更有宇宙感 */
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 28px;
+  font-weight: 500;
 }
 
 .win-buttons {
   display: flex;
   gap: 12px;
   justify-content: center;
+  width: 100%;
+}
+
+/* 按钮玻璃化（在深色弹窗里更协调） */
+.win-buttons .btn {
+  flex: 1;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  /* 保持原有的渐变背景但更通透一点 */
 }

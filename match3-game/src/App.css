@@ -1,49 +1,365 @@
+/*
+ * Cosmic Candy — Deep Space Candy Theme
+ * 梦幻星空糖果风格
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700&display=swap');
+
+/* ===========================
+   Reset & Base
+   =========================== */
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-html, body {
+html,
+body {
   width: 100%;
   height: 100%;
   overflow: hidden;
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-family: 'Nunito', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* ===========================
+   App Root — Deep Space Layer
+   =========================== */
+
 .app {
+  position: relative;
   width: 100%;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   padding: 20px;
+  overflow: hidden;
+
+  /* Deep space gradient — layered for depth */
+  background:
+    /* 3rd pass: nebula tints */
+    radial-gradient(ellipse 80% 60% at 15% 85%, rgba(120, 0, 180, 0.45) 0%, transparent 70%),
+    radial-gradient(ellipse 70% 50% at 85% 20%, rgba(0, 80, 160, 0.5)  0%, transparent 65%),
+    radial-gradient(ellipse 60% 40% at 50% 50%, rgba(80, 0, 120, 0.3)  0%, transparent 75%),
+    /* 2nd pass: mid-space base */
+    radial-gradient(ellipse 120% 80% at 30% 70%, #1a053a 0%, #0d0221 50%, #060010 100%),
+    /* 1st pass: base */
+    radial-gradient(ellipse 150% 100% at 50% 0%,  #1e0a4d 0%, #0a0118 60%, #020008 100%);
 }
 
+/* ===========================
+   Stars — box-shadow constellation
+   =========================== */
+
+.app::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+
+  /* Tiny scattered stars */
+  box-shadow:
+    /* row 1 */
+    12px  18px 0 0.5px rgba(255,255,255,0.85),
+    48px   6px 0 1px   rgba(255,255,255,0.6),
+    95px  30px 0 0.5px rgba(255,255,255,0.9),
+   140px  12px 0 1px   rgba(255,255,255,0.55),
+   185px  24px 0 0.5px rgba(255,255,255,0.75),
+   230px   8px 0 1px   rgba(255,255,255,0.5),
+   270px  20px 0 0.5px rgba(255,255,255,0.8),
+   310px   5px 0 1px   rgba(255,255,255,0.65),
+   360px  28px 0 0.5px rgba(255,255,255,0.9),
+   405px  15px 0 1px   rgba(255,255,255,0.5),
+    /* row 2 */
+    25px  55px 0 1px   rgba(255,255,255,0.6),
+    68px  70px 0 0.5px rgba(255,255,255,0.85),
+   112px  48px 0 1px   rgba(255,255,255,0.5),
+   158px  65px 0 0.5px rgba(255,255,255,0.9),
+   202px  52px 0 1px   rgba(255,255,255,0.65),
+   248px  75px 0 0.5px rgba(255,255,255,0.8),
+   295px  58px 0 1px   rgba(255,255,255,0.55),
+   338px  72px 0 0.5px rgba(255,255,255,0.75),
+   385px  50px 0 1px   rgba(255,255,255,0.6),
+    /* row 3 */
+    18px 105px 0 1px   rgba(255,255,255,0.5),
+    55px  118px 0 0.5px rgba(255,255,255,0.8),
+   102px  95px 0 1px   rgba(255,255,255,0.65),
+   145px 112px 0 0.5px rgba(255,255,255,0.9),
+   190px  98px 0 1px   rgba(255,255,255,0.55),
+   238px 120px 0 0.5px rgba(255,255,255,0.75),
+   282px 100px 0 1px   rgba(255,255,255,0.6),
+   325px 115px 0 0.5px rgba(255,255,255,0.85),
+   370px  92px 0 1px   rgba(255,255,255,0.5),
+    /* row 4 */
+    40px 158px 0 0.5px rgba(255,255,255,0.75),
+    80px  170px 0 1px   rgba(255,255,255,0.6),
+   128px 150px 0 0.5px rgba(255,255,255,0.9),
+   172px 165px 0 1px   rgba(255,255,255,0.5),
+   218px 155px 0 0.5px rgba(255,255,255,0.8),
+   265px 172px 0 1px   rgba(255,255,255,0.65),
+   308px 148px 0 0.5px rgba(255,255,255,0.75),
+   350px 168px 0 1px   rgba(255,255,255,0.55),
+    /* row 5 */
+    30px 215px 0 0.5px rgba(255,255,255,0.7),
+    75px  228px 0 1px   rgba(255,255,255,0.5),
+   118px 205px 0 0.5px rgba(255,255,255,0.85),
+   162px 222px 0 1px   rgba(255,255,255,0.6),
+   208px 210px 0 0.5px rgba(255,255,255,0.9),
+   252px 230px 0 1px   rgba(255,255,255,0.55),
+   298px 208px 0 0.5px rgba(255,255,255,0.75),
+   340px 225px 0 1px   rgba(255,255,255,0.65),
+    /* row 6 */
+    50px 265px 0 0.5px rgba(255,255,255,0.8),
+    95px  280px 0 1px   rgba(255,255,255,0.55),
+   142px 258px 0 0.5px rgba(255,255,255,0.7),
+   188px 275px 0 1px   rgba(255,255,255,0.6),
+   235px 262px 0 0.5px rgba(255,255,255,0.9),
+   280px 278px 0 1px   rgba(255,255,255,0.5),
+   320px 255px 0 0.5px rgba(255,255,255,0.75),
+    /* row 7 */
+    20px 310px 0 0.5px rgba(255,255,255,0.65),
+    62px  325px 0 1px   rgba(255,255,255,0.7),
+   108px 305px 0 0.5px rgba(255,255,255,0.85),
+   155px 320px 0 1px   rgba(255,255,255,0.55),
+   200px 308px 0 0.5px rgba(255,255,255,0.8),
+   245px 328px 0 1px   rgba(255,255,255,0.6),
+   292px 302px 0 0.5px rgba(255,255,255,0.75),
+    /* row 8 */
+    35px 370px 0 0.5px rgba(255,255,255,0.7),
+    82px  385px 0 1px   rgba(255,255,255,0.55),
+   128px 365px 0 0.5px rgba(255,255,255,0.8),
+   175px 382px 0 1px   rgba(255,255,255,0.65),
+   220px 368px 0 0.5px rgba(255,255,255,0.9),
+   268px 388px 0 1px   rgba(255,255,255,0.5),
+   312px 360px 0 0.5px rgba(255,255,255,0.75),
+    /* right side scatter */
+   420px  30px 0 0.5px rgba(255,255,255,0.8),
+   445px  75px 0 1px   rgba(255,255,255,0.55),
+   415px 120px 0 0.5px rgba(255,255,255,0.7),
+   440px 168px 0 1px   rgba(255,255,255,0.6),
+   420px 218px 0 0.5px rgba(255,255,255,0.85),
+   448px 258px 0 1px   rgba(255,255,255,0.5),
+   418px 305px 0 0.5px rgba(255,255,255,0.75),
+   442px 348px 0 1px   rgba(255,255,255,0.65),
+    /* left side scatter */
+     8px  40px 0 0.5px rgba(255,255,255,0.7),
+     3px  90px 0 1px   rgba(255,255,255,0.55),
+     9px 142px 0 0.5px rgba(255,255,255,0.8),
+     2px 192px 0 1px   rgba(255,255,255,0.6),
+     7px 242px 0 0.5px rgba(255,255,255,0.75),
+     4px 295px 0 1px   rgba(255,255,255,0.5),
+     8px 342px 0 0.5px rgba(255,255,255,0.85),
+     3px 388px 0 1px   rgba(255,255,255,0.65);
+
+  animation: starDrift 120s linear infinite;
+}
+
+/* Twinkling bright stars — separate layer */
+.app::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+
+  box-shadow:
+    /* bright twinkling stars */
+    60px  22px 0 1.5px rgba(255,255,255,1),
+   200px  42px 0 2px   rgba(255,255,255,0.95),
+   340px  18px 0 1.5px rgba(255,255,255,1),
+    28px  88px 0 2px   rgba(255,255,255,0.9),
+   175px 105px 0 1.5px rgba(255,255,255,1),
+   305px  82px 0 2px   rgba(255,255,255,0.95),
+    88px 155px 0 1.5px rgba(255,255,255,1),
+   260px 138px 0 2px   rgba(255,255,255,0.9),
+   395px 120px 0 1.5px rgba(255,255,255,1),
+    18px 200px 0 2px   rgba(255,255,255,0.95),
+   148px 188px 0 1.5px rgba(255,255,255,1),
+   285px 172px 0 2px   rgba(255,255,255,0.9),
+   420px 155px 0 1.5px rgba(255,255,255,1),
+    48px 248px 0 2px   rgba(255,255,255,0.95),
+   192px 235px 0 1.5px rgba(255,255,255,1),
+   318px 218px 0 2px   rgba(255,255,255,0.9),
+   108px 298px 0 1.5px rgba(255,255,255,1),
+   242px 285px 0 2px   rgba(255,255,255,0.95),
+   372px 268px 0 1.5px rgba(255,255,255,1),
+    35px 338px 0 2px   rgba(255,255,255,0.9),
+   168px 320px 0 1.5px rgba(255,255,255,1),
+   298px 305px 0 2px   rgba(255,255,255,0.95),
+   432px 290px 0 1.5px rgba(255,255,255,1),
+    72px 372px 0 2px   rgba(255,255,255,0.9),
+   208px 358px 0 1.5px rgba(255,255,255,1),
+   335px 342px 0 2px   rgba(255,255,255,0.95);
+
+  animation:
+    starTwinkle 3.2s ease-in-out infinite,
+    starDrift 200s linear infinite;
+}
+
+/* ===========================
+   Floating Light Orbs
+   =========================== */
+
 .game-container {
+  position: relative;
   width: 100%;
   max-width: 400px;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 16px;
+  z-index: 1;
 }
 
-.game-title {
-  font-size: 36px;
-  font-weight: 800;
-  color: white;
-  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-  margin-bottom: 8px;
-  letter-spacing: 4px;
+/* Soft ambient orb — top */
+.game-container::before {
+  content: '';
+  position: absolute;
+  top: -60px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 320px;
+  height: 200px;
+  border-radius: 50%;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(180, 120, 255, 0.22) 0%,
+    rgba(100, 200, 255, 0.12) 40%,
+    transparent 70%
+  );
+  filter: blur(24px);
+  pointer-events: none;
+  animation: orbFloat 5s ease-in-out infinite;
+  z-index: 0;
 }
+
+/* Soft ambient orb — bottom */
+.game-container::after {
+  content: '';
+  position: absolute;
+  bottom: -40px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 280px;
+  height: 160px;
+  border-radius: 50%;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(255, 160, 220, 0.18) 0%,
+    rgba(255, 200, 80, 0.10) 45%,
+    transparent 70%
+  );
+  filter: blur(28px);
+  pointer-events: none;
+  animation: orbFloat 4s ease-in-out infinite reverse;
+  z-index: 0;
+}
+
+/* ===========================
+   Title — Cosmic Candy Glow
+   =========================== */
+
+.game-title {
+  position: relative;
+  z-index: 1;
+  font-family: 'Fredoka One', 'Nunito', sans-serif;
+  font-size: 36px;
+  font-weight: 400;
+  color: #ffffff;
+  letter-spacing: 3px;
+  margin-bottom: 8px;
+  text-align: center;
+
+  /*
+   * Multi-layer glow:
+   * 1. Outermost soft halo (purple)
+   * 2. Mid halo (cyan/blue)
+   * 3. Inner bright glow (white)
+   * 4. Crisp base shadow
+   */
+  text-shadow:
+    /* outermost — deep purple */
+    0 0 30px rgba(160, 80, 255, 0.9),
+    0 0 60px rgba(120, 40, 220, 0.6),
+    0 0 90px rgba(80, 0, 180, 0.35),
+    /* mid — cyan/blue */
+    0 0 15px rgba(100, 200, 255, 0.9),
+    0 0 35px rgba(80, 160, 255, 0.5),
+    /* inner — white core */
+    0 0 5px rgba(255, 255, 255, 1),
+    0 0 12px rgba(255, 240, 200, 0.9),
+    /* crisp base */
+    0 2px 4px rgba(0, 0, 0, 0.5);
+
+  animation: titleGlow 4s ease-in-out infinite;
+}
+
+/* ===========================
+   Keyframe Animations
+   =========================== */
+
+/* Gentle drift of star field */
+@keyframes starDrift {
+  0%   { transform: translate(0, 0); }
+  100% { transform: translate(60px, 30px); }
+}
+
+/* Twinkle — bright stars blink */
+@keyframes starTwinkle {
+  0%,  100% { opacity: 1; }
+  30%         { opacity: 0.25; }
+  60%         { opacity: 0.9; }
+  80%         { opacity: 0.4; }
+}
+
+/* Floating ambient orbs */
+@keyframes orbFloat {
+  0%,  100% {
+    transform: translateX(-50%) translateY(0px) scale(1);
+    opacity: 0.8;
+  }
+  50% {
+    transform: translateX(-50%) translateY(-14px) scale(1.05);
+    opacity: 1;
+  }
+}
+
+/* Title glow pulse — subtle breathing */
+@keyframes titleGlow {
+  0%,  100% {
+    text-shadow:
+      0 0 30px rgba(160, 80, 255, 0.9),
+      0 0 60px rgba(120, 40, 220, 0.6),
+      0 0 90px rgba(80, 0, 180, 0.35),
+      0 0 15px rgba(100, 200, 255, 0.9),
+      0 0 35px rgba(80, 160, 255, 0.5),
+      0 0 5px rgba(255, 255, 255, 1),
+      0 0 12px rgba(255, 240, 200, 0.9),
+      0 2px 4px rgba(0, 0, 0, 0.5);
+  }
+  50% {
+    text-shadow:
+      0 0 40px rgba(180, 100, 255, 1),
+      0 0 80px rgba(140, 60, 240, 0.7),
+      0 0 110px rgba(100, 20, 200, 0.45),
+      0 0 20px rgba(120, 220, 255, 1),
+      0 0 50px rgba(100, 180, 255, 0.6),
+      0 0 6px rgba(255, 255, 255, 1),
+      0 0 16px rgba(255, 245, 210, 1),
+      0 2px 4px rgba(0, 0, 0, 0.5);
+  }
+}
+
+/* ===========================
+   Responsive
+   =========================== */
 
 @media (max-width: 400px) {
   .app {
@@ -52,5 +368,21 @@ body {
 
   .game-title {
     font-size: 28px;
+    letter-spacing: 2px;
+  }
+}
+
+@media (max-height: 600px) {
+  .app {
+    padding: 12px;
+  }
+
+  .game-title {
+    font-size: 26px;
+    margin-bottom: 4px;
+  }
+
+  .game-container {
+    gap: 10px;
   }
 }
