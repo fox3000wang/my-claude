@@ -19,6 +19,7 @@ import { TrainingSystem } from './systems/TrainingSystem';
 import { LarvaeSystem } from './systems/LarvaeSystem';
 import { EnergySystem } from './systems/EnergySystem';
 import { ResourceSystem } from './systems/ResourceSystem';
+import { ResearchSystem } from './systems/ResearchSystem';
 import { PathfindingSystem } from './systems/PathfindingSystem';
 import { Grid } from './utils/grid';
 import { Selected } from './components/Selected';
@@ -84,6 +85,9 @@ export class Game {
     this.buildSystem.setPlayerResources(this.playerResources);
     this.world.addSystem(this.buildSystem);
     this.world.addSystem(new LarvaeSystem());
+    const researchSystem = new ResearchSystem();
+    researchSystem.setPlayerResources(this.playerResources);
+    this.world.addSystem(researchSystem);
     this.trainingSystem = new TrainingSystem();
     this.trainingSystem.setPlayerResources(this.playerResources);
     this.world.addSystem(this.trainingSystem);

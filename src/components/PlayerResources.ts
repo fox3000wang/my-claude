@@ -5,6 +5,7 @@ export class PlayerResources extends Component {
     public minerals: number = 400,
     public supplyUsed: number = 0,
     public supplyMax: number = 10,
+    public hasWarpGate: boolean = false,
   ) {
     super('PlayerResources');
   }
