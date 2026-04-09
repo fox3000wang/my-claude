@@ -106,7 +106,7 @@
 }
 
 .tile-emoji {
-  font-size: 32px;
+  font-size: 30px;
   line-height: 1;
   pointer-events: none;
   /* 文字发光效果 — emoji 自带色彩，filter 叠一层白色辉光 */
@@ -130,6 +130,6 @@
   }
 
   .tile-emoji {
-    font-size: 26px;
+    font-size: 24px;
   }
 }

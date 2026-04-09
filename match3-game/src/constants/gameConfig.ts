@@ -1,6 +1,6 @@
 import { TileType, LevelConfig } from '../types/game';
 
-export const BOARD_SIZE = 6;
+export const BOARD_SIZE = 8;
 
 export const TILE_TYPES: TileType[] = ['cat', 'dog', 'rabbit', 'panda', 'fox'];
 
@@ -21,7 +21,7 @@ export const TILE_COLORS: Record<TileType, { primary: string; glow: string }> = 
   fox:    { primary: '#FF9F45', glow: 'rgba(255, 159, 69, 0.7)' },   // 蜜橙金
 };
 
-export const TILE_SIZE = 50;
+export const TILE_SIZE = 42;
 export const TILE_GAP = 4;
 export const BOARD_PADDING = 10;
 
