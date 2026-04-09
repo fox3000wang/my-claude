@@ -1,8 +1,11 @@
 import { System } from '../core/ecs/System';
 import { Position } from '../components/Position';
 import { MoveTarget } from '../components/MoveTarget';
+import { Unit } from '../components/Unit';
 
 const ARRIVE_THRESHOLD = 0.3;
+const UNIT_RADIUS = 0.5;
+const SEPARATION_FORCE = 2.0;
 
 export class MovementSystem extends System {
   readonly name = 'MovementSystem';
@@ -32,6 +35,27 @@ export class MovementSystem extends System {
       const step = Math.min(speed * delta, dist);
       pos.x += (dx / dist) * step;
       pos.z += (dz / dist) * step;
+    }
+
+    // Separation: push overlapping units apart
+    const allUnits = this.world!.getEntitiesWithComponents('Position', 'Unit');
+    for (const entity of allUnits) {
+      const pos = entity.getComponent<Position>('Position')!;
+      let sx = 0, sz = 0;
+      for (const other of allUnits) {
+        if (other.id === entity.id) continue;
+        const opos = other.getComponent<Position>('Position')!;
+        const dx = pos.x - opos.x;
+        const dz = pos.z - opos.z;
+        const dist = Math.hypot(dx, dz);
+        if (dist < UNIT_RADIUS * 2 && dist > 0) {
+          const overlap = UNIT_RADIUS * 2 - dist;
+          sx += (dx / dist) * overlap * SEPARATION_FORCE;
+          sz += (dz / dist) * overlap * SEPARATION_FORCE;
+        }
+      }
+      pos.x += sx * delta;
+      pos.z += sz * delta;
     }
   }
 }
