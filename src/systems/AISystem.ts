@@ -1,9 +1,9 @@
 import { System } from '../core/ecs/System';
+import { Entity } from '../core/ecs/Entity';
 import { Position } from '../components/Position';
 import { Combat } from '../components/Combat';
 import { MoveTarget } from '../components/MoveTarget';
 import { Unit } from '../components/Unit';
-import { Health } from '../components/Health';
 
 export class AISystem extends System {
   readonly name = 'AISystem';
@@ -26,7 +26,7 @@ export class AISystem extends System {
       const playerUnits = this.world!.getEntitiesWithComponents('Unit', 'Position')
         .filter(e => (e.getComponent<Unit>('Unit')?.ownerId ?? 0) === 0);
 
-      let nearest: { entity: ReturnType<typeof this.world!.getEntity>; dist: number } | null = null;
+      let nearest: { entity: Entity | undefined; dist: number } | null = null;
       for (const pu of playerUnits) {
         if (!pu.hasComponent('Health')) continue;
         const ppos = pu.getComponent<Position>('Position')!;

@@ -3,7 +3,6 @@ import type { World } from '../core/ecs/World';
 import type { Entity } from '../core/ecs/Entity';
 import { Position } from '../components/Position';
 import { Renderable } from '../components/Renderable';
-import { MineralDeposit } from '../components/MineralDeposit';
 import { Unit } from '../components/Unit';
 
 export class EntityRenderer {
@@ -40,7 +39,7 @@ export class EntityRenderer {
     renderable.object3d = instance;
   }
 
-  private createMesh(meshType: string, scale: number, entity: Entity): THREE.Object3D {
+  private createMesh(_meshType: string, scale: number, entity: Entity): THREE.Object3D {
     const isMineral = entity.hasComponent('MineralDeposit');
     const isUnit = entity.hasComponent('Unit');
 

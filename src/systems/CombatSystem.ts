@@ -1,8 +1,8 @@
 import { System } from '../core/ecs/System';
+import { Entity } from '../core/ecs/Entity';
 import { Position } from '../components/Position';
 import { Combat } from '../components/Combat';
 import { Health } from '../components/Health';
-import { Unit } from '../components/Unit';
 
 export class CombatSystem extends System {
   readonly name = 'CombatSystem';
@@ -33,11 +33,7 @@ export class CombatSystem extends System {
     }
   }
 
-  private performAttack(
-    attacker: ReturnType<typeof this.world!.getEntity>,
-    target: ReturnType<typeof this.world!.getEntity>,
-    combat: Combat,
-  ): void {
+  private performAttack(attacker: Entity | undefined, target: Entity | undefined, combat: Combat): void {
     if (!attacker || !target) return;
 
     const targetHealth = target.getComponent<Health>('Health');

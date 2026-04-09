@@ -1,6 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { World } from '../../../src/core/ecs/World';
-import { Entity } from '../../../src/core/ecs/Entity';
 import { System } from '../../../src/core/ecs/System';
 import { Component } from '../../../src/core/ecs/Component';
 
@@ -11,6 +10,7 @@ class MockComponent extends Component {
 }
 
 class MockSystem extends System {
+  readonly name = 'MockSystem';
   update = vi.fn((_delta: number) => {});
 }
 

@@ -1,4 +1,5 @@
 import { System } from '../core/ecs/System';
+import { Entity } from '../core/ecs/Entity';
 import { Position } from '../components/Position';
 import { ResourceCarrier } from '../components/ResourceCarrier';
 import { MineralDeposit } from '../components/MineralDeposit';
@@ -44,17 +45,11 @@ export class ResourceSystem extends System {
         continue;
       }
 
-      const mineralPos = mineral.getComponent<MineralDeposit>('MineralDeposit')!
-        ? (mineral.getComponent<MineralDeposit>('MineralDeposit')!)
-        : null;
-      if (!mineralPos) { carrier.mineralTargetId = null; continue; }
-
+      const mineralData = mineral.getComponent<MineralDeposit>('MineralDeposit')!;
       const mpos = mineral.getComponent<Position>('Position')!;
       const dist = Math.hypot(mpos.x - pos.x, mpos.z - pos.z);
 
       if (dist < 2) {
-        // 采集
-        const mineralData = mineral.getComponent<MineralDeposit>('MineralDeposit')!;
         const harvestAmt = Math.min(5 * 0.016, mineralData.amount, carrier.capacity - carrier.carrying);
         carrier.harvest(harvestAmt);
         mineralData.amount -= harvestAmt;
@@ -66,14 +61,10 @@ export class ResourceSystem extends System {
     }
   }
 
-  private returnToBase(
-    entity: ReturnType<typeof this.world!.getEntity>,
-    carrier: ResourceCarrier,
-    pos: ReturnType<typeof this.world!.getEntitiesWithComponents>[0]['getComponent<Position>'],
-  ): void {
-    if (!entity || !pos) return;
+  private returnToBase(entity: Entity | undefined, carrier: ResourceCarrier, pos: Position | undefined): void {
+    if (!entity || !pos || !this.playerResources) return;
     const bases = this.world!.getEntitiesWithComponents('Building', 'Position');
-    let nearestBase: ReturnType<typeof this.world!.getEntity> | null = null;
+    let nearestBase: Entity | undefined;
     let minDist = Infinity;
 
     for (const b of bases) {
@@ -86,17 +77,15 @@ export class ResourceSystem extends System {
 
     if (nearestBase && minDist < 4) {
       const delivered = carrier.deposit();
-      this.playerResources!.addMinerals(delivered);
+      this.playerResources.addMinerals(delivered);
       carrier.mineralTargetId = null;
     }
   }
 
-  private findNearestMineral(
-    pos: ReturnType<typeof this.world!.getEntitiesWithComponents>[0]['getComponent<Position>'],
-  ): ReturnType<typeof this.world!.getEntity> | null {
-    if (!pos) return null;
+  private findNearestMineral(pos: Position | undefined): Entity | undefined {
+    if (!pos) return undefined;
     const minerals = this.world!.getEntitiesWithComponents('MineralDeposit', 'Position');
-    let nearest: ReturnType<typeof this.world!.getEntity> | null = null;
+    let nearest: Entity | undefined;
     let minDist = Infinity;
     for (const m of minerals) {
       const mpos = m.getComponent<Position>('Position')!;

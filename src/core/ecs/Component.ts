@@ -15,7 +15,7 @@ export class ComponentRegistry {
     this.map.set(name, ctor);
   }
 
-  static get(name: string): new () => Component | undefined {
+  static get(name: string): (new () => Component) | undefined {
     return this.map.get(name);
   }
 }

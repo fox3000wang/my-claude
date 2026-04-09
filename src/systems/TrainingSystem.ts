@@ -1,8 +1,8 @@
 import { System } from '../core/ecs/System';
+import { Entity } from '../core/ecs/Entity';
 import { TrainQueue } from '../components/TrainQueue';
 import { Building } from '../components/Building';
 import { Position } from '../components/Position';
-import { PlayerResources } from '../components/PlayerResources';
 import { Renderable } from '../components/Renderable';
 import { Unit } from '../components/Unit';
 import { Selected } from '../components/Selected';
@@ -10,12 +10,7 @@ import unitsData from '../data/units.json';
 
 export class TrainingSystem extends System {
   readonly name = 'TrainingSystem';
-  private playerResources: PlayerResources | null = null;
   private _prevLengths = new Map<number, number>();
-
-  setPlayerResources(resources: PlayerResources): void {
-    this.playerResources = resources;
-  }
 
   update(delta: number): void {
     const buildings = this.world!.getEntitiesWithComponents('TrainQueue', 'Building', 'Position');
@@ -32,7 +27,6 @@ export class TrainingSystem extends System {
       const newLen = queue.queue.length;
 
       if (newLen < prevLen) {
-        // 有单位训练完成
         const unitType = queue.queue[0] ?? 'marine';
         this.spawnUnit(entity, unitType);
       }
@@ -41,10 +35,7 @@ export class TrainingSystem extends System {
     }
   }
 
-  private spawnUnit(
-    buildingEntity: ReturnType<typeof this.world!.getEntity>,
-    unitType: string,
-  ): void {
+  private spawnUnit(buildingEntity: Entity | undefined, unitType: string): void {
     if (!buildingEntity) return;
     const pos = buildingEntity.getComponent<Position>('Position')!;
     const data = (unitsData as Record<string, unknown>)[unitType] as {

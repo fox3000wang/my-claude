@@ -1,7 +1,14 @@
+import { useState } from 'react';
+import type { Entity } from '../core/ecs/Entity';
 import { GameCanvas } from './GameCanvas';
 import { HUD } from './HUD/HUD';
 
 export function App() {
+  const [minerals] = useState(200);
+  const [supplyUsed] = useState(0);
+  const [supplyMax] = useState(10);
+  const [selectedEntities] = useState<Entity[]>([]);
+
   return (
     <div
       style={{
@@ -14,7 +21,12 @@ export function App() {
       }}
     >
       <GameCanvas />
-      <HUD />
+      <HUD
+        minerals={minerals}
+        supplyUsed={supplyUsed}
+        supplyMax={supplyMax}
+        selectedEntities={selectedEntities}
+      />
     </div>
   );
 }
