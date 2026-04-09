@@ -11,12 +11,13 @@ import { DOMInputManager } from './input/InputManager';
 import { MovementSystem } from './systems/MovementSystem';
 import { CombatSystem } from './systems/CombatSystem';
 import { SelectionSystem } from './systems/SelectionSystem';
+import { AISystem } from './systems/AISystem';
 import { BuildSystem } from './systems/BuildSystem';
 import { ResourceSystem } from './systems/ResourceSystem';
-import { TrainingSystem } from './systems/TrainingSystem';
 import { Selected } from './components/Selected';
 import { PlayerResources } from './components/PlayerResources';
 import { ResourceCarrier } from './components/ResourceCarrier';
+import { Combat } from './components/Combat';
 
 export class Game {
   readonly world: World;
@@ -28,7 +29,7 @@ export class Game {
   private selectionSystem!: SelectionSystem;
   private buildSystem!: BuildSystem;
   private resourceSystem!: ResourceSystem;
-  private trainingSystem!: TrainingSystem;
+  private aiSystem!: AISystem;
   private playerResources!: PlayerResources;
   private animationId: number | null = null;
   private lastTime = 0;
@@ -59,6 +60,8 @@ export class Game {
     this.world.addSystem(new CombatSystem());
     this.selectionSystem = new SelectionSystem(this.inputManager, this.sceneManager.camera);
     this.world.addSystem(this.selectionSystem);
+    this.aiSystem = new AISystem();
+    this.world.addSystem(this.aiSystem);
 
     // 玩家资源
     this.playerResources = new PlayerResources();
@@ -68,9 +71,6 @@ export class Game {
     this.resourceSystem = new ResourceSystem();
     this.resourceSystem.setPlayerResources(this.playerResources);
     this.world.addSystem(this.resourceSystem);
-    this.trainingSystem = new TrainingSystem();
-    this.trainingSystem.setPlayerResources(this.playerResources);
-    this.world.addSystem(this.trainingSystem);
 
     // 初始化测试场景
     this.initTestScene();
@@ -91,6 +91,13 @@ export class Game {
     marine.addComponent(new Renderable('unit_marine', 1));
     marine.addComponent(new Unit('marine', 40, 40, 0));
     marine.addComponent(new Selected());
+
+    // AI 对手 Marine
+    const aiMarine = this.world.createEntity();
+    aiMarine.addComponent(new Position(-10, 0, -5));
+    aiMarine.addComponent(new Renderable('unit_marine', 1));
+    aiMarine.addComponent(new Unit('marine', 40, 40, 1)); // ownerId = 1
+    aiMarine.addComponent(new Combat(6, 0, 4, 1.0));
 
     // 添加两个晶矿点
     const minerals = [
