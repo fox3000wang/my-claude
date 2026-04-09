@@ -9,6 +9,8 @@ import { Unit } from './components/Unit';
 import { MineralDeposit } from './components/MineralDeposit';
 import { DOMInputManager } from './input/InputManager';
 import { MovementSystem } from './systems/MovementSystem';
+import { SelectionSystem } from './systems/SelectionSystem';
+import { Selected } from './components/Selected';
 
 export class Game {
   readonly world: World;
@@ -17,6 +19,7 @@ export class Game {
   private cameraController!: OrbitCameraController;
   private entityRenderer!: EntityRenderer;
   private inputManager!: DOMInputManager;
+  private selectionSystem!: SelectionSystem;
   private animationId: number | null = null;
   private lastTime = 0;
 
@@ -43,6 +46,8 @@ export class Game {
 
     // Systems
     this.world.addSystem(new MovementSystem());
+    this.selectionSystem = new SelectionSystem(this.inputManager, this.sceneManager.camera);
+    this.world.addSystem(this.selectionSystem);
 
     // 初始化测试场景
     this.initTestScene();
@@ -54,12 +59,14 @@ export class Game {
     scv.addComponent(new Position(0, 0, 0));
     scv.addComponent(new Renderable('unit_scv', 1));
     scv.addComponent(new Unit('scv', 60, 60, 0));
+    scv.addComponent(new Selected());
 
     // 添加一个 Marine
     const marine = this.world.createEntity();
     marine.addComponent(new Position(5, 0, 3));
     marine.addComponent(new Renderable('unit_marine', 1));
     marine.addComponent(new Unit('marine', 40, 40, 0));
+    marine.addComponent(new Selected());
 
     // 添加两个晶矿点
     const minerals = [
