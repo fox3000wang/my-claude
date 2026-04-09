@@ -13,6 +13,10 @@ All notable changes to 开心消消乐 (match3-game) will be documented here.
   - 背景音乐：轻柔两小节循环旋律（120 BPM）
 - **音乐开关按钮**：游戏页右上角 🎵/🔇，点击切换
 
+### Changed
+- 狐狸（fox）：蜜橙金 → 翠绿色 `#4ADE80`
+- 小猫（cat）：暖桃粉 → 天蓝色 `#60A5FA`
+
 ## [1.3.0] - 2026-04-09
 
 ### Added
