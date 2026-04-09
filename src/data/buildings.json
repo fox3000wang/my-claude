@@ -66,5 +66,71 @@
     "cost": { "minerals": 75 },
     "supply": 0,
     "size": 1
+  },
+  "nexus": {
+    "name": "Nexus",
+    "health": 1500,
+    "cost": { "minerals": 400 },
+    "supply": 0,
+    "size": 3,
+    "energy": 200,
+    "maxEnergy": 200,
+    "spawns": ["probe", "zealot", "dragoon", "scout"]
+  },
+  "pylon": {
+    "name": "Pylon",
+    "health": 300,
+    "cost": { "minerals": 100 },
+    "supply": 8,
+    "size": 1
+  },
+  "gateway": {
+    "name": "Gateway",
+    "health": 500,
+    "cost": { "minerals": 150 },
+    "supply": 0,
+    "size": 2,
+    "spawns": ["zealot", "dragoon", "dark_templar"]
+  },
+  "cybernetics_core": {
+    "name": "Cybernetics Core",
+    "health": 650,
+    "cost": { "minerals": 200 },
+    "supply": 0,
+    "size": 2,
+    "unlocks": ["dragoon", "scout"]
+  },
+  "forge": {
+    "name": "Forge",
+    "health": 500,
+    "cost": { "minerals": 150 },
+    "supply": 0,
+    "size": 2,
+    "unlocks": ["zealot"]
+  },
+  "stargate": {
+    "name": "Stargate",
+    "health": 600,
+    "cost": { "minerals": 150 },
+    "supply": 0,
+    "size": 2,
+    "spawns": ["scout"]
+  },
+  "templar_archives": {
+    "name": "Templar Archives",
+    "health": 500,
+    "cost": { "minerals": 150 },
+    "supply": 0,
+    "size": 2,
+    "unlocks": ["high_templar", "dark_templar"]
+  },
+  "photon_cannon": {
+    "name": "Photon Cannon",
+    "health": 200,
+    "cost": { "minerals": 100 },
+    "supply": 0,
+    "size": 1,
+    "attack": 20,
+    "range": 7
   }
 }

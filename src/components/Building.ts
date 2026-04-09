@@ -1,7 +1,9 @@
 import { Component } from '../core/ecs/Component';
 
 export type BuildingType = 'command_center' | 'supply_depot' | 'barracks' | 'engineering_bay'
-  | 'hatchery' | 'spawning_pool' | 'hydralisk_den' | 'spire' | 'extractor';
+  | 'hatchery' | 'spawning_pool' | 'hydralisk_den' | 'spire' | 'extractor'
+  | 'nexus' | 'pylon' | 'gateway' | 'cybernetics_core' | 'forge' | 'stargate'
+  | 'templar_archives' | 'photon_cannon';
 
 export class Building extends Component {
   constructor(
@@ -11,6 +13,8 @@ export class Building extends Component {
     public larvae: number = 0,
     public spawns?: string[],
     public unlocks?: string[],
+    public energy: number = 0,
+    public maxEnergy: number = 0,
   ) {
     super('Building');
   }
