@@ -13,6 +13,7 @@ All notable changes to 开心消消乐 (match3-game) will be documented here.
 
 ### Changed
 - `App.tsx` 重构：新增 `started` state 控制游戏流程
+- **棋盘从 6×6 升级为 8×8**：`BOARD_SIZE 6→8`，`TILE_SIZE 50→42`（适配 400px 宽度，总宽 388px）
 
 ## [1.2.0] - 2026-04-09
 
