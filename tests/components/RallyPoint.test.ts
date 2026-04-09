@@ -17,8 +17,9 @@ describe('RallyPoint', () => {
 
   it('setPosition updates coordinates', () => {
     const rp = new RallyPoint(0, 0, 0);
-    rp.setPosition(7, 0, 12);
+    rp.setPosition(7, 3, 12);
     expect(rp.x).toBe(7);
+    expect(rp.y).toBe(3);
     expect(rp.z).toBe(12);
   });
 
