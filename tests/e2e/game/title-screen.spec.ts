@@ -46,6 +46,8 @@ test.describe('Title Screen', () => {
     const errors: string[] = [];
     page.on('console', (msg) => {
       if (msg.type() === 'error') {
+        // Ignore favicon 404 — not a real application error
+        if (msg.text().includes('favicon')) return;
         errors.push(msg.text());
       }
     });

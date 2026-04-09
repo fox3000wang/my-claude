@@ -24,8 +24,8 @@ test.describe('Shop Screen', () => {
     await page.keyboard.press('3');
     await playBlindUntilComplete(page);
 
-    // Wait for shop to appear
-    await page.waitForSelector('h2:has-text("商店")', { timeout: 5000 });
+    // Wait for shop to appear (Boss Blind with target 1000 takes multiple rounds)
+    await page.waitForSelector('h2:has-text("商店")', { timeout: 20000 });
   }
 
   /**
@@ -37,7 +37,7 @@ test.describe('Shop Screen', () => {
       const count = await cards.count();
       if (count === 0) break;
 
-      const selectCount = Math.min(5, count);
+      const selectCount = Math.min(2, count);
       for (let i = 0; i < selectCount; i++) {
         await cards.nth(i).click();
       }

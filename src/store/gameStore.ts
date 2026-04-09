@@ -76,7 +76,6 @@ export interface GameStore {
   buyItem: (type: 'joker' | 'tarotPlanet', index: number) => void
   leaveShop: () => void
   backToTitle: () => void
-  enterShop: () => void
   skipBoss: () => void
 }
 
@@ -133,8 +132,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
     shopManager.reset()
     tarotSystem.startRound()
 
-    // 发 5 张手牌
-    deckManager.draw(5)
+    // 发 8 张手牌
+    deckManager.draw(8)
 
     set({
       screen: 'ANTE_SELECT',
@@ -173,7 +172,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
   // ─── playHand ──────────────────────────────────────────────────────────
   playHand() {
     const { selectedCards, jokerSystem,
-      tarotSystem, totalScore, handsRemaining, blindManager } = get()
+      tarotSystem, totalScore, handsRemaining, blindManager, money, shopManager } = get()
 
     if (selectedCards.length === 0) return
 
@@ -203,39 +202,68 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
     // 8. 判断游戏走向
     const targetScore = blindManager.getTargetScore()
-    const isLastBlind = blindManager.isLastBlind()
-    const isLastAnte = blindManager.isLastAnte()
 
     let nextScreen: ScreenType = 'SCORING'
     let nextTotalScore = newTotalScore
     let nextHandsRemaining = newHandsRemaining
 
     if (newTotalScore >= targetScore) {
-      // 达成目标 → 胜利或进入商店
-      if (isLastAnte && isLastBlind) {
+      // 达成目标 → 奖励并进入商店（或胜利）
+      const reward = blindManager.getReward()
+      const newMoney = money + reward
+      blindManager.completeBlind()
+
+      if (blindManager.isLastAnte()) {
+        // 所有 Ante 完成 → 胜利
         nextScreen = 'VICTORY'
       } else {
+        // 进入商店
+        shopManager.generateShop()
         nextScreen = 'SHOP'
       }
+      set({
+        screen: nextScreen,
+        totalScore: nextTotalScore,
+        handsRemaining: nextHandsRemaining,
+        lastResult: result,
+        lastScore: score,
+        lastJokerContext: jokerCtx,
+        money: newMoney,
+        currentAnte: blindManager.ante,
+        currentBlindIndex: blindManager.blindIndex,
+      })
     } else if (newHandsRemaining <= 0) {
       // 未达成且无出牌机会 → 游戏结束
       nextScreen = 'GAME_OVER'
+      set({
+        screen: nextScreen,
+        totalScore: nextTotalScore,
+        handsRemaining: nextHandsRemaining,
+        lastResult: result,
+        lastScore: score,
+        lastJokerContext: jokerCtx,
+      })
+    } else {
+      // 否则保持 SCORING（显示结果后自动 continueGame）
+      set({
+        screen: nextScreen,
+        totalScore: nextTotalScore,
+        handsRemaining: nextHandsRemaining,
+        lastResult: result,
+        lastScore: score,
+        lastJokerContext: jokerCtx,
+      })
     }
-    // 否则保持 SCORING（显示结果后自动 continueGame）
-
-    set({
-      screen: nextScreen,
-      totalScore: nextTotalScore,
-      handsRemaining: nextHandsRemaining,
-      lastResult: result,
-      lastScore: score,
-      lastJokerContext: jokerCtx,
-    })
   },
 
   // ─── continueGame ──────────────────────────────────────────────────────
   continueGame() {
     const { deckManager, selectedCards, screen } = get()
+
+    // 如果已经进入商店/BLIND_SELECT/结束，不重置牌堆
+    if (screen === 'SHOP' || screen === 'VICTORY' || screen === 'GAME_OVER' || screen === 'BLIND_SELECT') {
+      return
+    }
 
     // 1. 弃置已选中的牌
     deckManager.discardCards(selectedCards)
@@ -245,8 +273,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
       deckManager.reshuffle()
     }
 
-    // 3. 发牌至 5 张
-    deckManager.draw(5)
+    // 3. 发牌至 8 张
+    deckManager.draw(8)
 
     // 4. Tarot 系统开始新回合
     const { tarotSystem } = get()
@@ -279,6 +307,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
     if (!blindManager.selectBlind(index)) return
     set({
       screen: 'BLIND_SELECT',
+      currentAnte: blindManager.ante,
       currentBlindIndex: index,
       targetScore: blindManager.getTargetScore(),
     })
@@ -291,7 +320,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
     // 重置当轮得分和出牌次数
     blindManager.getTargetScore() // 确保已设置
     deckManager.reset()
-    deckManager.draw(5)
+    deckManager.draw(8)
 
     set({
       screen: 'PLAYING',
@@ -341,18 +370,11 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
   // ─── leaveShop ─────────────────────────────────────────────────────────
   leaveShop() {
-    const { blindManager, shopManager } = get()
+    const { shopManager } = get()
 
-    // 关闭商店，清空商品，进入下一个 Blind 选择
+    // 关闭商店，清空商品，进入下一个 Ante 的选择界面
     shopManager.reset()
-    const isLastBlind = blindManager.isLastBlind()
-    const isLastAnte = blindManager.isLastAnte()
-
-    if (isLastAnte && isLastBlind) {
-      set({ screen: 'VICTORY' })
-    } else {
-      set({ screen: 'BLIND_SELECT' })
-    }
+    set({ screen: 'ANTE_SELECT' })
   },
 
   // ─── backToTitle ───────────────────────────────────────────────────────
@@ -384,36 +406,6 @@ export const useGameStore = create<GameStore>((set, get) => ({
     })
   },
 
-  // ─── enterShop ─────────────────────────────────────────────────────────
-  enterShop() {
-    const { blindManager, shopManager, money } = get()
-
-    // 1. 获得盲注奖励
-    const reward = blindManager.getReward()
-    const newMoney = money + reward
-
-    // 2. 完成当前盲注
-    blindManager.completeBlind()
-
-    // 3. 检查是否全部完成（胜利）
-    if (blindManager.isLastAnte() && blindManager.blindIndex === 0) {
-      // 刚完成最后一个 Ante 的 Boss Blind，胜利
-      set({ screen: 'VICTORY', money: newMoney, currentAnte: blindManager.ante, currentBlindIndex: blindManager.blindIndex })
-      return
-    }
-
-    // 4. 生成商店商品
-    shopManager.generateShop()
-
-    // 5. 更新状态
-    set({
-      screen: 'SHOP',
-      money: newMoney,
-      currentAnte: blindManager.ante,
-      currentBlindIndex: blindManager.blindIndex,
-    })
-  },
-
   // ─── skipBoss ─────────────────────────────────────────────────────────
   skipBoss() {
     const { blindManager, money, deckManager, shopManager } = get()
@@ -432,7 +424,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
     // 重置牌堆，开始新 Ante
     deckManager.reset()
-    deckManager.draw(5)
+    deckManager.draw(8)
 
     // 检查是否全部完成
     if (blindManager.isLastAnte() && blindManager.blindIndex === 0) {

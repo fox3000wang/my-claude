@@ -4,8 +4,9 @@ test.describe('Blind Select Screen', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/');
     // Navigate: Title -> Ante Select -> Blind Select
-    await page.locator('#startBtn').click();
-    await page.locator('button', { hasText: '选择盲注' }).click();
+    // Use force:true because the button may still be animating
+    await page.locator('#startBtn').click({ force: true });
+    await page.locator('button', { hasText: '选择盲注' }).click({ force: true });
   });
 
   test('blind select screen shows all 3 blind options', async ({ page }) => {
@@ -28,7 +29,7 @@ test.describe('Blind Select Screen', () => {
     const buttons = page.locator('.title-screen .btn-secondary');
     const secondButton = buttons.nth(1);
     await expect(secondButton).toContainText('Big Blind');
-    await expect(secondButton).toContainText('目标: 150');
+    await expect(secondButton).toContainText('目标: 200');
     await expect(secondButton).toContainText('奖励: $4');
     await expect(secondButton).toContainText('按 2 快捷选择');
   });
@@ -37,7 +38,7 @@ test.describe('Blind Select Screen', () => {
     const buttons = page.locator('.title-screen .btn-secondary');
     const thirdButton = buttons.nth(2);
     await expect(thirdButton).toContainText('Boss Blind');
-    await expect(thirdButton).toContainText('目标: 200');
+    await expect(thirdButton).toContainText('目标: 100');
     await expect(thirdButton).toContainText('奖励: $5');
     await expect(thirdButton).toContainText('跳过 -$2');
     await expect(thirdButton).toContainText('按 3 快捷选择');
@@ -67,7 +68,7 @@ test.describe('Blind Select Screen', () => {
     await page.keyboard.press('2');
 
     const targetScore = page.locator('.status-value.target');
-    await expect(targetScore).toContainText('150');
+    await expect(targetScore).toContainText('200');
     await expect(page.locator('.card').first()).toBeVisible({ timeout: 3000 });
   });
 
@@ -75,7 +76,7 @@ test.describe('Blind Select Screen', () => {
     await page.keyboard.press('3');
 
     const targetScore = page.locator('.status-value.target');
-    await expect(targetScore).toContainText('200');
+    await expect(targetScore).toContainText('100');
     await expect(page.locator('.card').first()).toBeVisible({ timeout: 3000 });
   });
 

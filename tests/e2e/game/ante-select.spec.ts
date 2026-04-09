@@ -21,9 +21,9 @@ test.describe('Ante Select Screen', () => {
     await expect(moneyInfo).toBeVisible();
     await expect(moneyInfo).toContainText('筹码');
 
-    // Joker slots area (shows "暂无 Joker" when empty)
+    // Joker slots area (shows "暂无卡牌" when empty)
     const jokerArea = page.locator('.title-screen');
-    await expect(jokerArea).toContainText('暂无 Joker');
+    await expect(jokerArea).toContainText('暂无卡牌');
   });
 
   test('clicking Select Blind button navigates to BLIND_SELECT', async ({ page }) => {
@@ -42,7 +42,7 @@ test.describe('Ante Select Screen', () => {
     const emptyJokerSlots = page.locator('.joker-slot:not(.empty)');
     await expect(emptyJokerSlots).toHaveCount(0);
 
-    // Should show "暂无 Joker" message
-    await expect(page.locator('.title-screen')).toContainText('暂无 Joker');
+    // Should show "暂无卡牌" message
+    await expect(page.locator('.title-screen')).toContainText('暂无卡牌');
   });
 });

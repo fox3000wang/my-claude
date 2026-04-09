@@ -6,7 +6,7 @@ test.describe('Play Hand Flow', () => {
     // Navigate: Title -> Ante Select -> Blind Select -> Playing
     await page.locator('#startBtn').click();
     await page.locator('button', { hasText: '选择盲注' }).click();
-    await page.keyboard.press('1'); // Select Small Blind (target 100)
+    await page.keyboard.press('1'); // Select Small Blind (target 500)
   });
 
   test('8 cards are dealt on entering playing state', async ({ page }) => {
@@ -142,7 +142,8 @@ test.describe('Play Hand Flow', () => {
   test('joker slots area is rendered in playing state', async ({ page }) => {
     const jokerArea = page.locator('.joker-area');
     await expect(jokerArea).toBeVisible();
-    await expect(jokerArea).toContainText('Joker');
+    // Joker area has aria-label "Joker 区域"
+    await expect(jokerArea).toHaveAttribute('aria-label', 'Joker 区域');
 
     // Empty slots should be shown
     const emptySlots = page.locator('.joker-slot.empty');

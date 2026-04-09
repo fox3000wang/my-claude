@@ -29,8 +29,7 @@ export function ShopScreen() {
       <div className="shop-header">
         <h2>商店</h2>
         <div className="shop-money">
-          <span className="money-icon">$</span>
-          <span className="money-value">{money}</span>
+          <span className="status-value">${money}</span>
         </div>
       </div>
 
@@ -99,7 +98,7 @@ export function ShopScreen() {
       <div className="shop-footer">
         <JokerArea jokers={activeJokers} />
         <Button variant="secondary" onClick={leaveShop}>
-          离开商店
+          进入 Ante
         </Button>
       </div>
     </div>
