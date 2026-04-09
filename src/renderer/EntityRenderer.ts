@@ -5,6 +5,12 @@ import { Position } from '../components/Position';
 import { Renderable } from '../components/Renderable';
 import { Unit } from '../components/Unit';
 
+const RACE_COLORS: Record<string, number> = {
+  terran: 0x00aaff,
+  zerg: 0x8800ff,
+  protoss: 0xffcc00,
+};
+
 export class EntityRenderer {
   private scene: THREE.Scene;
   private meshCache = new Map<string, THREE.Object3D>();
@@ -12,6 +18,13 @@ export class EntityRenderer {
 
   constructor(scene: THREE.Scene) {
     this.scene = scene;
+  }
+
+  private unitColor(ownerId: number): number {
+    if (ownerId === 0) return RACE_COLORS.terran;
+    if (ownerId === 1) return RACE_COLORS.zerg;
+    if (ownerId === 2) return RACE_COLORS.protoss;
+    return 0xaaaaaa;
   }
 
   // 从 world 中注册所有已有实体
@@ -65,7 +78,7 @@ export class EntityRenderer {
 
     if (isUnit) {
       const unit = entity.getComponent<Unit>('Unit')!;
-      const color = unit.ownerId === 0 ? 0x00aaff : 0xff4422;
+      const color = this.unitColor(unit.ownerId);
       const geo = new THREE.BoxGeometry(1, 1, 1);
       const mat = new THREE.MeshStandardMaterial({ color, roughness: 0.5 });
       const mesh = new THREE.Mesh(geo, mat);
