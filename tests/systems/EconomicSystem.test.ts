@@ -94,7 +94,7 @@ describe('EconomicSystem', () => {
     expect(queue.queue.every(u => u === 'drone')).toBe(true);
   });
 
-  it('phase 2 (supply >= 20): trains army in fixed ratios', () => {
+  it('phase 2 (supply >= 20): applies worker budget and trains army in ratios', () => {
     const hatchery = makeBuilding(world, 'hatchery', 1, 0, 0, true);
     resources.useSupply(25); // supplyUsed=25 >= 20
 
@@ -102,7 +102,12 @@ describe('EconomicSystem', () => {
 
     const queue = hatchery.getComponent<TrainQueue>('TrainQueue')!;
     expect(queue.queue.length).toBeGreaterThan(0);
-    expect(queue.queue.some(u => u === 'zergling')).toBe(true);
+    // Worker budget: 1 worker slot per tick (ceil(0.2 * 3) = 1)
+    expect(queue.queue.some(u => u === 'drone')).toBe(true);
+    // Overlord is added by handleSupply independently; filter it out of army check
+    const armyUnits = queue.queue.filter(u => u !== 'drone' && u !== 'overlord');
+    expect(armyUnits.length).toBeGreaterThan(0);
+    expect(armyUnits.every(u => ['zergling', 'hydralisk', 'mutalisk'].includes(u))).toBe(true);
   });
 
   it('does nothing if decision timer not reached', () => {

@@ -8,7 +8,7 @@ import { TrainQueue } from '../components/TrainQueue';
 // ---------------------------------------------------------------------------
 const DECISION_INTERVAL = 5;    // seconds between decisions
 const SUPPLY_BUFFER = 4;         // build supply when free ≤ this
-const PRODUCTION_THRESHOLD = 20;  // expand production when supplyUsed > this
+const PRODUCTION_THRESHOLD = 20;  // expand production when supplyUsed >= this
 const TRAIN_QUEUE_TARGET = 3;     // target units per production queue
 const WORKER_BUDGET = 0.2;       // fraction of queue reserved for workers
 
@@ -77,6 +77,7 @@ export class EconomicSystem extends System {
     const config = RACE_CONFIG[ownerId];
     if (!config) return;
 
+    this.pendingProductionBuilding.delete(ownerId);
     this.handleSupply(ownerId, resources, config);
     this.handleProduction(ownerId, resources, config);
     this.handleTraining(ownerId, resources, config);
@@ -86,6 +87,7 @@ export class EconomicSystem extends System {
   // Supply
   // -------------------------------------------------------------------------
   private handleSupply(ownerId: number, resources: PlayerResources, config: RaceConfig): void {
+    this.pendingSupplyBuilding.delete(ownerId);
     const supplyFree = resources.supplyMax - resources.supplyUsed;
     if (supplyFree > SUPPLY_BUFFER) return;
     if (this.supplyBuildingInProgress(ownerId, config)) return;
@@ -162,7 +164,7 @@ export class EconomicSystem extends System {
       return;
     }
 
-    if (resources.supplyUsed > PRODUCTION_THRESHOLD) {
+    if (resources.supplyUsed >= PRODUCTION_THRESHOLD) {
       // Check all production queues (includes hatchery for Zerg, gateway for Protoss)
       const productionQueues = this.world!.getEntitiesWithComponents('Building', 'TrainQueue');
       const anyQueueBelowTarget = productionQueues.some(entity => {
@@ -221,10 +223,15 @@ export class EconomicSystem extends System {
           // Phase 1: workers only
           queue.queue.push(config.worker);
         } else {
-          // Phase 2: army on hatching pools
+          // Phase 2: apply worker budget
           const slotsRemaining = TRAIN_QUEUE_TARGET - queue.queue.length;
-          for (let i = 0; i < slotsRemaining; i++) {
+          const workerSlots = Math.min(Math.ceil(WORKER_BUDGET * TRAIN_QUEUE_TARGET), slotsRemaining);
+          const armySlots = slotsRemaining - workerSlots;
+          for (let i = 0; i < armySlots; i++) {
             queue.queue.push(this.pickByRatio(config.armyRatios));
+          }
+          for (let i = 0; i < workerSlots; i++) {
+            queue.queue.push(config.worker);
           }
         }
         return;
