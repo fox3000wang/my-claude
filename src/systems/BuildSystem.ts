@@ -12,6 +12,7 @@ const BUILD_TIME = 5; // 秒
 export class BuildSystem extends System {
   readonly name = 'BuildSystem';
   private playerResources: PlayerResources | null = null;
+  private ownerResources = new Map<number, PlayerResources>();
 
   constructor(private grid: Grid) {
     super();
@@ -19,6 +20,10 @@ export class BuildSystem extends System {
 
   setPlayerResources(resources: PlayerResources): void {
     this.playerResources = resources;
+  }
+
+  setResourcesForOwner(ownerId: number, resources: PlayerResources): void {
+    this.ownerResources.set(ownerId, resources);
   }
 
   private getFootprintCells(
@@ -97,26 +102,31 @@ export class BuildSystem extends System {
     buildingType: string,
     x: number,
     z: number,
+    ownerId: number = 0,
   ): boolean {
     const data = (buildingsData as Record<string, unknown>)[buildingType] as {
       cost: { minerals: number };
       supply: number;
     } | undefined;
-    if (!data || !this.playerResources) return false;
+    const resources =
+      ownerId === 0
+        ? this.playerResources
+        : this.ownerResources.get(ownerId) ?? null;
+    if (!data || !resources) return false;
 
     if (!this.canPlaceBuilding(buildingType, x, z)) return false;
-    if (!this.playerResources.canAfford(data.cost.minerals, data.supply)) return false;
+    if (!resources.canAfford(data.cost.minerals, data.supply)) return false;
 
-    this.playerResources.spend(data.cost.minerals);
+    resources.spend(data.cost.minerals);
     if (data.supply < 0) {
-      this.playerResources.supplyMax += Math.abs(data.supply);
+      resources.supplyMax += Math.abs(data.supply);
     } else {
-      this.playerResources.useSupply(data.supply);
+      resources.useSupply(data.supply);
     }
 
     const entity = this.world!.createEntity();
     entity.addComponent(new Position(x, 0, z));
-    entity.addComponent(new Building(buildingType as Building['buildingType'], true, 0));
+    entity.addComponent(new Building(buildingType as Building['buildingType'], true, 0, 0, undefined, undefined, 0, 0, ownerId));
     entity.addComponent(new Renderable(`building_${buildingType}`, 1));
     return true;
   }

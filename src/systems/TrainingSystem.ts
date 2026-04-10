@@ -15,9 +15,14 @@ export class TrainingSystem extends System {
   readonly name = 'TrainingSystem';
   private _prevLengths = new Map<number, number>();
   private playerResources: PlayerResources | null = null;
+  private ownerResources = new Map<number, PlayerResources>();
 
   setPlayerResources(resources: PlayerResources): void {
     this.playerResources = resources;
+  }
+
+  setResourcesForOwner(ownerId: number, resources: PlayerResources): void {
+    this.ownerResources.set(ownerId, resources);
   }
 
   update(delta: number): void {
@@ -62,9 +67,15 @@ export class TrainingSystem extends System {
     const mineralCost = data?.cost?.minerals ?? 0;
     const supplyCost = data?.cost?.supply ?? 0;
 
-    if (this.playerResources) {
-      if (!this.playerResources.spend(mineralCost)) return;
-      this.playerResources.useSupply(supplyCost);
+    const ownerId = building.ownerId ?? 0;
+    const resources =
+      ownerId === 0
+        ? this.playerResources
+        : this.ownerResources.get(ownerId) ?? null;
+
+    if (resources) {
+      if (!resources.spend(mineralCost)) return;
+      resources.useSupply(supplyCost);
     }
 
     if (building.spawns) {
@@ -74,7 +85,7 @@ export class TrainingSystem extends System {
     const newEntity = this.world!.createEntity();
     newEntity.addComponent(new Position(pos.x + 3, 0, pos.z));
     newEntity.addComponent(new Renderable(`unit_${unitType}`, 1));
-    newEntity.addComponent(new Unit(unitType as Unit['unitType'], health, maxHealth, 0));
+    newEntity.addComponent(new Unit(unitType as Unit['unitType'], health, maxHealth, ownerId));
     newEntity.addComponent(new Selected(false));
 
     // Send newly trained unit to rally point if building has one

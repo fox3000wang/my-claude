@@ -5,6 +5,7 @@ import { Building } from '../../src/components/Building';
 import { TrainQueue } from '../../src/components/TrainQueue';
 import { Position } from '../../src/components/Position';
 import { PlayerResources } from '../../src/components/PlayerResources';
+import { Unit } from '../../src/components/Unit';
 
 describe('TrainingSystem Zerg larvae', () => {
   let world: World;
@@ -70,5 +71,23 @@ describe('TrainingSystem Zerg larvae', () => {
 
     const entities = world.getEntitiesWithComponents('Unit');
     expect(entities.length).toBeGreaterThan(0);
+  });
+
+  it('trained unit gets correct ownerId from building', () => {
+    const aiResources = new PlayerResources();
+    aiResources.addMinerals(1000);
+    system.setResourcesForOwner(1, aiResources);
+
+    const hatchery = world.createEntity();
+    hatchery.addComponent(new Position(0, 0, 0));
+    hatchery.addComponent(new Building('hatchery', false, 1, 2, ['drone'], undefined, 0, 0, 1));
+    hatchery.addComponent(new TrainQueue(['drone']));
+
+    world.update(5);
+
+    const entities = world.getEntitiesWithComponents('Unit');
+    expect(entities.length).toBeGreaterThan(0);
+    const unit = entities[0].getComponent<Unit>('Unit')!;
+    expect(unit.ownerId).toBe(1);
   });
 });

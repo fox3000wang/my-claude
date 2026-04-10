@@ -15,6 +15,7 @@ export class Building extends Component {
     public unlocks?: string[],
     public energy: number = 0,
     public maxEnergy: number = 0,
+    public ownerId: number = 0,
   ) {
     super('Building');
   }
