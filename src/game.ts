@@ -22,6 +22,7 @@ import { LarvaeSystem } from './systems/LarvaeSystem';
 import { EnergySystem } from './systems/EnergySystem';
 import { ResourceSystem } from './systems/ResourceSystem';
 import { ResearchSystem } from './systems/ResearchSystem';
+import { EconomicSystem } from './systems/EconomicSystem';
 import { PathfindingSystem } from './systems/PathfindingSystem';
 import { Grid } from './utils/grid';
 import { Selected } from './components/Selected';
@@ -43,6 +44,8 @@ export class Game {
   private resourceSystem!: ResourceSystem;
   private aiSystem!: AISystem;
   private playerResources!: PlayerResources;
+  private aiResources: Record<number, PlayerResources> = {};
+  private economicSystem!: EconomicSystem;
   private grid!: Grid;
   private animationId: number | null = null;
   private lastTime = 0;
@@ -106,6 +109,20 @@ export class Game {
     this.resourceSystem = new ResourceSystem();
     this.resourceSystem.setPlayerResources(this.playerResources);
     this.world.addSystem(this.resourceSystem);
+
+    // AI 资源与经济系统
+    this.aiResources = {
+      1: new PlayerResources(500), // Zerg AI
+      2: new PlayerResources(500), // Protoss AI
+    };
+    this.economicSystem = new EconomicSystem();
+    this.economicSystem.setResourcesForOwner(1, this.aiResources[1]);
+    this.economicSystem.setResourcesForOwner(2, this.aiResources[2]);
+    this.buildSystem.setResourcesForOwner(1, this.aiResources[1]);
+    this.buildSystem.setResourcesForOwner(2, this.aiResources[2]);
+    this.trainingSystem.setResourcesForOwner(1, this.aiResources[1]);
+    this.trainingSystem.setResourcesForOwner(2, this.aiResources[2]);
+    this.world.addSystem(this.economicSystem);
 
     // 初始化测试场景
     this.initTestScene();
