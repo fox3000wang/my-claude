@@ -77,9 +77,9 @@ export class EconomicSystem extends System {
     const config = RACE_CONFIG[ownerId];
     if (!config) return;
 
+    this.handleSupply(ownerId, resources, config);
     this.handleProduction(ownerId, resources, config);
     this.handleTraining(ownerId, resources, config);
-    this.handleSupply(ownerId, resources, config);
   }
 
   // -------------------------------------------------------------------------
@@ -91,11 +91,30 @@ export class EconomicSystem extends System {
     if (this.supplyBuildingInProgress(ownerId, config)) return;
 
     if (config.supplyBuilding.type === 'train') {
-      // Zerg supply (Overlord) is handled through handleTraining for hatcheries
-      // Only Protoss uses pendingSupplyBuilding for build-type supply
-      return;
+      this.queueSupplyTrain(ownerId, config.supplyBuilding.unitOrBuilding);
     } else {
       this.pendingSupplyBuilding.add(ownerId);
+    }
+  }
+
+  /** Queue a Zerg supply unit (Overlord) on an available Hatchery.
+   *  Only called in phase 2 from handleSupply.
+   *  Guarded to only add if not already in queue (prevents double-queue). */
+  private queueSupplyTrain(ownerId: number, unit: string): void {
+    const resources = this.ownerResources.get(ownerId);
+    // Only queue overlords in phase 2 so economy-building in phase 1 is not overridden
+    if (!resources || resources.supplyUsed < PRODUCTION_THRESHOLD) return;
+
+    const hatcheries = this.world!.getEntitiesWithComponents('Building', 'TrainQueue', 'Position');
+    for (const entity of hatcheries) {
+      const building = entity.getComponent<Building>('Building')!;
+      if (building.buildingType === 'hatchery') {
+        const queue = entity.getComponent<TrainQueue>('TrainQueue')!;
+        if (queue.queue.length < TRAIN_QUEUE_TARGET && !queue.queue.includes(unit)) {
+          queue.queue.push(unit);
+          return;
+        }
+      }
     }
   }
 
@@ -144,11 +163,15 @@ export class EconomicSystem extends System {
     }
 
     if (resources.supplyUsed > PRODUCTION_THRESHOLD) {
-      // Check all production queues
+      // Check all production queues (includes hatchery for Zerg, gateway for Protoss)
       const productionQueues = this.world!.getEntitiesWithComponents('Building', 'TrainQueue');
       const anyQueueBelowTarget = productionQueues.some(entity => {
         const building = entity.getComponent<Building>('Building')!;
-        if (building.buildingType === config.productionBuilding) {
+        if (
+          building.buildingType === config.productionBuilding ||
+          (ownerId === 1 && building.buildingType === 'hatchery') ||
+          (ownerId === 2 && building.buildingType === 'gateway')
+        ) {
           const queue = entity.getComponent<TrainQueue>('TrainQueue')!;
           return queue.queue.length < TRAIN_QUEUE_TARGET;
         }
@@ -165,82 +188,71 @@ export class EconomicSystem extends System {
   // Training
   // -------------------------------------------------------------------------
   private handleTraining(ownerId: number, resources: PlayerResources, config: RaceConfig): void {
-    const supplyFree = resources.supplyMax - resources.supplyUsed;
+    const isPhase1 = resources.supplyUsed < PRODUCTION_THRESHOLD;
 
-    // Handle hatcheries (Zerg only): overlords when supply is emergency, workers when economy is the priority
+    // Hatchery block (Zerg only):
+    // - Phase 1: supply conditions (priority over phase conditions) + workers
+    // - Phase 2: army (the duplicate overlord/overlord logic removed per SPEC;
+    //   hatching pools in phase 2 are handled here; spawning pools are NOT)
     if (config.supplyBuilding.type === 'train') {
+      const supplyFree = resources.supplyMax - resources.supplyUsed;
+
       const hatcheries = this.world!.getEntitiesWithComponents('Building', 'TrainQueue', 'Position');
       for (const entity of hatcheries) {
         const building = entity.getComponent<Building>('Building')!;
         if (building.buildingType !== 'hatchery') continue;
 
         const queue = entity.getComponent<TrainQueue>('TrainQueue')!;
-
         if (queue.queue.length >= TRAIN_QUEUE_TARGET) continue;
 
-        // Economy priority: if supply is exactly at max (free=0), build workers
-        // Supply emergency: if free supply is positive but low, build overlords
-        if (supplyFree === 0) {
-          queue.queue.push(config.worker);
-          return;
-        }
-
-        if (supplyFree > 0 && supplyFree <= SUPPLY_BUFFER) {
-          if (!queue.queue.includes(config.supplyBuilding.unitOrBuilding)) {
-            queue.queue.push(config.supplyBuilding.unitOrBuilding);
+        if (isPhase1) {
+          // Supply conditions: take priority over phase conditions
+          if (supplyFree === 0) {
+            queue.queue.push(config.worker);
+            return;
           }
-          return;
-        }
-
-        // Normal economy phase (supplyUsed < PRODUCTION_THRESHOLD, free > SUPPLY_BUFFER)
-        if (resources.supplyUsed < PRODUCTION_THRESHOLD) {
+          if (supplyFree > 0 && supplyFree <= SUPPLY_BUFFER) {
+            // Only queue if not already in queue (matches queueSupplyTrain guard)
+            if (!queue.queue.includes(config.supplyBuilding.unitOrBuilding)) {
+              queue.queue.push(config.supplyBuilding.unitOrBuilding);
+            }
+            return;
+          }
+          // Phase 1: workers only
           queue.queue.push(config.worker);
-          return;
-        }
-
-        // Phase 2: queue army + workers
-        const slotsRemaining = TRAIN_QUEUE_TARGET - queue.queue.length;
-        const workerSlots = Math.min(Math.ceil(WORKER_BUDGET * TRAIN_QUEUE_TARGET), slotsRemaining);
-        const armySlots = slotsRemaining - workerSlots;
-
-        for (let i = 0; i < armySlots; i++) {
-          queue.queue.push(this.pickByRatio(config.armyRatios));
-        }
-        for (let i = 0; i < workerSlots; i++) {
-          queue.queue.push(config.worker);
+        } else {
+          // Phase 2: army on hatching pools
+          const slotsRemaining = TRAIN_QUEUE_TARGET - queue.queue.length;
+          for (let i = 0; i < slotsRemaining; i++) {
+            queue.queue.push(this.pickByRatio(config.armyRatios));
+          }
         }
         return;
       }
     }
 
-    // Handle production buildings (gateway, spawning_pool): workers (phase 1) or army+workers (phase 2)
+    // Spawning pool / gateway block: workers in phase 1, workers in phase 2
+    // (hatcheries in phase 2 are handled by the hatching block above)
     const productionEntities = this.world!.getEntitiesWithComponents('Building', 'TrainQueue', 'Position');
 
     for (const entity of productionEntities) {
       const building = entity.getComponent<Building>('Building')!;
       if (building.buildingType !== config.productionBuilding) continue;
+      // Skip hatching pools in phase 2 (handled by hatching block above)
+      if (!isPhase1 && building.buildingType === 'hatchery') continue;
 
       const queue = entity.getComponent<TrainQueue>('TrainQueue')!;
-
       if (queue.queue.length >= TRAIN_QUEUE_TARGET) continue;
 
       const slotsRemaining = TRAIN_QUEUE_TARGET - queue.queue.length;
 
-      if (resources.supplyUsed < PRODUCTION_THRESHOLD) {
+      if (isPhase1) {
         // Phase 1: workers only
         queue.queue.push(config.worker);
       } else {
-        // Phase 2: mix of army + workers
-        const workerSlots = Math.min(Math.ceil(WORKER_BUDGET * TRAIN_QUEUE_TARGET), slotsRemaining);
-        const armySlots = slotsRemaining - workerSlots;
-
-        // Fill armySlots with pickByRatio
-        for (let i = 0; i < armySlots; i++) {
-          queue.queue.push(this.pickByRatio(config.armyRatios));
-        }
-
-        // Fill remaining with worker
-        for (let i = 0; i < workerSlots; i++) {
+        // Phase 2: workers (spawning pools can't produce army without tech;
+        // hatching pools skipped above so they don't double-queue with hatching block)
+        for (let i = 0; i < slotsRemaining; i++) {
           queue.queue.push(config.worker);
         }
       }
