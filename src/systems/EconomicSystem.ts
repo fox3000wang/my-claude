@@ -120,7 +120,7 @@ export class EconomicSystem extends System {
     }
   }
 
-  private supplyBuildingInProgress(ownerId: number, config: RaceConfig): boolean {
+  private supplyBuildingInProgress(_ownerId: number, config: RaceConfig): boolean {
     if (config.supplyBuilding.type === 'train') {
       // Zerg: check if any Hatchery's TrainQueue already contains the supply unit
       const hatcheries = this.world!.getEntitiesWithComponents('Building', 'TrainQueue');
@@ -189,7 +189,7 @@ export class EconomicSystem extends System {
   // -------------------------------------------------------------------------
   // Training
   // -------------------------------------------------------------------------
-  private handleTraining(ownerId: number, resources: PlayerResources, config: RaceConfig): void {
+  private handleTraining(_ownerId: number, resources: PlayerResources, config: RaceConfig): void {
     const isPhase1 = resources.supplyUsed < PRODUCTION_THRESHOLD;
 
     // Hatchery block (Zerg only):

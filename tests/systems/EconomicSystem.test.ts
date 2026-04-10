@@ -6,10 +6,8 @@ import { Building } from '../../src/components/Building';
 import { Position } from '../../src/components/Position';
 import { TrainQueue } from '../../src/components/TrainQueue';
 import { Renderable } from '../../src/components/Renderable';
-import { Unit } from '../../src/components/Unit';
-import { Combat } from '../../src/components/Combat';
 
-function makeBuilding(world: World, type: string, ownerId: number, x: number, z: number, hasQueue = false) {
+function makeBuilding(world: World, type: string, _ownerId: number, x: number, z: number, hasQueue = false) {
   const e = world.createEntity();
   e.addComponent(new Building(type as Building['buildingType'], false, 0));
   e.addComponent(new Position(x, 0, z));
