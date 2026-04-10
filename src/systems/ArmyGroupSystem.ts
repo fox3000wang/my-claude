@@ -190,6 +190,13 @@ export class ArmyGroupSystem extends System {
       if (!e) continue;
 
       if (group.mode === 'retreat') {
+        // Protoss: skip retreat targeting for high-value units (they hold position as rear guard)
+        if (this.isProtoss(group.ownerId) && this.isHighValue(e.getComponent<Unit>('Unit')?.unitType ?? '')) {
+          const combat = e.getComponent<Combat>('Combat');
+          if (combat) combat.targetId = null;
+          continue;
+        }
+
         let targetX = group.rallyX;
         let targetZ = group.rallyZ;
 
@@ -209,21 +216,6 @@ export class ArmyGroupSystem extends System {
           mt.arrived = false;
         } else {
           e.addComponent(MoveTarget.at(targetX, 0, targetZ));
-        }
-
-        // Protoss: sort retreat order — high-value units retreat last
-        if (this.isProtoss(group.ownerId)) {
-          const highValueCount = group.unitIds.filter(uid => {
-            const e2 = this.world!.getEntity(uid);
-            const u = e2?.getComponent<Unit>('Unit');
-            return u && this.isHighValue(u.unitType);
-          }).length;
-          // Skip retreat targeting for high-value units (they go last)
-          if (highValueCount > 0 && this.isHighValue(e.getComponent<Unit>('Unit')?.unitType ?? '')) {
-            const combat = e.getComponent<Combat>('Combat');
-            if (combat) combat.targetId = null;
-            continue;
-          }
         }
 
         const combat = e.getComponent<Combat>('Combat');

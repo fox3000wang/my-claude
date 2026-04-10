@@ -215,16 +215,25 @@ describe('ArmyGroupSystem', () => {
     groupEntity.addComponent(new Position(0, 0, 0));
 
     const ag = groupEntity.getComponent<ArmyGroup>('ArmyGroup')!;
-    ag.setRallyPoint(0, 0);
+    ag.setRallyPoint(50, 50); // rally at distinct coords
 
-    // Zealot (low HP, not high-value)
-    const zealot = world.createEntity();
-    zealot.addComponent(new Unit('zealot', 100, 100, 2));
-    zealot.addComponent(new Position(0, 0, 0));
-    zealot.addComponent(new Health(10, 100));
-    zealot.addComponent(new Combat(8, 1, 1, 2));
-    zealot.addComponent(new MoveTarget(0, 0, 0));
-    ag.addUnit(zealot.id);
+    // Two zealots (low HP) + templar: group avg strength < 0.40 → retreat
+    // zealot1: 5/100=0.05, zealot2: 5/100=0.05, templar: 40/40=1.0 → avg = 1.1/3 = 0.367 < 0.40
+    const zealot1 = world.createEntity();
+    zealot1.addComponent(new Unit('zealot', 100, 100, 2));
+    zealot1.addComponent(new Position(0, 0, 0));
+    zealot1.addComponent(new Health(5, 100));
+    zealot1.addComponent(new Combat(8, 1, 1, 2));
+    zealot1.addComponent(new MoveTarget(0, 0, 0));
+    ag.addUnit(zealot1.id);
+
+    const zealot2 = world.createEntity();
+    zealot2.addComponent(new Unit('zealot', 100, 100, 2));
+    zealot2.addComponent(new Position(1, 0, 0));
+    zealot2.addComponent(new Health(5, 100));
+    zealot2.addComponent(new Combat(8, 1, 1, 2));
+    zealot2.addComponent(new MoveTarget(0, 0, 0));
+    ag.addUnit(zealot2.id);
 
     // High Templar (high-value, should not retreat first)
     const templar = world.createEntity();
@@ -235,18 +244,20 @@ describe('ArmyGroupSystem', () => {
     templar.addComponent(new MoveTarget(0, 0, 0));
     ag.addUnit(templar.id);
 
-    // Enemy triggers retreat
+    // Enemy nearby triggers retreat
     const enemy = world.createEntity();
     enemy.addComponent(new Unit('marine', 40, 40, 0));
-    enemy.addComponent(new Position(1, 0, 0));
+    enemy.addComponent(new Position(2, 0, 0));
     enemy.addComponent(new Health(40, 40));
 
     world.update(1);
 
-    // zealot should have retreat target
-    expect(zealot.hasComponent('MoveTarget')).toBe(true);
-    // high templar: MoveTarget stays at original position (not cleared by retreat)
-    expect(templar.hasComponent('MoveTarget')).toBe(true);
+    // zealots should have retreat target (rally point at x=50)
+    const z1Move = zealot1.getComponent<MoveTarget>('MoveTarget')!;
+    expect(z1Move.x).toBeCloseTo(50, 0);
+    // high templar: MoveTarget still at original x=0 (NOT updated to rally x=50)
+    const templarMove = templar.getComponent<MoveTarget>('MoveTarget')!;
+    expect(templarMove.x).toBeCloseTo(0, 0);
   });
 
   it('Terran: retreats toward nearest building instead of rally point', () => {
