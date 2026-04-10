@@ -159,4 +159,12 @@ export class SelectionSystem extends System {
   getSelectedIds(): number[] {
     return Array.from(this.selectedIds);
   }
+
+  addSelectedIds(ids: number[]): void {
+    for (const id of ids) this.selectedIds.add(id);
+  }
+
+  removeSelectedIds(ids: number[]): void {
+    for (const id of ids) this.selectedIds.delete(id);
+  }
 }

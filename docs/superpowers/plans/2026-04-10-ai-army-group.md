@@ -728,13 +728,13 @@ git commit -m "feat(ai): integrate army groups into AISystem and TrainingSystem"
 
 ## Self-Review Checklist
 
-- [ ] `RallyPoint` tested (5 cases) ✅
-- [ ] `ArmyGroup` tested (5 cases) ✅
-- [ ] `ArmyGroupSystem` tested (4 cases) ✅
-- [ ] `AISystem` updated to skip grouped units ✅
-- [ ] `TrainingSystem` sends new units to rally point ✅
-- [ ] `ArmyGroupSystem` registered in `game.ts` ✅
-- [ ] No placeholder/TBD in any step ✅
-- [ ] Type signatures consistent across all tasks ✅
-- [ ] Full test suite passes ✅
-- [ ] Production build succeeds ✅
+- [x] `RallyPoint` tested (5 cases) ✅
+- [x] `ArmyGroup` tested (5 cases) ✅
+- [x] `ArmyGroupSystem` tested (8 cases — 4 original + 4 bug-fix tests) ✅
+- [x] `AISystem` updated to skip grouped units ✅
+- [x] `TrainingSystem` sends new units to rally point ✅
+- [x] `ArmyGroupSystem` registered in `game.ts` ✅
+- [x] No placeholder/TBD in any step ✅
+- [x] Type signatures consistent across all tasks ✅
+- [x] Full test suite passes ✅
+- [x] Production build succeeds ✅

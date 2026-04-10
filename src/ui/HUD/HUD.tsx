@@ -6,10 +6,11 @@ interface Props {
   supplyUsed: number;
   supplyMax: number;
   selectedEntities: Entity[];
+  isSpectator?: boolean;
   onCommand?: (cmd: 'attack' | 'move' | 'stop') => void;
 }
 
-export function HUD({ minerals, supplyUsed, supplyMax, selectedEntities, onCommand }: Props) {
+export function HUD({ minerals, supplyUsed, supplyMax, selectedEntities, isSpectator = false, onCommand }: Props) {
   return (
     <div
       style={{
@@ -23,6 +24,27 @@ export function HUD({ minerals, supplyUsed, supplyMax, selectedEntities, onComma
         pointerEvents: 'none',
       }}
     >
+      {/* Spectator banner */}
+      {isSpectator && (
+        <div
+          style={{
+            position: 'absolute',
+            top: -32,
+            left: 0,
+            right: 0,
+            background: '#b45309',
+            color: '#fef3c7',
+            textAlign: 'center',
+            fontSize: 12,
+            fontWeight: 600,
+            padding: '4px 0',
+            letterSpacing: 1,
+            pointerEvents: 'none',
+          }}
+        >
+          SPECTATING
+        </div>
+      )}
       {/* 小地图区域 */}
       <div style={{ width: 160, padding: 8 }}>
         <div
