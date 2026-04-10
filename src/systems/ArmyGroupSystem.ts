@@ -5,6 +5,8 @@ import { Position } from '../components/Position';
 import { Combat } from '../components/Combat';
 import { Health } from '../components/Health';
 import { MoveTarget } from '../components/MoveTarget';
+import { StrategyState } from '../components/StrategyState';
+import { Building } from '../components/Building';
 import type { Entity } from '../core/ecs/Entity';
 
 /** How close an enemy must be (in world units) before group reacts */
@@ -15,6 +17,42 @@ const RALLY_ARRIVED_DIST = 2;
 
 export class ArmyGroupSystem extends System {
   readonly name = 'ArmyGroupSystem';
+
+  /** High-value units that Protoss should protect during retreat (retreat last) */
+  private HIGH_VALUE_UNITS = new Set(['high_templar', 'dark_templar']);
+
+  private isZerg(ownerId: number): boolean { return ownerId === 1; }
+  private isProtoss(ownerId: number): boolean { return ownerId === 2; }
+  private isTerran(ownerId: number): boolean { return ownerId === 3; }
+
+  private isHighValue(unitType: string): boolean {
+    return this.HIGH_VALUE_UNITS.has(unitType);
+  }
+
+  private getRetreatThreshold(ownerId: number): number {
+    if (this.isZerg(ownerId)) return 0.20;   // Zerg: HP < 20% 才撤
+    if (this.isProtoss(ownerId)) return 0.40; // Protoss: HP < 40% 开始判断
+    if (this.isTerran(ownerId)) return 0.50;  // Terran: HP < 50% 边打边退
+    return 0.30; // default
+  }
+
+  private findNearestAlliedBuilding(group: ArmyGroup): { x: number; z: number } | null {
+    const buildings = this.world!.getEntitiesWithComponents('Building', 'Position');
+    let nearest: { x: number; z: number } | null = null;
+    let minDist = Infinity;
+    for (const e of buildings) {
+      const building = e.getComponent<Building>('Building')!;
+      if (!building.isConstructing) {
+        const pos = e.getComponent<Position>('Position')!;
+        const dist = Math.hypot(pos.x - group.rallyX, pos.z - group.rallyZ);
+        if (dist < minDist) {
+          minDist = dist;
+          nearest = { x: pos.x, z: pos.z };
+        }
+      }
+    }
+    return nearest;
+  }
 
   update(_delta: number): void {
     const groups = this.world!.getEntitiesWithComponents('ArmyGroup');
@@ -32,7 +70,29 @@ export class ArmyGroupSystem extends System {
       if (nearestEnemy) {
         const dist = nearestEnemy.dist;
 
-        if (groupStrength / maxStrength < group.retreatThreshold) {
+        const strategy = groupEntity.getComponent<StrategyState>('StrategyState');
+        if (strategy?.phase === 'rush') {
+          if (this.isZerg(group.ownerId)) {
+            // Zerg Rush: if 8+ zerglings, attack immediately
+            const zerglingIds = group.unitIds.filter(uid => {
+              const e = this.world!.getEntity(uid);
+              const u = e?.getComponent<Unit>('Unit');
+              return u?.unitType === 'zergling';
+            });
+            if (zerglingIds.length >= 8) {
+              this.setGroupMode(group, 'attack', nearestEnemy.pos);
+              continue;
+            }
+          } else {
+            // Non-Zerg in rush: defend only, no aggressive push
+            if (dist < DETECTION_RANGE && groupStrength >= group.attackThreshold) {
+              this.setGroupMode(group, 'defend', null);
+            }
+            continue;
+          }
+        }
+
+        if (groupStrength / maxStrength < this.getRetreatThreshold(group.ownerId)) {
           this.setGroupMode(group, 'retreat', nearestEnemy.pos);
         } else if (dist < DETECTION_RANGE && groupStrength >= group.attackThreshold) {
           this.setGroupMode(group, 'attack', nearestEnemy.pos);
@@ -130,16 +190,42 @@ export class ArmyGroupSystem extends System {
       if (!e) continue;
 
       if (group.mode === 'retreat') {
-        if (group.hasRallyPoint) {
-          if (e.hasComponent('MoveTarget')) {
-            const mt = e.getComponent<MoveTarget>('MoveTarget')!;
-            mt.x = group.rallyX;
-            mt.z = group.rallyZ;
-            mt.arrived = false;
-          } else {
-            e.addComponent(MoveTarget.at(group.rallyX, 0, group.rallyZ));
+        let targetX = group.rallyX;
+        let targetZ = group.rallyZ;
+
+        // Terran: retreat toward nearest building instead of rally point
+        if (this.isTerran(group.ownerId)) {
+          const nearestBuilding = this.findNearestAlliedBuilding(group);
+          if (nearestBuilding) {
+            targetX = nearestBuilding.x;
+            targetZ = nearestBuilding.z;
           }
         }
+
+        if (e.hasComponent('MoveTarget')) {
+          const mt = e.getComponent<MoveTarget>('MoveTarget')!;
+          mt.x = targetX;
+          mt.z = targetZ;
+          mt.arrived = false;
+        } else {
+          e.addComponent(MoveTarget.at(targetX, 0, targetZ));
+        }
+
+        // Protoss: sort retreat order — high-value units retreat last
+        if (this.isProtoss(group.ownerId)) {
+          const highValueCount = group.unitIds.filter(uid => {
+            const e2 = this.world!.getEntity(uid);
+            const u = e2?.getComponent<Unit>('Unit');
+            return u && this.isHighValue(u.unitType);
+          }).length;
+          // Skip retreat targeting for high-value units (they go last)
+          if (highValueCount > 0 && this.isHighValue(e.getComponent<Unit>('Unit')?.unitType ?? '')) {
+            const combat = e.getComponent<Combat>('Combat');
+            if (combat) combat.targetId = null;
+            continue;
+          }
+        }
+
         const combat = e.getComponent<Combat>('Combat');
         if (combat) combat.targetId = null;
       } else if (group.mode === 'attack') {

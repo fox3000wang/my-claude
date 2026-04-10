@@ -7,6 +7,8 @@ import { Position } from '../../src/components/Position';
 import { Combat } from '../../src/components/Combat';
 import { Health } from '../../src/components/Health';
 import { MoveTarget } from '../../src/components/MoveTarget';
+import { StrategyState } from '../../src/components/StrategyState';
+import { Building } from '../../src/components/Building';
 
 function makeUnit(world: World, ownerId: number, x: number, z: number, hp = 100): number {
   const e = world.createEntity();
@@ -174,5 +176,109 @@ describe('ArmyGroupSystem', () => {
     const mt = unit.getComponent<MoveTarget>('MoveTarget')!;
     expect(mt.x).toBe(50);
     expect(mt.z).toBe(50);
+  });
+
+  it('Zerg: attacks with 8+ zerglings in rush phase', () => {
+    const groupEntity = world.createEntity();
+    groupEntity.addComponent(new ArmyGroup(1)); // Zerg
+    groupEntity.addComponent(new StrategyState('rush'));
+    groupEntity.addComponent(new Position(0, 0, 0));
+
+    const ag = groupEntity.getComponent<ArmyGroup>('ArmyGroup')!;
+    ag.setRallyPoint(0, 0);
+
+    // Add 8 zerglings
+    for (let i = 0; i < 8; i++) {
+      const z = world.createEntity();
+      z.addComponent(new Unit('zergling', 35, 35, 1));
+      z.addComponent(new Position(i * 0.5, 0, 0));
+      z.addComponent(new Combat(5, 1, 1, 1));
+      z.addComponent(new Health(35, 35));
+      ag.addUnit(z.id);
+    }
+
+    // Enemy nearby
+    const enemy = world.createEntity();
+    enemy.addComponent(new Unit('marine', 40, 40, 0));
+    enemy.addComponent(new Position(5, 0, 0));
+    enemy.addComponent(new Health(40, 40));
+
+    world.update(1);
+
+    expect(ag.mode).toBe('attack');
+  });
+
+  it('Protoss: high-value units do not get retreat MoveTarget during retreat', () => {
+    const groupEntity = world.createEntity();
+    groupEntity.addComponent(new ArmyGroup(2)); // Protoss
+    groupEntity.addComponent(new StrategyState('timing'));
+    groupEntity.addComponent(new Position(0, 0, 0));
+
+    const ag = groupEntity.getComponent<ArmyGroup>('ArmyGroup')!;
+    ag.setRallyPoint(0, 0);
+
+    // Zealot (low HP, not high-value)
+    const zealot = world.createEntity();
+    zealot.addComponent(new Unit('zealot', 100, 100, 2));
+    zealot.addComponent(new Position(0, 0, 0));
+    zealot.addComponent(new Health(10, 100));
+    zealot.addComponent(new Combat(8, 1, 1, 2));
+    zealot.addComponent(new MoveTarget(0, 0, 0));
+    ag.addUnit(zealot.id);
+
+    // High Templar (high-value, should not retreat first)
+    const templar = world.createEntity();
+    templar.addComponent(new Unit('high_templar', 40, 40, 2));
+    templar.addComponent(new Position(0, 0, 0));
+    templar.addComponent(new Health(40, 40));
+    templar.addComponent(new Combat(0, 0, 7, 1));
+    templar.addComponent(new MoveTarget(0, 0, 0));
+    ag.addUnit(templar.id);
+
+    // Enemy triggers retreat
+    const enemy = world.createEntity();
+    enemy.addComponent(new Unit('marine', 40, 40, 0));
+    enemy.addComponent(new Position(1, 0, 0));
+    enemy.addComponent(new Health(40, 40));
+
+    world.update(1);
+
+    // zealot should have retreat target
+    expect(zealot.hasComponent('MoveTarget')).toBe(true);
+    // high templar: MoveTarget stays at original position (not cleared by retreat)
+    expect(templar.hasComponent('MoveTarget')).toBe(true);
+  });
+
+  it('Terran: retreats toward nearest building instead of rally point', () => {
+    const groupEntity = world.createEntity();
+    groupEntity.addComponent(new ArmyGroup(3)); // Terran
+    groupEntity.addComponent(new StrategyState('timing'));
+    groupEntity.addComponent(new Position(0, 0, 0));
+
+    const ag = groupEntity.getComponent<ArmyGroup>('ArmyGroup')!;
+    ag.setRallyPoint(100, 100); // far rally point
+
+    const marine = world.createEntity();
+    marine.addComponent(new Unit('marine', 40, 40, 3));
+    marine.addComponent(new Position(10, 0, 0));
+    marine.addComponent(new Health(10, 40)); // low HP → retreat
+    marine.addComponent(new Combat(6, 0, 4, 1));
+    ag.addUnit(marine.id);
+
+    // Building near marine (x=5), closer than rally (x=100)
+    const building = world.createEntity();
+    building.addComponent(new Building('barracks', false, 1));
+    building.addComponent(new Position(5, 0, 0));
+
+    const enemy = world.createEntity();
+    enemy.addComponent(new Unit('zergling', 35, 35, 0));
+    enemy.addComponent(new Position(6, 0, 0));
+    enemy.addComponent(new Health(35, 35));
+
+    world.update(1);
+
+    // Marine should retreat toward building (near x=5), not rally (x=100)
+    const marineMove = marine.getComponent<MoveTarget>('MoveTarget')!;
+    expect(marineMove.x).toBeCloseTo(5, 0);
   });
 });
