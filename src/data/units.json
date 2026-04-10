@@ -39,6 +39,16 @@
     "siegeSpeed": 0.5,
     "cost": { "minerals": 125, "supply": 3 }
   },
+  "medic": {
+    "name": "Medic",
+    "health": 60,
+    "maxHealth": 60,
+    "attack": 0,
+    "armor": 0,
+    "range": 0,
+    "speed": 2.0,
+    "cost": { "minerals": 75, "supply": 1 }
+  },
   "drone": {
     "name": "Drone",
     "health": 40,

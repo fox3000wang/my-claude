@@ -63,6 +63,17 @@ describe('EconomicSystem', () => {
     expect((system as unknown as { pendingSupplyBuilding: Set<number> }).pendingSupplyBuilding.has(2)).toBe(true);
   });
 
+  it('Terran: sets pendingSupplyBuilding flag when supply buffer exhausted', () => {
+    makeBuilding(world, 'command_center', 3, 0, 0, true);
+    const p3 = new PlayerResources(1000, 0, 10);
+    system.setResourcesForOwner(3, p3);
+    p3.useSupply(8);
+
+    world.update(5);
+
+    expect((system as unknown as { pendingSupplyBuilding: Set<number> }).pendingSupplyBuilding.has(3)).toBe(true);
+  });
+
   it('sets pendingProductionBuilding when no production buildings exist', () => {
     makeBuilding(world, 'nexus', 1, 0, 0, false); // only base, no production
 

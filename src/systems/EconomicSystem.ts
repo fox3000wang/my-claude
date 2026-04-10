@@ -44,6 +44,16 @@ const RACE_CONFIG: Record<number, RaceConfig> = {
       { unit: 'dark_templar', ratio: 0.10 },
     ],
   },
+  3: { // Terran
+    supplyBuilding: { type: 'build', unitOrBuilding: 'supply_depot' },
+    productionBuilding: 'barracks',
+    worker: 'scv',
+    armyRatios: [
+      { unit: 'marine', ratio: 0.50 },
+      { unit: 'tank',   ratio: 0.30 },
+      { unit: 'medic',  ratio: 0.20 },
+    ],
+  },
 };
 
 // ---------------------------------------------------------------------------
@@ -120,7 +130,7 @@ export class EconomicSystem extends System {
     }
   }
 
-  private supplyBuildingInProgress(_ownerId: number, config: RaceConfig): boolean {
+  private supplyBuildingInProgress(ownerId: number, config: RaceConfig): boolean {
     if (config.supplyBuilding.type === 'train') {
       // Zerg: check if any Hatchery's TrainQueue already contains the supply unit
       const hatcheries = this.world!.getEntitiesWithComponents('Building', 'TrainQueue');
@@ -135,11 +145,15 @@ export class EconomicSystem extends System {
       }
       return false;
     } else {
-      // Protoss: check if any Building entity has buildingType === pylon && isConstructing === true
+      // Protoss/Terran: check if any Building entity has buildingType === pylon/supply_depot && isConstructing === true
       const buildings = this.world!.getEntitiesWithComponents('Building');
       for (const entity of buildings) {
         const building = entity.getComponent<Building>('Building')!;
-        if (building.buildingType === config.supplyBuilding.unitOrBuilding && building.isConstructing) {
+        if (
+          building.ownerId === ownerId &&
+          building.buildingType === config.supplyBuilding.unitOrBuilding &&
+          building.isConstructing
+        ) {
           return true;
         }
       }

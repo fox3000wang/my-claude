@@ -24,12 +24,15 @@ import { ResourceSystem } from './systems/ResourceSystem';
 import { ResearchSystem } from './systems/ResearchSystem';
 import { EconomicSystem } from './systems/EconomicSystem';
 import { PathfindingSystem } from './systems/PathfindingSystem';
+import { StrategySystem } from './systems/StrategySystem';
 import { Grid } from './utils/grid';
 import { Selected } from './components/Selected';
 import { PlayerResources } from './components/PlayerResources';
 import { ResourceCarrier } from './components/ResourceCarrier';
 import { Combat } from './components/Combat';
 import { Shield } from './components/Shield';
+import { ArmyGroup } from './components/ArmyGroup';
+import { StrategyState } from './components/StrategyState';
 
 export class Game {
   readonly world: World;
@@ -46,6 +49,7 @@ export class Game {
   private playerResources!: PlayerResources;
   private aiResources: Record<number, PlayerResources> = {};
   private economicSystem!: EconomicSystem;
+  private strategySystem!: StrategySystem;
   private grid!: Grid;
   private animationId: number | null = null;
   private lastTime = 0;
@@ -114,15 +118,21 @@ export class Game {
     this.aiResources = {
       1: new PlayerResources(500), // Zerg AI
       2: new PlayerResources(500), // Protoss AI
+      3: new PlayerResources(500), // Terran AI
     };
     this.economicSystem = new EconomicSystem();
     this.economicSystem.setResourcesForOwner(1, this.aiResources[1]);
     this.economicSystem.setResourcesForOwner(2, this.aiResources[2]);
+    this.economicSystem.setResourcesForOwner(3, this.aiResources[3]);
     this.buildSystem.setResourcesForOwner(1, this.aiResources[1]);
     this.buildSystem.setResourcesForOwner(2, this.aiResources[2]);
+    this.buildSystem.setResourcesForOwner(3, this.aiResources[3]);
     this.trainingSystem.setResourcesForOwner(1, this.aiResources[1]);
     this.trainingSystem.setResourcesForOwner(2, this.aiResources[2]);
+    this.trainingSystem.setResourcesForOwner(3, this.aiResources[3]);
     this.world.addSystem(this.economicSystem);
+    this.strategySystem = new StrategySystem();
+    this.world.addSystem(this.strategySystem);
 
     // 初始化测试场景
     this.initTestScene();
@@ -182,6 +192,16 @@ export class Game {
     zealot.addComponent(new Unit('zealot', 100, 100, 2));
     zealot.addComponent(new Combat(8, 1, 1, 2.0));
     zealot.addComponent(new Shield(50, 50));
+
+    // Zerg AI ArmyGroup + StrategyState (ownerId = 1)
+    const zergArmy = this.world.createEntity();
+    zergArmy.addComponent(new ArmyGroup(1));
+    zergArmy.addComponent(new StrategyState('rush'));
+
+    // Protoss AI ArmyGroup + StrategyState (ownerId = 2)
+    const protossArmy = this.world.createEntity();
+    protossArmy.addComponent(new ArmyGroup(2));
+    protossArmy.addComponent(new StrategyState('rush'));
 
     // 注册到渲染层
     this.entityRenderer.registerWorld(this.world);

@@ -1,6 +1,6 @@
 import { Component } from '../core/ecs/Component';
 
-export type UnitType = 'scv' | 'marine' | 'firebat' | 'tank'
+export type UnitType = 'scv' | 'marine' | 'firebat' | 'tank' | 'medic'
   | 'drone' | 'zergling' | 'hydralisk' | 'mutalisk' | 'overlord'
   | 'probe' | 'zealot' | 'dragoon' | 'high_templar' | 'dark_templar' | 'scout';
 
