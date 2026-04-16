@@ -1,0 +1,795 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 55;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		01EE2D3A1673FADF223FEB71 /* GatewayEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5402BF00066072A76C64A703 /* GatewayEndpoint.swift */; };
+		05EA5C4C3970CAF6B1FF72BA /* GatewayClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = F14F8F39A987085932401405 /* GatewayClient.swift */; };
+		1657AC4753753252A9F7CFB2 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9C6E0E853402A7595BB5126 /* HomeViewModel.swift */; };
+		1B3BE185DB3DF66AE7A5B86F /* NodeStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A9A7B53E024676A46761F17 /* NodeStatus.swift */; };
+		3C521E21215A157368A0E0CD /* GatewayMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC467285837E5BFFF8C3DB61 /* GatewayMessage.swift */; };
+		40A1C9B1F122710DC12B410D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B50CE7A77F4ABF056942EE1 /* Foundation.framework */; };
+		43CC76335C0F1CE7D96C85D9 /* PairingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62A3708052E3C30488EBDDD6 /* PairingService.swift */; };
+		46F0950B146AF52B959A8C03 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41F63552F0E6C86E2C0C7F24 /* AppDelegate.swift */; };
+		4F94417F03C01438EA8BEDED /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7141549DB8549F508BDA2C4C /* Constants.swift */; };
+		59B6A075593D5724105EEF74 /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC49761A9425B0895EC98082 /* SettingsViewModel.swift */; };
+		5D4AFB36D13D533787D547B8 /* DiscoveryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0229B34EE2FC3BCF20B1BD20 /* DiscoveryView.swift */; };
+		62CD0F1FD19F15084CE84783 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 722F68BE3C425A20F5CDA7CC /* SettingsView.swift */; };
+		633604E26961CFB433F89C7C /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7F77F859D7075E6F26194F9 /* Logger.swift */; };
+		6FEEC5AEEF313A58F188488C /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B02DA27DEB26A2FE6F98C271 /* HomeView.swift */; };
+		85C48968D14EEAD34A337C27 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B6492FDA273DB305B555C9 /* Extensions.swift */; };
+		8D3266A327723400FEE06B0F /* CameraCapability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F1EDE8D351D129F787606C5 /* CameraCapability.swift */; };
+		8E4F530E995B00B97BBD89AD /* NodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCCF81134143EE2243DB47E1 /* NodeView.swift */; };
+		959D0C975766445E8B25AD85 /* KeychainService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C7B6F31C4DEE1B6935839CA /* KeychainService.swift */; };
+		98035B85E414D830C7092C09 /* NodeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C80382B537E9B27C455007A /* NodeViewModel.swift */; };
+		A0AC30BEA7542C8C45841729 /* CryptoService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A38011C62EC74C30637A8C04 /* CryptoService.swift */; };
+		A34193C58B153705830E7C84 /* CanvasView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC437C18CA1EF6D2C0BD4A97 /* CanvasView.swift */; };
+		AC4F0E522C74A3EF023458BE /* LocationCapability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78E7B4EA48A816C2FB3AFB11 /* LocationCapability.swift */; };
+		B1979B38743FC578FCFDE0F4 /* PairingInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ACC9D3EEA02F7341F4BE126 /* PairingInfo.swift */; };
+		B2063FF9FA16FC23194E4715 /* DiscoveryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB194A18A681BD7252674E80 /* DiscoveryViewModel.swift */; };
+		BF0785A303C09D3D35A11314 /* CanvasCapability.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4A1EFF94081C85EC0831F37 /* CanvasCapability.swift */; };
+		BF92DAEC40B61A91B2DFDBC9 /* PairingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC58DA1E9E67C4D2D9827EBC /* PairingViewModel.swift */; };
+		C6249C61292B2F935710071F /* PairingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7007F7BC91F793E986DC35D1 /* PairingView.swift */; };
+		CF1549EF750BE5BEB541011F /* CanvasViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF88B76EA88A734D4B99BEC2 /* CanvasViewModel.swift */; };
+		DA44D71C1A51234580202933 /* NodeSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EDCA74483C02DDA76DF1EA9 /* NodeSession.swift */; };
+		DCCB1857DDB6A46066C1FDB4 /* MyClawApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DC11404D0A1C1EA5CF700C3 /* MyClawApp.swift */; };
+		E3C6E95C788F02E62457F6E5 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9FD94D3551E5AA6ADB41D04 /* ContentView.swift */; };
+		E46038F52DB345AD23824652 /* DiscoveryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD227E30E5488A733DCB55F4 /* DiscoveryService.swift */; };
+		E498171B1976B390A3110D21 /* Capability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41DC5871CB24936EBD8DA5A4 /* Capability.swift */; };
+		E64522FC6763F0F128F27AEC /* ScreenCapability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23AABD9E816679D33F1929D5 /* ScreenCapability.swift */; };
+		F51EB61AB00A1C9104E4DA08 /* CanvasViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC2E761261D35F553A988B5C /* CanvasViewController.swift */; };
+		F98D9AA220472B0CF2764CDC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 81D68F2964667455F22795D3 /* Assets.xcassets */; };
+
+/* Begin PBXBuildFile section */
+		AA0000010000000100000001 /* CryptoServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000010000000100000002 /* CryptoServiceTests.swift */; };
+		AA0000010000000100000003 /* GatewayClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000010000000100000004 /* GatewayClientTests.swift */; };
+		AA0000010000000100000005 /* KeychainServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000010000000100000006 /* KeychainServiceTests.swift */; };
+		AA0000010000000100000007 /* PairingServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000010000000100000008 /* PairingServiceTests.swift */; };
+		AA0000010000000100000009 /* MyClawUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000001000000010000000A /* MyClawUITests.swift */; };
+/* End PBXBuildFile section *//* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		0229B34EE2FC3BCF20B1BD20 /* DiscoveryView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = DiscoveryView.swift; path = Features/Discovery/DiscoveryView.swift; sourceTree = "<group>"; };
+		0E04DBAB810D86E10B58CD56 /* GatewayClient.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = GatewayClient.swift; path = ../../Users/fox/workspace/myclaw/MyClaw/Core/Services/GatewayClient.swift; sourceTree = "<group>"; };
+		111CBB8860ACAA661E06D2E0 /* CanvasViewModel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CanvasViewModel.swift; path = ../../Users/fox/workspace/myclaw/MyClaw/Features/Canvas/CanvasViewModel.swift; sourceTree = "<group>"; };
+		1B50CE7A77F4ABF056942EE1 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS18.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		1E4A5BF8E7840F0E879FD6D1 /* MyClaw.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyClaw.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		20DFB3FEE5420BF9D8971591 /* SettingsView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SettingsView.swift; path = ../../Users/fox/workspace/myclaw/MyClaw/Features/Settings/SettingsView.swift; sourceTree = "<group>"; };
+		23AABD9E816679D33F1929D5 /* ScreenCapability.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ScreenCapability.swift; path = Core/Node/Capabilities/ScreenCapability.swift; sourceTree = "<group>"; };
+		27B7F21C7A2C19485CD27C0C /* CryptoService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CryptoService.swift; path = ../../Users/fox/workspace/myclaw/MyClaw/Core/Services/CryptoService.swift; sourceTree = "<group>"; };
+		290C7A02526B32EBCBF6561E /* Capability.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Capability.swift; path = ../../Users/fox/workspace/myclaw/MyClaw/Core/Models/Capability.swift; sourceTree = "<group>"; };
+		343C685E46262AFFE40C61BF /* PairingInfo.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PairingInfo.swift; path = ../../Users/fox/workspace/myclaw/MyClaw/Core/Models/PairingInfo.swift; sourceTree = "<group>"; };
+		3A247755D363E75A1C95082A /* DiscoveryService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = DiscoveryService.swift; path = ../../Users/fox/workspace/myclaw/MyClaw/Core/Services/DiscoveryService.swift; sourceTree = "<group>"; };
+		3A815D4A7131FAB911FBD532 /* PairingView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PairingView.swift; path = ../../Users/fox/workspace/myclaw/MyClaw/Features/Pairing/PairingView.swift; sourceTree = "<group>"; };
+		41DC5871CB24936EBD8DA5A4 /* Capability.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Capability.swift; path = Core/Models/Capability.swift; sourceTree = "<group>"; };
+		41F63552F0E6C86E2C0C7F24 /* AppDelegate.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = App/AppDelegate.swift; sourceTree = "<group>"; };
+		4CB508FBAB663DAA67752BE6 /* HomeViewModel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = HomeViewModel.swift; path = ../../Users/fox/workspace/myclaw/MyClaw/Features/Home/HomeViewModel.swift; sourceTree = "<group>"; };
+		4F1EDE8D351D129F787606C5 /* CameraCapability.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CameraCapability.swift; path = Core/Node/Capabilities/CameraCapability.swift; sourceTree = "<group>"; };
+		4F536DF14C0354F48684FAE5 /* MyClawApp.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = MyClawApp.swift; path = ../../Users/fox/workspace/myclaw/MyClaw/App/MyClawApp.swift; sourceTree = "<group>"; };
+		5402BF00066072A76C64A703 /* GatewayEndpoint.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = GatewayEndpoint.swift; path = Core/Models/GatewayEndpoint.swift; sourceTree = "<group>"; };
+		5839C847C4B58D3304BA388F /* NodeStatus.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = NodeStatus.swift; path = ../../Users/fox/workspace/myclaw/MyClaw/Core/Models/NodeStatus.swift; sourceTree = "<group>"; };
+		594E80E5413A8F8C6B3E359E /* PairingViewModel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PairingViewModel.swift; path = ../../Users/fox/workspace/myclaw/MyClaw/Features/Pairing/PairingViewModel.swift; sourceTree = "<group>"; };
+		5A9A7B53E024676A46761F17 /* NodeStatus.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = NodeStatus.swift; path = Core/Models/NodeStatus.swift; sourceTree = "<group>"; };
+		5CDCA6260685AFCA0EB48AC3 /* NodeViewModel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = NodeViewModel.swift; path = ../../Users/fox/workspace/myclaw/MyClaw/Features/Node/NodeViewModel.swift; sourceTree = "<group>"; };
+		5D21C7867F5DB0CF0EFEF72E /* Extensions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Extensions.swift; path = ../../Users/fox/workspace/myclaw/MyClaw/Core/Utilities/Extensions.swift; sourceTree = "<group>"; };
+		60D327909C913AC9376C6B13 /* KeychainService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = KeychainService.swift; path = ../../Users/fox/workspace/myclaw/MyClaw/Core/Services/KeychainService.swift; sourceTree = "<group>"; };
+		62A3708052E3C30488EBDDD6 /* PairingService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PairingService.swift; path = Core/Services/PairingService.swift; sourceTree = "<group>"; };
+		6C7B6F31C4DEE1B6935839CA /* KeychainService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = KeychainService.swift; path = Core/Services/KeychainService.swift; sourceTree = "<group>"; };
+		6C80382B537E9B27C455007A /* NodeViewModel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = NodeViewModel.swift; path = Features/Node/NodeViewModel.swift; sourceTree = "<group>"; };
+		6EDCA74483C02DDA76DF1EA9 /* NodeSession.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = NodeSession.swift; path = Core/Node/NodeSession.swift; sourceTree = "<group>"; };
+		7007F7BC91F793E986DC35D1 /* PairingView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PairingView.swift; path = Features/Pairing/PairingView.swift; sourceTree = "<group>"; };
+		7141549DB8549F508BDA2C4C /* Constants.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Constants.swift; path = Core/Utilities/Constants.swift; sourceTree = "<group>"; };
+		722F68BE3C425A20F5CDA7CC /* SettingsView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SettingsView.swift; path = Features/Settings/SettingsView.swift; sourceTree = "<group>"; };
+		76B6492FDA273DB305B555C9 /* Extensions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Extensions.swift; path = Core/Utilities/Extensions.swift; sourceTree = "<group>"; };
+		78E7B4EA48A816C2FB3AFB11 /* LocationCapability.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = LocationCapability.swift; path = Core/Node/Capabilities/LocationCapability.swift; sourceTree = "<group>"; };
+		7ACC9D3EEA02F7341F4BE126 /* PairingInfo.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PairingInfo.swift; path = Core/Models/PairingInfo.swift; sourceTree = "<group>"; };
+		81D68F2964667455F22795D3 /* Assets.xcassets */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = Resources/Assets.xcassets; sourceTree = "<group>"; };
+		858041B57D6DD21F98C37A50 /* Logger.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Logger.swift; path = ../../Users/fox/workspace/myclaw/MyClaw/Core/Utilities/Logger.swift; sourceTree = "<group>"; };
+		909DB0F5684DC6FE1994C017 /* ContentView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ContentView.swift; path = ../../Users/fox/workspace/myclaw/MyClaw/App/ContentView.swift; sourceTree = "<group>"; };
+		92A1187495F0A27EE7446EE1 /* CanvasCapability.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CanvasCapability.swift; path = ../../Users/fox/workspace/myclaw/MyClaw/Core/Node/Capabilities/CanvasCapability.swift; sourceTree = "<group>"; };
+		98DCD1972CDF4489E25A9762 /* Assets.xcassets */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = ../../Users/fox/workspace/myclaw/MyClaw/Assets.xcassets; sourceTree = "<group>"; };
+		9D297247E32FCCB4D9E9B44E /* DiscoveryViewModel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = DiscoveryViewModel.swift; path = ../../Users/fox/workspace/myclaw/MyClaw/Features/Discovery/DiscoveryViewModel.swift; sourceTree = "<group>"; };
+		9DC11404D0A1C1EA5CF700C3 /* MyClawApp.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = MyClawApp.swift; path = App/MyClawApp.swift; sourceTree = "<group>"; };
+		9F73A2D8792E1CD3CFBF59A3 /* AppDelegate.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = ../../Users/fox/workspace/myclaw/MyClaw/App/AppDelegate.swift; sourceTree = "<group>"; };
+		A38011C62EC74C30637A8C04 /* CryptoService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CryptoService.swift; path = Core/Services/CryptoService.swift; sourceTree = "<group>"; };
+		AC49761A9425B0895EC98082 /* SettingsViewModel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SettingsViewModel.swift; path = Features/Settings/SettingsViewModel.swift; sourceTree = "<group>"; };
+		AFC3038A1D5FDEBA95997253 /* NodeSession.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = NodeSession.swift; path = ../../Users/fox/workspace/myclaw/MyClaw/Core/Node/NodeSession.swift; sourceTree = "<group>"; };
+		B02DA27DEB26A2FE6F98C271 /* HomeView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = HomeView.swift; path = Features/Home/HomeView.swift; sourceTree = "<group>"; };
+		B6A1137AA2FE0D8AB6E48ECD /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; name = Info.plist; path = ../../Users/fox/workspace/myclaw/MyClaw/Resources/Info.plist; sourceTree = "<group>"; };
+		B8A1360796169C5FBC668AE7 /* GatewayEndpoint.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = GatewayEndpoint.swift; path = ../../Users/fox/workspace/myclaw/MyClaw/Core/Models/GatewayEndpoint.swift; sourceTree = "<group>"; };
+		BBAA77ECFB6A79E82ED2B720 /* HomeView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = HomeView.swift; path = ../../Users/fox/workspace/myclaw/MyClaw/Features/Home/HomeView.swift; sourceTree = "<group>"; };
+		BC437C18CA1EF6D2C0BD4A97 /* CanvasView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CanvasView.swift; path = Features/Canvas/CanvasView.swift; sourceTree = "<group>"; };
+		BD227E30E5488A733DCB55F4 /* DiscoveryService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = DiscoveryService.swift; path = Core/Services/DiscoveryService.swift; sourceTree = "<group>"; };
+		C01D5BC0FAD60127035B97C6 /* LocationCapability.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = LocationCapability.swift; path = ../../Users/fox/workspace/myclaw/MyClaw/Core/Node/Capabilities/LocationCapability.swift; sourceTree = "<group>"; };
+		C9D3E44254B8D9FE30870837 /* NodeView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = NodeView.swift; path = ../../Users/fox/workspace/myclaw/MyClaw/Features/Node/NodeView.swift; sourceTree = "<group>"; };
+		CA15BDCAF64744AE3014C333 /* DiscoveryView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = DiscoveryView.swift; path = ../../Users/fox/workspace/myclaw/MyClaw/Features/Discovery/DiscoveryView.swift; sourceTree = "<group>"; };
+		D4A1EFF94081C85EC0831F37 /* CanvasCapability.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CanvasCapability.swift; path = Core/Node/Capabilities/CanvasCapability.swift; sourceTree = "<group>"; };
+		D5C8DCC5ADBEE1D950A15CB8 /* GatewayMessage.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = GatewayMessage.swift; path = ../../Users/fox/workspace/myclaw/MyClaw/Core/Models/GatewayMessage.swift; sourceTree = "<group>"; };
+		D931A64D6B73ACE08C5B1B8C /* Constants.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Constants.swift; path = ../../Users/fox/workspace/myclaw/MyClaw/Core/Utilities/Constants.swift; sourceTree = "<group>"; };
+		D9C6E0E853402A7595BB5126 /* HomeViewModel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = HomeViewModel.swift; path = Features/Home/HomeViewModel.swift; sourceTree = "<group>"; };
+		DA287F9BCEBF88E0394635B5 /* PairingService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PairingService.swift; path = ../../Users/fox/workspace/myclaw/MyClaw/Core/Services/PairingService.swift; sourceTree = "<group>"; };
+		DB194A18A681BD7252674E80 /* DiscoveryViewModel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = DiscoveryViewModel.swift; path = Features/Discovery/DiscoveryViewModel.swift; sourceTree = "<group>"; };
+		DC467285837E5BFFF8C3DB61 /* GatewayMessage.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = GatewayMessage.swift; path = Core/Models/GatewayMessage.swift; sourceTree = "<group>"; };
+		DC492956E0929C2BA64B0C3F /* CanvasViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CanvasViewController.swift; path = ../../Users/fox/workspace/myclaw/MyClaw/Features/Canvas/CanvasViewController.swift; sourceTree = "<group>"; };
+		DF88B76EA88A734D4B99BEC2 /* CanvasViewModel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CanvasViewModel.swift; path = Features/Canvas/CanvasViewModel.swift; sourceTree = "<group>"; };
+		E7F77F859D7075E6F26194F9 /* Logger.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Logger.swift; path = Core/Utilities/Logger.swift; sourceTree = "<group>"; };
+		E9FD94D3551E5AA6ADB41D04 /* ContentView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ContentView.swift; path = App/ContentView.swift; sourceTree = "<group>"; };
+		EC2E761261D35F553A988B5C /* CanvasViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CanvasViewController.swift; path = Features/Canvas/CanvasViewController.swift; sourceTree = "<group>"; };
+		EC3E64BB9D1F55B693DFC430 /* ScreenCapability.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ScreenCapability.swift; path = ../../Users/fox/workspace/myclaw/MyClaw/Core/Node/Capabilities/ScreenCapability.swift; sourceTree = "<group>"; };
+		EC58DA1E9E67C4D2D9827EBC /* PairingViewModel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PairingViewModel.swift; path = Features/Pairing/PairingViewModel.swift; sourceTree = "<group>"; };
+		ED964060C26D92D56A5CE3D4 /* CameraCapability.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CameraCapability.swift; path = ../../Users/fox/workspace/myclaw/MyClaw/Core/Node/Capabilities/CameraCapability.swift; sourceTree = "<group>"; };
+		F14F8F39A987085932401405 /* GatewayClient.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = GatewayClient.swift; path = Core/Services/GatewayClient.swift; sourceTree = "<group>"; };
+		F6A5329A435CD9B3F6763C7A /* SettingsViewModel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SettingsViewModel.swift; path = ../../Users/fox/workspace/myclaw/MyClaw/Features/Settings/SettingsViewModel.swift; sourceTree = "<group>"; };
+		FA2223503115A3DE48606FBA /* CanvasView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CanvasView.swift; path = ../../Users/fox/workspace/myclaw/MyClaw/Features/Canvas/CanvasView.swift; sourceTree = "<group>"; };
+		FCCF81134143EE2243DB47E1 /* NodeView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = NodeView.swift; path = Features/Node/NodeView.swift; sourceTree = "<group>"; };
+
+		AA0000010000000100000002 /* CryptoServiceTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CryptoServiceTests.swift; path = Tests/Unit/CryptoServiceTests.swift; sourceTree = "<group>"; };
+		AA0000010000000100000004 /* GatewayClientTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = GatewayClientTests.swift; path = Tests/Unit/GatewayClientTests.swift; sourceTree = "<group>"; };
+		AA0000010000000100000006 /* KeychainServiceTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = KeychainServiceTests.swift; path = Tests/Unit/KeychainServiceTests.swift; sourceTree = "<group>"; };
+		AA0000010000000100000008 /* PairingServiceTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PairingServiceTests.swift; path = Tests/Unit/PairingServiceTests.swift; sourceTree = "<group>"; };
+		AA000001000000010000000A /* MyClawUITests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = MyClawUITests.swift; path = Tests/UI/MyClawUITests.swift; sourceTree = "<group>"; };
+		AA000001000000010000000B /* MyClawTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MyClawTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section *//* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		A4BE816DD040ED783CC9CC36 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				40A1C9B1F122710DC12B410D /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+
+/* Begin PBXFrameworksBuildPhase section */
+		AA000001000000010000000F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section *//* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		1381CB652049F2D1693B1221 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				290C7A02526B32EBCBF6561E /* Capability.swift */,
+				B8A1360796169C5FBC668AE7 /* GatewayEndpoint.swift */,
+				5839C847C4B58D3304BA388F /* NodeStatus.swift */,
+				D5C8DCC5ADBEE1D950A15CB8 /* GatewayMessage.swift */,
+				343C685E46262AFFE40C61BF /* PairingInfo.swift */,
+			);
+			name = Models;
+			sourceTree = "<group>";
+		};
+		13B5E33E5A944A48C72A68ED /* Node */ = {
+			isa = PBXGroup;
+			children = (
+				5CDCA6260685AFCA0EB48AC3 /* NodeViewModel.swift */,
+				C9D3E44254B8D9FE30870837 /* NodeView.swift */,
+			);
+			name = Node;
+			sourceTree = "<group>";
+		};
+		24D2CB6504572F1B8C8B176B /* Canvas */ = {
+			isa = PBXGroup;
+			children = (
+				FA2223503115A3DE48606FBA /* CanvasView.swift */,
+				111CBB8860ACAA661E06D2E0 /* CanvasViewModel.swift */,
+				DC492956E0929C2BA64B0C3F /* CanvasViewController.swift */,
+			);
+			name = Canvas;
+			sourceTree = "<group>";
+		};
+		293B559BE9F8F947833E3331 /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				4CB508FBAB663DAA67752BE6 /* HomeViewModel.swift */,
+				BBAA77ECFB6A79E82ED2B720 /* HomeView.swift */,
+			);
+			name = Home;
+			sourceTree = "<group>";
+		};
+		305A78FB00D5C52CC7BA6BC9 /* MyClaw */ = {
+			isa = PBXGroup;
+			children = (
+				41F63552F0E6C86E2C0C7F24 /* AppDelegate.swift */,
+				E9FD94D3551E5AA6ADB41D04 /* ContentView.swift */,
+				9DC11404D0A1C1EA5CF700C3 /* MyClawApp.swift */,
+				41DC5871CB24936EBD8DA5A4 /* Capability.swift */,
+				5402BF00066072A76C64A703 /* GatewayEndpoint.swift */,
+				DC467285837E5BFFF8C3DB61 /* GatewayMessage.swift */,
+				5A9A7B53E024676A46761F17 /* NodeStatus.swift */,
+				7ACC9D3EEA02F7341F4BE126 /* PairingInfo.swift */,
+				6EDCA74483C02DDA76DF1EA9 /* NodeSession.swift */,
+				4F1EDE8D351D129F787606C5 /* CameraCapability.swift */,
+				D4A1EFF94081C85EC0831F37 /* CanvasCapability.swift */,
+				78E7B4EA48A816C2FB3AFB11 /* LocationCapability.swift */,
+				23AABD9E816679D33F1929D5 /* ScreenCapability.swift */,
+				A38011C62EC74C30637A8C04 /* CryptoService.swift */,
+				BD227E30E5488A733DCB55F4 /* DiscoveryService.swift */,
+				F14F8F39A987085932401405 /* GatewayClient.swift */,
+				6C7B6F31C4DEE1B6935839CA /* KeychainService.swift */,
+				62A3708052E3C30488EBDDD6 /* PairingService.swift */,
+				7141549DB8549F508BDA2C4C /* Constants.swift */,
+				76B6492FDA273DB305B555C9 /* Extensions.swift */,
+				E7F77F859D7075E6F26194F9 /* Logger.swift */,
+				BC437C18CA1EF6D2C0BD4A97 /* CanvasView.swift */,
+				EC2E761261D35F553A988B5C /* CanvasViewController.swift */,
+				DF88B76EA88A734D4B99BEC2 /* CanvasViewModel.swift */,
+				0229B34EE2FC3BCF20B1BD20 /* DiscoveryView.swift */,
+				DB194A18A681BD7252674E80 /* DiscoveryViewModel.swift */,
+				B02DA27DEB26A2FE6F98C271 /* HomeView.swift */,
+				D9C6E0E853402A7595BB5126 /* HomeViewModel.swift */,
+				FCCF81134143EE2243DB47E1 /* NodeView.swift */,
+				6C80382B537E9B27C455007A /* NodeViewModel.swift */,
+				7007F7BC91F793E986DC35D1 /* PairingView.swift */,
+				EC58DA1E9E67C4D2D9827EBC /* PairingViewModel.swift */,
+				722F68BE3C425A20F5CDA7CC /* SettingsView.swift */,
+				AC49761A9425B0895EC98082 /* SettingsViewModel.swift */,
+				81D68F2964667455F22795D3 /* Assets.xcassets */,
+			);
+			name = MyClaw;
+			sourceTree = "<group>";
+		};
+		62696254131947BD2AAB3B60 = {
+			isa = PBXGroup;
+			children = (
+				C10C0C5D21A371DB62712343 /* Products */,
+				BDEEFF05265DC8F51A484183 /* Frameworks */,
+				8298162FD4E873096A02C225 /* Core */,
+				F6337B35E135BFB33E7D8EA6 /* App */,
+				F96AAAF81301C32C9B8FFB70 /* Features */,
+				E0F8504EB8D1B40A9AD72BCD /* Resources */,
+				98DCD1972CDF4489E25A9762 /* Assets.xcassets */,
+				305A78FB00D5C52CC7BA6BC9 /* MyClaw */,
+			);
+			sourceTree = "<group>";
+		};
+		64B9D8912031F25B113B48CB /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				3A247755D363E75A1C95082A /* DiscoveryService.swift */,
+				60D327909C913AC9376C6B13 /* KeychainService.swift */,
+				0E04DBAB810D86E10B58CD56 /* GatewayClient.swift */,
+				DA287F9BCEBF88E0394635B5 /* PairingService.swift */,
+				27B7F21C7A2C19485CD27C0C /* CryptoService.swift */,
+			);
+			name = Services;
+			sourceTree = "<group>";
+		};
+		6A600FCA0D75D6A750447606 /* Node */ = {
+			isa = PBXGroup;
+			children = (
+				8C9E6A78E9D1DF09C47DA0A0 /* Capabilities */,
+				AFC3038A1D5FDEBA95997253 /* NodeSession.swift */,
+			);
+			name = Node;
+			sourceTree = "<group>";
+		};
+		8298162FD4E873096A02C225 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				1381CB652049F2D1693B1221 /* Models */,
+				CDC15FF3BAD97C30C7D2DE3C /* Utilities */,
+				6A600FCA0D75D6A750447606 /* Node */,
+				64B9D8912031F25B113B48CB /* Services */,
+			);
+			name = Core;
+			sourceTree = "<group>";
+		};
+		8C9E6A78E9D1DF09C47DA0A0 /* Capabilities */ = {
+			isa = PBXGroup;
+			children = (
+				92A1187495F0A27EE7446EE1 /* CanvasCapability.swift */,
+				ED964060C26D92D56A5CE3D4 /* CameraCapability.swift */,
+				C01D5BC0FAD60127035B97C6 /* LocationCapability.swift */,
+				EC3E64BB9D1F55B693DFC430 /* ScreenCapability.swift */,
+			);
+			name = Capabilities;
+			sourceTree = "<group>";
+		};
+		8D126B5EA07571A439355D0F /* Discovery */ = {
+			isa = PBXGroup;
+			children = (
+				9D297247E32FCCB4D9E9B44E /* DiscoveryViewModel.swift */,
+				CA15BDCAF64744AE3014C333 /* DiscoveryView.swift */,
+			);
+			name = Discovery;
+			sourceTree = "<group>";
+		};
+		BDEEFF05265DC8F51A484183 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				FAA7F4804F3296010DF3D9FC /* iOS */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		C10C0C5D21A371DB62712343 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				1E4A5BF8E7840F0E879FD6D1 /* MyClaw.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		CDC15FF3BAD97C30C7D2DE3C /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				D931A64D6B73ACE08C5B1B8C /* Constants.swift */,
+				858041B57D6DD21F98C37A50 /* Logger.swift */,
+				5D21C7867F5DB0CF0EFEF72E /* Extensions.swift */,
+			);
+			name = Utilities;
+			sourceTree = "<group>";
+		};
+		D23E9004962456D75191F6D2 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				20DFB3FEE5420BF9D8971591 /* SettingsView.swift */,
+				F6A5329A435CD9B3F6763C7A /* SettingsViewModel.swift */,
+			);
+			name = Settings;
+			sourceTree = "<group>";
+		};
+		D2569B14BFDF928B07D2B615 /* Pairing */ = {
+			isa = PBXGroup;
+			children = (
+				3A815D4A7131FAB911FBD532 /* PairingView.swift */,
+				594E80E5413A8F8C6B3E359E /* PairingViewModel.swift */,
+			);
+			name = Pairing;
+			sourceTree = "<group>";
+		};
+		E0F8504EB8D1B40A9AD72BCD /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				B6A1137AA2FE0D8AB6E48ECD /* Info.plist */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		F6337B35E135BFB33E7D8EA6 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				9F73A2D8792E1CD3CFBF59A3 /* AppDelegate.swift */,
+				909DB0F5684DC6FE1994C017 /* ContentView.swift */,
+				4F536DF14C0354F48684FAE5 /* MyClawApp.swift */,
+			);
+			name = App;
+			sourceTree = "<group>";
+		};
+		F96AAAF81301C32C9B8FFB70 /* Features */ = {
+			isa = PBXGroup;
+			children = (
+				D23E9004962456D75191F6D2 /* Settings */,
+				293B559BE9F8F947833E3331 /* Home */,
+				D2569B14BFDF928B07D2B615 /* Pairing */,
+				8D126B5EA07571A439355D0F /* Discovery */,
+				24D2CB6504572F1B8C8B176B /* Canvas */,
+				13B5E33E5A944A48C72A68ED /* Node */,
+			);
+			name = Features;
+			sourceTree = "<group>";
+		};
+		FAA7F4804F3296010DF3D9FC /* iOS */ = {
+			isa = PBXGroup;
+			children = (
+				1B50CE7A77F4ABF056942EE1 /* Foundation.framework */,
+			);
+			name = iOS;
+			sourceTree = "<group>";
+		};
+
+		AA000001000000010000000C /* TestSources */ = {
+			isa = PBXGroup;
+			children = (
+				AA0000010000000100000002 /* CryptoServiceTests.swift */,
+				AA0000010000000100000004 /* GatewayClientTests.swift */,
+				AA0000010000000100000006 /* KeychainServiceTests.swift */,
+				AA0000010000000100000008 /* PairingServiceTests.swift */,
+				AA000001000000010000000A /* MyClawUITests.swift */,
+			);
+			name = TestSources;
+			sourceTree = "<group>";
+		};
+
+		AA000001000000010000000D /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				AA000001000000010000000C /* TestSources */,
+			);
+			name = Tests;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section *//* End PBXGroup section *//* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		D48A1D2CFAAD7F22AA4ED4A6 /* MyClaw */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4CFF1DEF8A892F63FA34FD06 /* Build configuration list for PBXNativeTarget "MyClaw" */;
+			buildPhases = (
+				8878B9FAA689A66290460E18 /* Sources */,
+				A4BE816DD040ED783CC9CC36 /* Frameworks */,
+				F3585EB7B56E3EABB4B929DC /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				AA0000010000000100000011 /* PBXTargetDependency */,
+			);
+			name = MyClaw;
+			productName = MyClaw;
+			productReference = 1E4A5BF8E7840F0E879FD6D1 /* MyClaw.app */;
+			productType = "com.apple.product-type.application";
+		};
+
+/* Begin PBXNativeTarget section */
+		AA0000010000000100000010 /* MyClawTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AA0000010000000100000013 /* Build configuration list for PBXNativeTarget "MyClawTests" */;
+			buildPhases = (
+				AA000001000000010000000E /* Sources */,
+				AA000001000000010000000F /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				AA0000010000000100000011 /* PBXTargetDependency */,
+			);
+			name = MyClawTests;
+			productName = MyClawTests;
+			productReference = AA000001000000010000000B /* MyClawTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		8FDB780ECDBD4863BFF86C89 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 1600;
+				LastUpgradeCheck = 1600;
+			};
+			buildConfigurationList = 5D5F1E6A7B63DB7BC1FFF857 /* Build configuration list for PBXProject "MyClaw" */;
+			compatibilityVersion = "Xcode 15.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 62696254131947BD2AAB3B60;
+			minimizedProjectReferenceProxies = 0;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = C10C0C5D21A371DB62712343 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				AA0000010000000100000010 /* MyClawTests */,
+				D48A1D2CFAAD7F22AA4ED4A6 /* MyClaw */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		F3585EB7B56E3EABB4B929DC /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F98D9AA220472B0CF2764CDC /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		8878B9FAA689A66290460E18 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				46F0950B146AF52B959A8C03 /* AppDelegate.swift in Sources */,
+				E3C6E95C788F02E62457F6E5 /* ContentView.swift in Sources */,
+				DCCB1857DDB6A46066C1FDB4 /* MyClawApp.swift in Sources */,
+				E498171B1976B390A3110D21 /* Capability.swift in Sources */,
+				01EE2D3A1673FADF223FEB71 /* GatewayEndpoint.swift in Sources */,
+				3C521E21215A157368A0E0CD /* GatewayMessage.swift in Sources */,
+				1B3BE185DB3DF66AE7A5B86F /* NodeStatus.swift in Sources */,
+				B1979B38743FC578FCFDE0F4 /* PairingInfo.swift in Sources */,
+				DA44D71C1A51234580202933 /* NodeSession.swift in Sources */,
+				8D3266A327723400FEE06B0F /* CameraCapability.swift in Sources */,
+				BF0785A303C09D3D35A11314 /* CanvasCapability.swift in Sources */,
+				AC4F0E522C74A3EF023458BE /* LocationCapability.swift in Sources */,
+				E64522FC6763F0F128F27AEC /* ScreenCapability.swift in Sources */,
+				A0AC30BEA7542C8C45841729 /* CryptoService.swift in Sources */,
+				E46038F52DB345AD23824652 /* DiscoveryService.swift in Sources */,
+				05EA5C4C3970CAF6B1FF72BA /* GatewayClient.swift in Sources */,
+				959D0C975766445E8B25AD85 /* KeychainService.swift in Sources */,
+				43CC76335C0F1CE7D96C85D9 /* PairingService.swift in Sources */,
+				4F94417F03C01438EA8BEDED /* Constants.swift in Sources */,
+				85C48968D14EEAD34A337C27 /* Extensions.swift in Sources */,
+				633604E26961CFB433F89C7C /* Logger.swift in Sources */,
+				A34193C58B153705830E7C84 /* CanvasView.swift in Sources */,
+				F51EB61AB00A1C9104E4DA08 /* CanvasViewController.swift in Sources */,
+				CF1549EF750BE5BEB541011F /* CanvasViewModel.swift in Sources */,
+				5D4AFB36D13D533787D547B8 /* DiscoveryView.swift in Sources */,
+				B2063FF9FA16FC23194E4715 /* DiscoveryViewModel.swift in Sources */,
+				6FEEC5AEEF313A58F188488C /* HomeView.swift in Sources */,
+				1657AC4753753252A9F7CFB2 /* HomeViewModel.swift in Sources */,
+				8E4F530E995B00B97BBD89AD /* NodeView.swift in Sources */,
+				98035B85E414D830C7092C09 /* NodeViewModel.swift in Sources */,
+				C6249C61292B2F935710071F /* PairingView.swift in Sources */,
+				BF92DAEC40B61A91B2DFDBC9 /* PairingViewModel.swift in Sources */,
+				62CD0F1FD19F15084CE84783 /* SettingsView.swift in Sources */,
+				59B6A075593D5724105EEF74 /* SettingsViewModel.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+
+/* Begin PBXSourcesBuildPhase section */
+		AA000001000000010000000E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AA0000010000000100000001 /* CryptoServiceTests.swift in Sources */,
+				AA0000010000000100000003 /* GatewayClientTests.swift in Sources */,
+				AA0000010000000100000005 /* KeychainServiceTests.swift in Sources */,
+				AA0000010000000100000007 /* PairingServiceTests.swift in Sources */,
+				AA0000010000000100000009 /* MyClawUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section *//* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		662ED410803EB44643883051 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = "";
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.openclaw.myclaw;
+				PRODUCT_NAME = MyClaw;
+				SDKROOT = iphonesimulator;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		71C467B9C649A9283A074426 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphonesimulator;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		8C8DBF3A0D7D7C500D0EA48E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = "";
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.openclaw.myclaw;
+				PRODUCT_NAME = MyClaw;
+				SDKROOT = iphonesimulator;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		E39BF8F3A9EB74D77BF49D75 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphonesimulator;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+
+/* Begin PBXTargetDependency section */
+		AA0000010000000100000011 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D48A1D2CFAAD7F22AA4ED4A6 /* MyClaw */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCConfigurationList section */
+		AA0000010000000100000013 /* Build configuration list for PBXNativeTarget "MyClawTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AA0000010000000100000014 /* Debug */,
+				AA0000010000000100000015 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+		AA0000010000000100000014 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ENABLE_TESTABILITY = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphonesimulator;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MyClaw.app/MyClaw";
+				BUNDLE_LOADER = "$(TEST_HOST)";
+			};
+			name = Debug;
+		};
+		AA0000010000000100000015 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphonesimulator;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MyClaw.app/MyClaw";
+				BUNDLE_LOADER = "$(TEST_HOST)";
+			};
+			name = Release;
+		};
+/* Begin XCConfigurationList section */
+		4CFF1DEF8A892F63FA34FD06 /* Build configuration list for PBXNativeTarget "MyClaw" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8C8DBF3A0D7D7C500D0EA48E /* Release */,
+				662ED410803EB44643883051 /* Debug */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		5D5F1E6A7B63DB7BC1FFF857 /* Build configuration list for PBXProject "MyClaw" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E39BF8F3A9EB74D77BF49D75 /* Debug */,
+				71C467B9C649A9283A074426 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 8FDB780ECDBD4863BFF86C89 /* Project object */;
+}
